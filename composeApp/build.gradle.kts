@@ -54,6 +54,8 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.multiplatformSettings)
                 implementation(libs.koin.core)
+                implementation(libs.kamel.image)
+                implementation(libs.materialKolor)
             }
         }
 
@@ -86,11 +88,11 @@ kotlin {
 
 android {
     namespace = "dev.ishubhamsingh.splashy"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 33
+        minSdk = 25
+        targetSdk = 34
 
         applicationId = "dev.ishubhamsingh.splashy"
         versionCode = 1

@@ -7,9 +7,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 
-class AndroidApp : Application() {
+class SplashyApp : Application() {
     companion object {
-        lateinit var INSTANCE: AndroidApp
+        lateinit var INSTANCE: SplashyApp
     }
 
     override fun onCreate() {
@@ -25,12 +25,4 @@ class AppActivity : ComponentActivity() {
     }
 }
 
-internal actual fun openUrl(url: String?) {
-    val uri = url?.let { Uri.parse(it) } ?: return
-    val intent = Intent().apply {
-        action = Intent.ACTION_VIEW
-        data = uri
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
-    AndroidApp.INSTANCE.startActivity(intent)
-}
+internal actual fun getPlatform(): String = "Android"

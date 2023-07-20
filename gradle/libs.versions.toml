@@ -1,7 +1,7 @@
 [versions]
 
 kotlin = "1.8.20"
-agp = "8.0.1"
+agp = "8.0.2"
 compose = "1.4.0"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.7.0"
@@ -11,14 +11,16 @@ voyager = "1.0.0-rc06"
 composeImageLoader = "1.4.1"
 napier = "2.6.1"
 buildConfig = "3.1.0"
-kotlinx-coroutines = "1.6.4"
-insetsx = "0.1.0-alpha07"
+kotlinx-coroutines = "1.7.2"
+insetsx = "0.1.0-alpha10"
 ktor = "2.3.0"
 composeIcons = "1.1.0"
 kotlinx-serialization = "1.5.1"
 multiplatformSettings = "1.0.0"
 koin = "3.4.0"
 sqlDelight = "2.0.0-alpha05"
+kamel = "0.6.0"
+materialKolor = "1.2.0"
 
 [libraries]
 
@@ -43,6 +45,8 @@ sqlDelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", versi
 sqlDelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-sqljs = { module = "app.cash.sqldelight:sqljs-driver", version.ref = "sqlDelight" }
+kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel"}
+materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 
 [plugins]
 
