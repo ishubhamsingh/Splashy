@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Shubham Singh
+ * Copyright $YEAR Shubham Singh
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.models
-
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class Urls(
-  @SerialName("full") val full: String = "",
-  @SerialName("raw") val raw: String = "",
-  @SerialName("regular") val regular: String = "",
-  @SerialName("small") val small: String = "",
-  @SerialName("small_s3") val smallS3: String = "",
-  @SerialName("thumb") val thumb: String = ""
-)

@@ -21,6 +21,8 @@ koin = "3.4.0"
 sqlDelight = "2.0.0-alpha05"
 kamel = "0.6.0"
 materialKolor = "1.2.0"
+spotless = "6.20.0"
+ktfmt = "0.44"
 
 [libraries]
 
@@ -61,3 +63,4 @@ libres = { id = "io.github.skeptick.libres", version.ref = "libres" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
