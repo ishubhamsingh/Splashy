@@ -1,4 +1,4 @@
-package dev.ishubhamsingh.splashy.theme
+package dev.ishubhamsingh.splashy.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape

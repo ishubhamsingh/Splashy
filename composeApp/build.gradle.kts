@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.compose)
@@ -8,14 +10,22 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.sqlDelight)
 }
+lateinit var secretKeyProperties: Properties
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
     targetHierarchy.default()
+    val secretKeyPropertiesFile = rootProject.file("secrets.properties")
+     secretKeyProperties = Properties().apply {
+        secretKeyPropertiesFile.inputStream().use { secret ->
+            load(secret)
+        }
+    }
+
     android {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "11"
             }
         }
     }
@@ -50,6 +60,9 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.insetsx)
                 implementation(libs.ktor.core)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.ktor.client.logging)
                 implementation(libs.composeIcons.featherIcons)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.multiplatformSettings)
@@ -103,8 +116,8 @@ android {
         res.srcDirs("src/androidMain/resources")
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     packagingOptions {
         resources.excludes.add("META-INF/**")
@@ -119,6 +132,7 @@ libres {
 buildConfig {
   // BuildConfig configuration here.
   // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
+    buildConfigField("String", "UNSPLASH_API_KEY", "\"${secretKeyProperties["unsplash.access.key"]}\"")
 }
 
 sqldelight {
