@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'composeApp'
     spec.version                  = '1.0.0'
-    spec.homepage                 = 'empty'
+    spec.homepage                 = 'https://github.com/ishubhamsingh/Splashy'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''
-    spec.summary                  = 'Compose application framework'
+    spec.summary                  = 'An Unsplash based wallpaper app built with Compose Multiplatform and KMM for Android and iOS'
     spec.vendored_frameworks      = 'build/cocoapods/framework/ComposeApp.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '11.0'

@@ -43,8 +43,8 @@ kotlin {
 
   cocoapods {
     version = "1.0.0"
-    summary = "Compose application framework"
-    homepage = "empty"
+    summary = "An Unsplash based wallpaper app built with Compose Multiplatform and KMM for Android and iOS"
+    homepage = "https://github.com/ishubhamsingh/Splashy"
     ios.deploymentTarget = "11.0"
     podfile = project.file("../iosApp/Podfile")
     framework {
