@@ -25,6 +25,7 @@ plugins {
   alias(libs.plugins.kotlinx.serialization).apply(false)
   alias(libs.plugins.sqlDelight).apply(false)
   alias(libs.plugins.spotless).apply(false)
+  alias(libs.plugins.parcelize.darwin).apply(false)
 }
 
 allprojects {

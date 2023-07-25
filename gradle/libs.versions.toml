@@ -23,6 +23,9 @@ kamel = "0.6.0"
 materialKolor = "1.2.0"
 spotless = "6.20.0"
 ktfmt = "0.44"
+decompose = "2.1.0-compose-experimental-alpha-05"
+essenty = "1.2.0-alpha-03"
+parcelize-darwin = "0.1.4"
 
 [libraries]
 
@@ -52,6 +55,12 @@ sqlDelight-driver-native = { module = "app.cash.sqldelight:native-driver", versi
 sqlDelight-driver-sqljs = { module = "app.cash.sqldelight:sqljs-driver", version.ref = "sqlDelight" }
 kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel"}
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+decompose-extensions-compose-jetbrains = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose"}
+decompose-extensions-android = { module = "com.arkivanov.decompose:extensions-android", version.ref = "decompose" }
+essenty-lifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essenty" }
+essenty-state-keeper = { module = "com.arkivanov.essenty:state-keeper", version.ref = "essenty" }
+essenty-parcelable = { module = "com.arkivanov.essenty:parcelable", version.ref = "essenty" }
 
 [plugins]
 
@@ -64,3 +73,4 @@ buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+parcelize-darwin = { id = "com.arkivanov.parcelize.darwin", version.ref = "parcelize-darwin"}

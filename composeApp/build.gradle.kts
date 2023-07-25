@@ -24,6 +24,8 @@ plugins {
   alias(libs.plugins.buildConfig)
   alias(libs.plugins.kotlinx.serialization)
   alias(libs.plugins.sqlDelight)
+  id("kotlin-parcelize")
+  alias(libs.plugins.parcelize.darwin)
 }
 
 lateinit var secretKeyProperties: Properties
@@ -50,6 +52,11 @@ kotlin {
     framework {
       baseName = "ComposeApp"
       isStatic = true
+
+      export(libs.decompose)
+      export(libs.essenty.lifecycle)
+      export(libs.essenty.state.keeper)
+      export(libs.essenty.parcelable)
     }
   }
 
@@ -76,6 +83,12 @@ kotlin {
         implementation(libs.koin.core)
         implementation(libs.kamel.image)
         implementation(libs.materialKolor)
+        implementation(libs.decompose)
+        implementation(libs.decompose.extensions.compose.jetbrains)
+        implementation(libs.decompose.extensions.android)
+        implementation(libs.essenty.lifecycle)
+        implementation(libs.essenty.state.keeper)
+        implementation(libs.essenty.parcelable)
       }
     }
 
@@ -89,6 +102,7 @@ kotlin {
         implementation(libs.kotlinx.coroutines.android)
         implementation(libs.ktor.client.okhttp)
         implementation(libs.sqlDelight.driver.android)
+        implementation(libs.decompose.extensions.android)
       }
     }
 
@@ -96,6 +110,10 @@ kotlin {
       dependencies {
         implementation(libs.ktor.client.darwin)
         implementation(libs.sqlDelight.driver.native)
+        api(libs.decompose)
+        api(libs.essenty.lifecycle)
+        api(libs.essenty.state.keeper)
+        api(libs.essenty.parcelable)
       }
     }
 
