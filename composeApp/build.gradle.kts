@@ -26,6 +26,7 @@ plugins {
   alias(libs.plugins.sqlDelight)
   id("kotlin-parcelize")
   alias(libs.plugins.parcelize.darwin)
+  alias(libs.plugins.ksp)
 }
 
 lateinit var secretKeyProperties: Properties
@@ -80,7 +81,7 @@ kotlin {
         implementation(libs.composeIcons.featherIcons)
         implementation(libs.kotlinx.serialization.json)
         implementation(libs.multiplatformSettings)
-        implementation(libs.koin.core)
+        implementation(libs.kotlin.inject.runtime)
         implementation(libs.kamel.image)
         implementation(libs.materialKolor)
         implementation(libs.decompose)
@@ -165,4 +166,11 @@ sqldelight {
       packageName.set("dev.ishubhamsingh.splashy.db")
     }
   }
+}
+
+dependencies {
+  add("kspAndroid", libs.kotlin.inject.compiler)
+  add("kspIosX64", libs.kotlin.inject.compiler)
+  add("kspIosArm64", libs.kotlin.inject.compiler)
+  add("kspIosSimulatorArm64", libs.kotlin.inject.compiler)
 }

@@ -2,7 +2,7 @@
 
 kotlin = "1.8.20"
 agp = "8.1.0"
-compose = "1.4.0"
+compose = "1.4.1"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.7.2"
 compose-uitooling = "1.4.3"
@@ -17,7 +17,8 @@ ktor = "2.3.2"
 composeIcons = "1.1.0"
 kotlinx-serialization = "1.5.1"
 multiplatformSettings = "1.0.0"
-koin = "3.4.0"
+kotlin-inject = "0.6.1"
+ksp = "1.8.20-1.0.11"
 sqlDelight = "2.0.0-alpha05"
 kamel = "0.6.0"
 materialKolor = "1.2.0"
@@ -48,7 +49,8 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 composeIcons-featherIcons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "composeIcons" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
-koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+kotlin-inject-compiler = { module = 'me.tatarka.inject:kotlin-inject-compiler-ksp', version.ref = 'kotlin-inject' }
+kotlin-inject-runtime = { module = 'me.tatarka.inject:kotlin-inject-runtime', version.ref = 'kotlin-inject' }
 sqlDelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
@@ -74,3 +76,4 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 parcelize-darwin = { id = "com.arkivanov.parcelize.darwin", version.ref = "parcelize-darwin"}
+ksp = { id = 'com.google.devtools.ksp', version.ref = 'ksp' }

@@ -26,6 +26,7 @@ plugins {
   alias(libs.plugins.sqlDelight).apply(false)
   alias(libs.plugins.spotless).apply(false)
   alias(libs.plugins.parcelize.darwin).apply(false)
+  alias(libs.plugins.ksp).apply(false)
 }
 
 allprojects {
