@@ -15,8 +15,9 @@
  */
 import androidx.compose.ui.window.ComposeUIViewController
 import dev.ishubhamsingh.splashy.App
+import dev.ishubhamsingh.splashy.core.api.UnsplashApi
 import platform.UIKit.UIViewController
 
-fun MainViewController(): UIViewController {
-  return ComposeUIViewController { App() }
+fun MainViewController(unsplashApi: UnsplashApi): UIViewController {
+  return ComposeUIViewController { App(unsplashApi = unsplashApi) }
 }

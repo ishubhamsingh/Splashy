@@ -22,8 +22,17 @@ struct ContentView: View {
 }
 
 struct ComposeView: UIViewControllerRepresentable {
+	let lifecycle: LifecycleRegistry = LifecycleRegistryKt.LifecycleRegistry()
+
+	init() {
+		LifecycleRegistryExtKt.create(lifecycle)
+	}
     func makeUIViewController(context: Context) -> UIViewController {
-        MainKt.MainViewController()
+        let applicationComponent = InjectApplicationComponent(componentContext: DefaultComponentContext(lifecycle: lifecycle))
+        let unsplashApi = applicationComponent.unsplashApiCreator()
+        let controller = MainKt.MainViewController(unsplashApi: unsplashApi)
+        LifecycleRegistryExtKt.resume(lifecycle)
+        return controller
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}

@@ -8,7 +8,7 @@ Pod::Spec.new do |spec|
     spec.summary                  = 'An Unsplash based wallpaper app built with Compose Multiplatform and KMM for Android and iOS'
     spec.vendored_frameworks      = 'build/cocoapods/framework/ComposeApp.framework'
     spec.libraries                = 'c++'
-    spec.ios.deployment_target = '11.0'
+    spec.ios.deployment_target = '16.0'
                 
                 
     spec.pod_target_xcconfig = {

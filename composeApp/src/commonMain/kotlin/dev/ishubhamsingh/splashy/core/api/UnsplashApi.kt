@@ -16,6 +16,7 @@
 package dev.ishubhamsingh.splashy.core.api
 
 import Splashy.composeApp.BuildConfig
+import dev.ishubhamsingh.splashy.core.di.Singleton
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
 import io.ktor.client.HttpClient
@@ -30,27 +31,11 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import me.tatarka.inject.annotations.Inject
 
-class UnsplashApi(private val httpClient: HttpClient) {
-
-  private val client by lazy {
-    httpClient.config {
-      install(Logging) {
-        logger = Logger.DEFAULT
-        level = LogLevel.ALL
-      }
-      install(ContentNegotiation) {
-        json(
-          Json {
-            prettyPrint = true
-            isLenient = true
-            ignoreUnknownKeys = true
-          }
-        )
-      }
-    }
-  }
-
+@Inject
+@Singleton
+class UnsplashApi(private val client: HttpClient) {
   suspend fun fetchPhotos(page: Int): ArrayList<Photo> {
     return client
       .get {

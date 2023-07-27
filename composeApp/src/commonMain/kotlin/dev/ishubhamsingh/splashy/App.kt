@@ -47,11 +47,8 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import io.ktor.client.HttpClient
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App() {
-  val unsplashApi = UnsplashApi(getHttpClient())
-
+fun App(unsplashApi: UnsplashApi) {
   var photosResponse by remember { mutableStateOf<ArrayList<Photo>>(arrayListOf()) }
   LaunchedEffect(Unit) { photosResponse = unsplashApi.searchPhotos("hd wallpaper", 1).results }
 

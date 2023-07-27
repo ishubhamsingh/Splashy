@@ -38,7 +38,7 @@ kotlin {
   secretKeyProperties =
     Properties().apply { secretKeyPropertiesFile.inputStream().use { secret -> load(secret) } }
 
-  android { compilations.all { kotlinOptions { jvmTarget = "11" } } }
+  android { compilations.all { kotlinOptions { jvmTarget = "17" } } }
 
   iosX64()
   iosArm64()
@@ -48,7 +48,7 @@ kotlin {
     version = "1.0.0"
     summary = "An Unsplash based wallpaper app built with Compose Multiplatform and KMM for Android and iOS"
     homepage = "https://github.com/ishubhamsingh/Splashy"
-    ios.deploymentTarget = "11.0"
+    ios.deploymentTarget = "16.0"
     podfile = project.file("../iosApp/Podfile")
     framework {
       baseName = "ComposeApp"
@@ -138,8 +138,8 @@ android {
     res.srcDirs("src/androidMain/resources")
   }
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
   }
   packagingOptions { resources.excludes.add("META-INF/**") }
 }

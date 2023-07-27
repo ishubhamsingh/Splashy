@@ -21,29 +21,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.Composable
+import dev.ishubhamsingh.splashy.core.api.UnsplashApi
+import dev.ishubhamsingh.splashy.core.di.ApplicationComponent
 import dev.ishubhamsingh.splashy.core.utils.initialiseLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import java.time.Duration
-
-class SplashyApp : Application() {
-  companion object {
-    lateinit var INSTANCE: SplashyApp
-  }
-
-  override fun onCreate() {
-    super.onCreate()
-    INSTANCE = this
-    initialiseLogging()
-  }
-}
-
-class AppActivity : ComponentActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContent { App() }
-  }
-}
+@Composable
+fun AppView(unsplashApi: UnsplashApi) = App(unsplashApi)
 
 internal actual fun getPlatform(): String = "Android"
 
