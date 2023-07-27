@@ -15,21 +15,15 @@
  */
 package dev.ishubhamsingh.splashy
 
-import android.app.Application
 import android.os.Build
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import dev.ishubhamsingh.splashy.core.api.UnsplashApi
-import dev.ishubhamsingh.splashy.core.di.ApplicationComponent
-import dev.ishubhamsingh.splashy.core.utils.initialiseLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import java.time.Duration
-@Composable
-fun AppView(unsplashApi: UnsplashApi) = App(unsplashApi)
+
+@Composable fun AppView(unsplashApi: UnsplashApi) = App(unsplashApi)
 
 internal actual fun getPlatform(): String = "Android"
 
