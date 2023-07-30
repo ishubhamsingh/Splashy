@@ -13,9 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy
+package dev.ishubhamsingh.splashy.core.domain
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
+import dev.ishubhamsingh.splashy.models.Photo
+import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
+import kotlinx.coroutines.flow.Flow
 
-@Composable fun AppView() = App(darkTheme = isSystemInDarkTheme(), dynamicColor = true)
+interface UnsplashRepository {
+  fun getPhotos(page: Int, forceFetch: Boolean = false): Flow<NetworkResult<ArrayList<Photo>>>
+
+  fun searchPhotos(
+    searchQuery: String,
+    page: Int,
+    forceFetch: Boolean = false
+  ): Flow<NetworkResult<PhotoSearchCollection>>
+}

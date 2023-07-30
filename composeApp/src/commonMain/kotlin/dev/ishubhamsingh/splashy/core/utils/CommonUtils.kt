@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import androidx.compose.ui.window.ComposeUIViewController
-import dev.ishubhamsingh.splashy.App
-import dev.ishubhamsingh.splashy.core.api.UnsplashApi
-import platform.UIKit.UIViewController
+package dev.ishubhamsingh.splashy.core.utils
 
-fun MainViewController(unsplashApi: UnsplashApi): UIViewController {
-  return ComposeUIViewController { App(unsplashApi = unsplashApi) }
-}
+import io.ktor.client.HttpClient
+
+expect fun getHttpClient(): HttpClient

@@ -13,9 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy
+package dev.ishubhamsingh.splashy.core.presentation
 
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import dev.ishubhamsingh.splashy.ui.theme.DarkColors
+import dev.ishubhamsingh.splashy.ui.theme.LightColors
+import dev.ishubhamsingh.splashy.ui.theme.Shapes
+import dev.ishubhamsingh.splashy.ui.theme.Typography
 
-@Composable fun AppView() = App(darkTheme = isSystemInDarkTheme(), dynamicColor = true)
+@Composable
+actual fun SplashyTheme(
+  darkTheme: Boolean,
+  dynamicColor: Boolean,
+  content: @Composable () -> Unit
+) {
+  MaterialTheme(
+    colorScheme = if (darkTheme) DarkColors else LightColors,
+    typography = Typography,
+    shapes = Shapes,
+    content = content
+  )
+}

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy
+package dev.ishubhamsingh.splashy.core.presentation
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 
-@Composable fun AppView() = App(darkTheme = isSystemInDarkTheme(), dynamicColor = true)
+@Composable
+expect fun SplashyTheme(darkTheme: Boolean, dynamicColor: Boolean, content: @Composable () -> Unit)

@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.core.api
+package dev.ishubhamsingh.splashy.core.network.api
 
 import Splashy.composeApp.BuildConfig
 import dev.ishubhamsingh.splashy.core.di.Singleton
-import dev.ishubhamsingh.splashy.models.Photo
-import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import me.tatarka.inject.annotations.Inject
@@ -29,21 +28,19 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 @Singleton
 class UnsplashApi(private val client: HttpClient) {
-  suspend fun fetchPhotos(page: Int): ArrayList<Photo> {
-    return client
-      .get {
-        url {
-          protocol = URLProtocol.HTTPS
-          host = HOST_URL
-          path("photos")
-          parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
-          parameters.append("page", page.toString())
-        }
+  suspend fun fetchPhotos(page: Int): HttpResponse {
+    return client.get {
+      url {
+        protocol = URLProtocol.HTTPS
+        host = HOST_URL
+        path("photos")
+        parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
+        parameters.append("page", page.toString())
       }
-      .body()
+    }
   }
 
-  suspend fun searchPhotos(query: String, page: Int): PhotoSearchCollection {
+  suspend fun searchPhotos(query: String, page: Int): HttpResponse {
     return client
       .get {
         url {

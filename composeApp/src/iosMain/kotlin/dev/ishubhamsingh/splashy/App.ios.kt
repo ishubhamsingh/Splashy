@@ -15,21 +15,16 @@
  */
 package dev.ishubhamsingh.splashy
 
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.darwin.Darwin
+import androidx.compose.ui.window.ComposeUIViewController
+import platform.UIKit.UIScreen
+import platform.UIKit.UIUserInterfaceStyle
+import platform.UIKit.UIViewController
 
-actual fun getPlatform(): String = "iOS"
-
-actual fun getHttpClient(): HttpClient {
-  val httpClient =
-    HttpClient(Darwin) {
-      engine {
-        configureRequest {
-          setTimeoutInterval(60.0)
-          setAllowsCellularAccess(true)
-        }
-      }
-    }
-
-  return httpClient
+fun MainViewController(): UIViewController {
+  return ComposeUIViewController {
+    val isDarkTheme =
+      UIScreen.mainScreen.traitCollection.userInterfaceStyle ==
+        UIUserInterfaceStyle.UIUserInterfaceStyleDark
+    App(darkTheme = isDarkTheme, dynamicColor = false)
+  }
 }

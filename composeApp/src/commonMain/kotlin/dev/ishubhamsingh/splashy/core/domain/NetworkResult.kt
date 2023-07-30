@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy
+package dev.ishubhamsingh.splashy.core.domain
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
+sealed class NetworkResult<T>(val data: T? = null, val message: String? = null) {
+  class Success<T>(data: T?) : NetworkResult<T>(data)
 
-@Composable fun AppView() = App(darkTheme = isSystemInDarkTheme(), dynamicColor = true)
+  class Error<T>(message: String, data: T? = null) : NetworkResult<T>(data, message)
+
+  class Loading<T>(val isLoading: Boolean = true) : NetworkResult<T>(null)
+}

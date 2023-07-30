@@ -13,9 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy
+package dev.ishubhamsingh.splashy.core.utils
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.darwin.Darwin
 
-@Composable fun AppView() = App(darkTheme = isSystemInDarkTheme(), dynamicColor = true)
+actual fun getHttpClient(): HttpClient {
+  val httpClient =
+    HttpClient(Darwin) {
+      engine {
+        configureRequest {
+          setTimeoutInterval(60.0)
+          setAllowsCellularAccess(true)
+        }
+      }
+    }
+
+  return httpClient
+}

@@ -127,7 +127,7 @@ android {
   compileSdk = 34
 
   defaultConfig {
-    minSdk = 25
+    minSdk = 26
     targetSdk = 34
 
     applicationId = "dev.ishubhamsingh.splashy"
