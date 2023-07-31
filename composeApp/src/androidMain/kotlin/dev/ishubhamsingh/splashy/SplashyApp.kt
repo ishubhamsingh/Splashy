@@ -16,7 +16,11 @@
 package dev.ishubhamsingh.splashy
 
 import android.app.Application
+import dev.ishubhamsingh.splashy.core.di.appModule
 import dev.ishubhamsingh.splashy.core.utils.initialiseLogging
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 class SplashyApp : Application() {
   companion object {
@@ -26,6 +30,11 @@ class SplashyApp : Application() {
   override fun onCreate() {
     super.onCreate()
     INSTANCE = this
+    startKoin {
+      androidContext(INSTANCE)
+      androidLogger()
+      modules(appModule())
+    }
     initialiseLogging()
   }
 }

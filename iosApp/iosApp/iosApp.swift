@@ -7,6 +7,7 @@ struct iosApp: App {
 
 init() {
 		LoggingKt.initialiseLogging()
+		DIHelperKt.doInitKoin()
 	}
     var body: some Scene {
         WindowGroup {
@@ -22,17 +23,8 @@ struct ContentView: View {
 }
 
 struct ComposeView: UIViewControllerRepresentable {
-	let lifecycle: LifecycleRegistry = LifecycleRegistryKt.LifecycleRegistry()
-
-	init() {
-		LifecycleRegistryExtKt.create(lifecycle)
-	}
     func makeUIViewController(context: Context) -> UIViewController {
-        let applicationComponent = InjectApplicationComponent(componentContext: DefaultComponentContext(lifecycle: lifecycle))
-        let unsplashApi = applicationComponent.unsplashApiCreator()
-        let controller = MainKt.MainViewController(unsplashApi: unsplashApi)
-        LifecycleRegistryExtKt.resume(lifecycle)
-        return controller
+        App_iosKt.MainViewController()
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}

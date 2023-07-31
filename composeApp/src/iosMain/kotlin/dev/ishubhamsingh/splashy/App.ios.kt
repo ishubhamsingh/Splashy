@@ -16,12 +16,13 @@
 package dev.ishubhamsingh.splashy
 
 import androidx.compose.ui.window.ComposeUIViewController
+import moe.tlaster.precompose.PreComposeApplication
 import platform.UIKit.UIScreen
 import platform.UIKit.UIUserInterfaceStyle
 import platform.UIKit.UIViewController
 
 fun MainViewController(): UIViewController {
-  return ComposeUIViewController {
+  return PreComposeApplication {
     val isDarkTheme =
       UIScreen.mainScreen.traitCollection.userInterfaceStyle ==
         UIUserInterfaceStyle.UIUserInterfaceStyleDark

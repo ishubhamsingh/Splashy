@@ -17,16 +17,13 @@ ktor = "2.3.2"
 composeIcons = "1.1.0"
 kotlinx-serialization = "1.5.1"
 multiplatformSettings = "1.0.0"
-kotlin-inject = "0.6.1"
-ksp = "1.9.0-1.0.12"
+koin = "3.4.0"
 sqlDelight = "2.0.0-alpha05"
 kamel = "0.6.0"
 materialKolor = "1.2.0"
 spotless = "6.20.0"
 ktfmt = "0.44"
-decompose = "2.1.0-compose-experimental-alpha-05"
-essenty = "1.2.0-alpha-03"
-parcelize-darwin = "0.1.4"
+precompose = "1.5.0-beta01"
 
 [libraries]
 
@@ -47,22 +44,22 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 composeIcons-featherIcons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "composeIcons" }
+composeIcons-evaIcons = { module = "br.com.devsrsouza.compose.icons:eva-icons", version.ref = "composeIcons" }
+composeIcons-octicons = { module = "br.com.devsrsouza.compose.icons:octicons", version.ref = "composeIcons" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
-kotlin-inject-compiler = { module = 'me.tatarka.inject:kotlin-inject-compiler-ksp', version.ref = 'kotlin-inject' }
-kotlin-inject-runtime = { module = 'me.tatarka.inject:kotlin-inject-runtime', version.ref = 'kotlin-inject' }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 sqlDelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
 sqlDelight-driver-sqljs = { module = "app.cash.sqldelight:sqljs-driver", version.ref = "sqlDelight" }
-kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel"}
+kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
-decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
-decompose-extensions-compose-jetbrains = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose"}
-decompose-extensions-android = { module = "com.arkivanov.decompose:extensions-android", version.ref = "decompose" }
-essenty-lifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essenty" }
-essenty-state-keeper = { module = "com.arkivanov.essenty:state-keeper", version.ref = "essenty" }
-essenty-parcelable = { module = "com.arkivanov.essenty:parcelable", version.ref = "essenty" }
+precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
+precompose-viewmodel = { module = "moe.tlaster:precompose-viewmodel", version.ref = "precompose" }
+
 
 [plugins]
 
@@ -75,5 +72,3 @@ buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-parcelize-darwin = { id = "com.arkivanov.parcelize.darwin", version.ref = "parcelize-darwin"}
-ksp = { id = 'com.google.devtools.ksp', version.ref = 'ksp' }

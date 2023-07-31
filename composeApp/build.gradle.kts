@@ -24,9 +24,6 @@ plugins {
   alias(libs.plugins.buildConfig)
   alias(libs.plugins.kotlinx.serialization)
   alias(libs.plugins.sqlDelight)
-  id("kotlin-parcelize")
-  alias(libs.plugins.parcelize.darwin)
-  alias(libs.plugins.ksp)
 }
 
 lateinit var secretKeyProperties: Properties
@@ -54,11 +51,6 @@ kotlin {
     framework {
       baseName = "ComposeApp"
       isStatic = true
-
-      export(libs.decompose)
-      export(libs.essenty.lifecycle)
-      export(libs.essenty.state.keeper)
-      export(libs.essenty.parcelable)
     }
   }
 
@@ -67,6 +59,7 @@ kotlin {
       dependencies {
         implementation(compose.runtime)
         implementation(compose.foundation)
+        implementation(compose.animation)
         implementation(compose.material)
         implementation(compose.material3)
         implementation(libs.libres)
@@ -80,21 +73,22 @@ kotlin {
         implementation(libs.ktor.serialization.kotlinx.json)
         implementation(libs.ktor.client.logging)
         implementation(libs.composeIcons.featherIcons)
+        implementation(libs.composeIcons.evaIcons)
+        implementation(libs.composeIcons.octicons)
         implementation(libs.kotlinx.serialization.json)
         implementation(libs.multiplatformSettings)
-        implementation(libs.kotlin.inject.runtime)
+        implementation(libs.koin.core)
         implementation(libs.kamel.image)
         implementation(libs.materialKolor)
-        implementation(libs.decompose)
-        implementation(libs.decompose.extensions.compose.jetbrains)
-        implementation(libs.decompose.extensions.android)
-        implementation(libs.essenty.lifecycle)
-        implementation(libs.essenty.state.keeper)
-        implementation(libs.essenty.parcelable)
+        api(libs.precompose)
+        api(libs.precompose.viewmodel)
       }
     }
 
-    val commonTest by getting { dependencies { implementation(kotlin("test")) } }
+    val commonTest by getting { dependencies {
+      implementation(kotlin("test"))
+      implementation(libs.koin.test)
+    } }
 
     val androidMain by getting {
       dependencies {
@@ -104,7 +98,7 @@ kotlin {
         implementation(libs.kotlinx.coroutines.android)
         implementation(libs.ktor.client.okhttp)
         implementation(libs.sqlDelight.driver.android)
-        implementation(libs.decompose.extensions.android)
+        implementation(libs.koin.android)
       }
     }
 
@@ -112,10 +106,6 @@ kotlin {
       dependencies {
         implementation(libs.ktor.client.darwin)
         implementation(libs.sqlDelight.driver.native)
-        api(libs.decompose)
-        api(libs.essenty.lifecycle)
-        api(libs.essenty.state.keeper)
-        api(libs.essenty.parcelable)
       }
     }
 
@@ -167,11 +157,4 @@ sqldelight {
       packageName.set("dev.ishubhamsingh.splashy.db")
     }
   }
-}
-
-dependencies {
-  add("kspAndroid", libs.kotlin.inject.compiler)
-  add("kspIosX64", libs.kotlin.inject.compiler)
-  add("kspIosArm64", libs.kotlin.inject.compiler)
-  add("kspIosSimulatorArm64", libs.kotlin.inject.compiler)
 }

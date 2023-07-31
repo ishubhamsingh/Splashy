@@ -15,7 +15,6 @@
  */
 package dev.ishubhamsingh.splashy.core.network
 
-import dev.ishubhamsingh.splashy.core.di.Singleton
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.core.network.api.UnsplashApi
@@ -24,10 +23,7 @@ import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
 import io.ktor.client.call.body
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import me.tatarka.inject.annotations.Inject
 
-@Inject
-@Singleton
 class UnsplashRepositoryImpl(private val unsplashApi: UnsplashApi) : UnsplashRepository {
   override fun getPhotos(page: Int, forceFetch: Boolean): Flow<NetworkResult<ArrayList<Photo>>> {
     return flow {
