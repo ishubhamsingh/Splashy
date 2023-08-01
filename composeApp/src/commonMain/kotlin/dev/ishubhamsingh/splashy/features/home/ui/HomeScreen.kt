@@ -23,17 +23,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
+import dev.ishubhamsingh.splashy.core.navigation.Screen
 import dev.ishubhamsingh.splashy.features.home.HomeViewModel
 import dev.ishubhamsingh.splashy.models.Photo
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import moe.tlaster.precompose.navigation.Navigator
-import moe.tlaster.precompose.viewmodel.viewModel
 
 @Composable
 fun HomeScreen(
     navigator: Navigator,
-    viewModel: HomeViewModel = HomeViewModel()
+    viewModel: HomeViewModel = getViewModel(
+        key = Screen.Home.route,
+        factory = viewModelFactory { HomeViewModel() }
+    )
 ) {
 
     val state by viewModel.state.collectAsState()

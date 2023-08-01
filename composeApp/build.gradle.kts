@@ -81,7 +81,8 @@ kotlin {
         implementation(libs.kamel.image)
         implementation(libs.materialKolor)
         api(libs.precompose)
-        api(libs.precompose.viewmodel)
+        api(libs.moko.mvvm.compose)
+        api(libs.moko.mvvm.flow.compose)
       }
     }
 

@@ -24,6 +24,7 @@ materialKolor = "1.2.0"
 spotless = "6.20.0"
 ktfmt = "0.44"
 precompose = "1.5.0-beta01"
+moko-mvvm = "0.16.1"
 
 [libraries]
 
@@ -59,6 +60,8 @@ kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
 precompose-viewmodel = { module = "moe.tlaster:precompose-viewmodel", version.ref = "precompose" }
+moko-mvvm-flow-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "moko-mvvm"}
+moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "moko-mvvm"}
 
 
 [plugins]

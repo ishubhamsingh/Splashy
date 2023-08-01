@@ -1,22 +1,18 @@
 package dev.ishubhamsingh.splashy.features.home
 
+import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.features.home.ui.HomeEvent
 import dev.ishubhamsingh.splashy.features.home.ui.HomeState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import moe.tlaster.precompose.viewmodel.ViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class HomeViewModel : ViewModel(), KoinComponent {
-    private val viewModelScope = CoroutineScope(Dispatchers.IO)
     private val unsplashRepository: UnsplashRepository by inject()
 
     private val _state = MutableStateFlow(HomeState())
@@ -79,6 +75,13 @@ class HomeViewModel : ViewModel(), KoinComponent {
                     }
                 }
             }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        _state.update {
+            HomeState()
         }
     }
 }
