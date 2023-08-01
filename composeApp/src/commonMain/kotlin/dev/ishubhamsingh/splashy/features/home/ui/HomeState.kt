@@ -20,7 +20,9 @@ import dev.ishubhamsingh.splashy.models.Photo
 data class HomeState(
   val photos: ArrayList<Photo> = arrayListOf(),
   val networkError: String? = null,
-  val isLoading: Boolean = false,
-  val searchQuery: String? = null,
-  val currentPage: Int = 0
+  val isRefreshing: Boolean = false,
+  val isLazyLoading: Boolean = false,
+  val searchQuery: String? = "wallpaper",
+  val currentPage: Int = 1,
+  val totalPages: Int = 0
 )

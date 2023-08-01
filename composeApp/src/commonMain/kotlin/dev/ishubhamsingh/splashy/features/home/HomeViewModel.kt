@@ -18,24 +18,22 @@ package dev.ishubhamsingh.splashy.features.home
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
+import dev.ishubhamsingh.splashy.core.network.UnsplashRepositoryImpl
+import dev.ishubhamsingh.splashy.core.network.api.UnsplashApi
+import dev.ishubhamsingh.splashy.core.utils.getHttpClient
 import dev.ishubhamsingh.splashy.features.home.ui.HomeEvent
 import dev.ishubhamsingh.splashy.features.home.ui.HomeState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class HomeViewModel : ViewModel(), KoinComponent {
-  private val unsplashRepository: UnsplashRepository by inject()
+class HomeViewModel : ViewModel() {
+  private val unsplashApi: UnsplashApi = UnsplashApi(getHttpClient())
+  private val unsplashRepository: UnsplashRepository = UnsplashRepositoryImpl(unsplashApi)
 
   private val _state = MutableStateFlow(HomeState())
   val state = _state.asStateFlow()
-
-  init {
-    fetchPhotos()
-  }
 
   fun onEvent(event: HomeEvent) {
     when (event) {
@@ -43,9 +41,14 @@ class HomeViewModel : ViewModel(), KoinComponent {
         fetchPhotos()
       }
       is HomeEvent.Refresh -> {
+        resetPage()
         fetchPhotos()
       }
       is HomeEvent.OnSearchQueryChange -> {}
+      is HomeEvent.LoadMore -> {
+        nextPage()
+        fetchPhotos()
+      }
     }
   }
 
@@ -54,31 +57,38 @@ class HomeViewModel : ViewModel(), KoinComponent {
   }
 
   private fun resetPage() {
-    _state.update { it.copy(currentPage = 0) }
+    _state.update {
+      it.copy(currentPage = 1, totalPages = 0, searchQuery = "wallpaper", photos = arrayListOf())
+    }
   }
 
-  fun fetchPhotos(page: Int = state.value.currentPage) {
+  private fun fetchPhotos(page: Int = state.value.currentPage) {
     viewModelScope.launch {
       unsplashRepository.searchPhotos("wallpaper", page).collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Success -> {
             networkResult.data?.let { resp ->
-              _state.update { homeState -> homeState.copy(photos = resp.results) }
+              _state.update { homeState ->
+                val current = homeState.photos
+                current.addAll(resp.results)
+                homeState.copy(photos = current, totalPages = resp.totalPages)
+              }
             }
           }
           is NetworkResult.Error -> {
             _state.update { homeState -> homeState.copy(networkError = networkResult.message) }
           }
           is NetworkResult.Loading -> {
-            _state.update { homeState -> homeState.copy(isLoading = networkResult.isLoading) }
+            _state.update { homeState ->
+              if (homeState.currentPage == 1) {
+                homeState.copy(isRefreshing = networkResult.isLoading)
+              } else {
+                homeState.copy(isLazyLoading = networkResult.isLoading)
+              }
+            }
           }
         }
       }
     }
-  }
-
-  override fun onCleared() {
-    super.onCleared()
-    _state.update { HomeState() }
   }
 }

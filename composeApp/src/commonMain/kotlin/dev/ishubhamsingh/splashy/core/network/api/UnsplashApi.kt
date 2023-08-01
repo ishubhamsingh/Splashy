@@ -16,10 +16,10 @@
 package dev.ishubhamsingh.splashy.core.network.api
 
 import Splashy.composeApp.BuildConfig
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
@@ -35,7 +35,7 @@ class UnsplashApi(private val httpClient: HttpClient) {
   private val client by lazy {
     httpClient.config {
       install(Logging) {
-        logger = Logger.DEFAULT
+        logger = KtorLogger()
         level = LogLevel.ALL
       }
       install(ContentNegotiation) {
@@ -47,6 +47,12 @@ class UnsplashApi(private val httpClient: HttpClient) {
           }
         )
       }
+    }
+  }
+
+  class KtorLogger() : Logger {
+    override fun log(message: String) {
+      Napier.v(message)
     }
   }
 

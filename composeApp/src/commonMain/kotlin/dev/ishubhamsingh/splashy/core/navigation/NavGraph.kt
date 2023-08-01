@@ -31,7 +31,8 @@ fun Navigation(navigator: Navigator, paddingValues: PaddingValues) {
   NavHost(
     navigator = navigator,
     initialRoute = Screen.Home.route,
-    modifier = Modifier.padding(paddingValues)
+    modifier = Modifier.padding(paddingValues),
+    persistNavState = true,
   ) {
     scene(route = Screen.Home.route) { HomeScreen(navigator) }
     scene(route = Screen.Collections.route) { CollectionsScreen(navigator) }

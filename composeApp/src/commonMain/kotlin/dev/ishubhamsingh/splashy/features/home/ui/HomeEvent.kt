@@ -16,9 +16,11 @@
 package dev.ishubhamsingh.splashy.features.home.ui
 
 sealed class HomeEvent {
-  object Load : HomeEvent()
+  data object Load : HomeEvent()
 
-  object Refresh : HomeEvent()
+  data object Refresh : HomeEvent()
+
+  data object LoadMore : HomeEvent()
 
   data class OnSearchQueryChange(val query: String) : HomeEvent()
 }
