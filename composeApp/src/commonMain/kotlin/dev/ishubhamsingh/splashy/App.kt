@@ -42,7 +42,7 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
   SplashyTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
     Scaffold(
       bottomBar = {
-        when(currentRoute(navigator)) {
+        when (currentRoute(navigator)) {
           Screen.Home.route,
           Screen.Collections.route,
           Screen.Favourites.route -> {
@@ -62,28 +62,28 @@ fun BottomNavigationComponent(navigator: Navigator) {
     backgroundColor = MaterialTheme.colorScheme.surface,
     contentColor = MaterialTheme.colorScheme.onSurface,
     elevation = 8.dp
-  ){
-    val items = listOf(
-      Screen.Home,
-      Screen.Collections,
-      Screen.Favourites
-    )
+  ) {
+    val items = listOf(Screen.Home, Screen.Collections, Screen.Favourites)
 
     items.forEach {
       val isSelected = it.route == currentRoute(navigator)
       BottomNavigationItem(
-        label = {  },
+        label = {},
         selected = isSelected,
         icon = {
-          Crossfade(targetState = isSelected, animationSpec = tween(100,20, FastOutSlowInEasing)) { mIsSelected ->
-            Icon(imageVector = if(mIsSelected) it.selectedNavIcon else it.unselectedNavIcon, contentDescription = it.title)
+          Crossfade(
+            targetState = isSelected,
+            animationSpec = tween(100, 20, FastOutSlowInEasing)
+          ) { mIsSelected ->
+            Icon(
+              imageVector = if (mIsSelected) it.selectedNavIcon else it.unselectedNavIcon,
+              contentDescription = it.title
+            )
           }
         },
         selectedContentColor = MaterialTheme.colorScheme.onSurface,
         unselectedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-        onClick = {
-          navigator.navigate(it.route, NavOptions(launchSingleTop = true))
-        }
+        onClick = { navigator.navigate(it.route, NavOptions(launchSingleTop = true)) }
       )
     }
   }

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 Shubham Singh
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package dev.ishubhamsingh.splashy.features.home.ui
 
 import androidx.compose.foundation.background
@@ -34,70 +49,63 @@ import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
 fun HomeScreen(
-    navigator: Navigator,
-    viewModel: HomeViewModel = getViewModel(
-        key = Screen.Home.route,
-        factory = viewModelFactory { HomeViewModel() }
-    )
+  navigator: Navigator,
+  viewModel: HomeViewModel =
+    getViewModel(key = Screen.Home.route, factory = viewModelFactory { HomeViewModel() })
 ) {
 
-    val state by viewModel.state.collectAsState()
+  val state by viewModel.state.collectAsState()
 
-    Surface(
-        color = MaterialTheme.colorScheme.surface,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(4.dp)
-            ) {
-                items(items = state.photos, key = {it.id} ) {
-                    PhotoCardItem(navigator, it)
-                }
-            }
-        }
-
+  Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize()) {
+      LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(4.dp)
+      ) {
+        items(items = state.photos, key = { it.id }) { PhotoCardItem(navigator, it) }
+      }
     }
+  }
 }
-
 
 @Composable
 fun PhotoCardItem(
-    navigator: Navigator,
-    photo: Photo,
-    heightDp: Dp = 320.dp,
-    widthDp: Dp = 160.dp,
-    padding: Dp = 4.dp,
+  navigator: Navigator,
+  photo: Photo,
+  heightDp: Dp = 320.dp,
+  widthDp: Dp = 160.dp,
+  padding: Dp = 4.dp,
 ) {
 
-    Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(parseColor(photo.color))),
-        modifier = Modifier
-            .padding(vertical = padding, horizontal = padding)
-            .fillMaxWidth()
-            .height(heightDp)
-            .background(
-                color = Color(parseColor(photo.color)) ?: MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(16.dp)
-            )
-    ) {
-        KamelImage(resource =  asyncPainterResource(data = photo.urls.regular),
-            contentDescription = photo.altDescription,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop)
-    }
+  Card(
+    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+    colors = CardDefaults.cardColors(containerColor = Color(parseColor(photo.color))),
+    modifier =
+      Modifier.padding(vertical = padding, horizontal = padding)
+        .fillMaxWidth()
+        .height(heightDp)
+        .background(
+          color = Color(parseColor(photo.color)) ?: MaterialTheme.colorScheme.surface,
+          shape = RoundedCornerShape(16.dp)
+        )
+  ) {
+    KamelImage(
+      resource = asyncPainterResource(data = photo.urls.regular),
+      contentDescription = photo.altDescription,
+      modifier = Modifier.fillMaxSize(),
+      contentScale = ContentScale.Crop
+    )
+  }
 }
 
 fun parseColor(colorString: String): Int {
-    if (colorString[0] == '#') { // Use a long to avoid rollovers on #ffXXXXXX
-        var color = colorString.substring(1).toLong(16)
-        if (colorString.length == 7) { // Set the alpha value
-            color = color or -0x1000000
-        } else require(colorString.length == 9) { "Unknown color" }
-        return color.toInt()
-    }
-    throw IllegalArgumentException("Unknown color")
+  if (colorString[0] == '#') { // Use a long to avoid rollovers on #ffXXXXXX
+    var color = colorString.substring(1).toLong(16)
+    if (colorString.length == 7) { // Set the alpha value
+      color = color or -0x1000000
+    } else require(colorString.length == 9) { "Unknown color" }
+    return color.toInt()
+  }
+  throw IllegalArgumentException("Unknown color")
 }

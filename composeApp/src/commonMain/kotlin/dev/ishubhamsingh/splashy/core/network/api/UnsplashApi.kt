@@ -49,6 +49,7 @@ class UnsplashApi(private val httpClient: HttpClient) {
       }
     }
   }
+
   suspend fun fetchPhotos(page: Int): HttpResponse {
     return client.get {
       url {
