@@ -33,6 +33,10 @@ class HomeViewModel : ViewModel(), KoinComponent {
   private val _state = MutableStateFlow(HomeState())
   val state = _state.asStateFlow()
 
+  init {
+    fetchPhotos()
+  }
+
   fun onEvent(event: HomeEvent) {
     when (event) {
       is HomeEvent.Load -> {

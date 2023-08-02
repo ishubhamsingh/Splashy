@@ -81,8 +81,8 @@ fun BottomNavigationComponent(navigator: Navigator) {
             )
           }
         },
-        selectedContentColor = MaterialTheme.colorScheme.onSurface,
-        unselectedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+        selectedContentColor = MaterialTheme.colorScheme.secondary,
+        unselectedContentColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
         onClick = { navigator.navigate(it.route, NavOptions(launchSingleTop = true)) }
       )
     }

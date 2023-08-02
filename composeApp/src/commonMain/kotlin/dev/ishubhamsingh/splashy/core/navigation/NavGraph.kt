@@ -26,7 +26,6 @@ import dev.ishubhamsingh.splashy.features.collections.ui.CollectionsScreen
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesScreen
 import dev.ishubhamsingh.splashy.features.home.HomeViewModel
 import dev.ishubhamsingh.splashy.features.home.ui.HomeScreen
-import io.github.aakira.napier.Napier
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 
@@ -40,10 +39,7 @@ fun Navigation(navigator: Navigator, paddingValues: PaddingValues) {
     modifier = Modifier.padding(paddingValues),
     persistNavState = true,
   ) {
-    scene(route = Screen.Home.route) {
-      Napier.v("hello")
-      HomeScreen(navigator, homeViewModel)
-    }
+    scene(route = Screen.Home.route) { HomeScreen(navigator, homeViewModel) }
     scene(route = Screen.Collections.route) { CollectionsScreen(navigator) }
     scene(route = Screen.Favourites.route) { FavouritesScreen(navigator) }
   }

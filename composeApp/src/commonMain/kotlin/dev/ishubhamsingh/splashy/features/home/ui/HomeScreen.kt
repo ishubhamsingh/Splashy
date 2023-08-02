@@ -36,6 +36,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -44,7 +45,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -56,7 +56,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
-import compose.icons.evaicons.outline.ArrowIosUpward
+import compose.icons.evaicons.outline.ArrowheadUp
 import dev.ishubhamsingh.splashy.features.home.HomeViewModel
 import dev.ishubhamsingh.splashy.ui.components.OnBottomReached
 import dev.ishubhamsingh.splashy.ui.components.PhotoCardItem
@@ -75,7 +75,7 @@ fun HomeScreen(navigator: Navigator, viewModel: HomeViewModel) {
   val isFabVisible by
     remember(threshold) { derivedStateOf { lazyGridState.firstVisibleItemIndex > threshold } }
 
-  LaunchedEffect(Unit) { viewModel.onEvent(HomeEvent.Load) }
+  //  LaunchedEffect(Unit) { viewModel.onEvent(HomeEvent.Load) }
 
   Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxSize()) {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -92,7 +92,7 @@ fun HomeScreen(navigator: Navigator, viewModel: HomeViewModel) {
               Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
                 CircularProgressIndicator(
                   modifier = Modifier.align(Alignment.CenterHorizontally).size(24.dp),
-                  color = MaterialTheme.colorScheme.onSurface
+                  color = MaterialTheme.colorScheme.secondary
                 )
               }
             }
@@ -108,8 +108,8 @@ fun HomeScreen(navigator: Navigator, viewModel: HomeViewModel) {
           state.isRefreshing,
           pullRefreshState,
           Modifier.align(Alignment.TopCenter),
-          backgroundColor = MaterialTheme.colorScheme.onSurface,
-          contentColor = MaterialTheme.colorScheme.inverseOnSurface
+          backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+          contentColor = MaterialTheme.colorScheme.secondary
         )
         ScrollToTopFab(
           isFabVisible,
@@ -139,9 +139,10 @@ fun BoxScope.ScrollToTopFab(
     FloatingActionButton(
       onClick = { coroutineScope.launch { lazyGridState.animateScrollToItem(0) } },
       backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-      contentColor = MaterialTheme.colorScheme.secondary
+      contentColor = MaterialTheme.colorScheme.secondary,
+      elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 15.dp)
     ) {
-      Icon(imageVector = EvaIcons.Outline.ArrowIosUpward, contentDescription = "scroll up")
+      Icon(imageVector = EvaIcons.Outline.ArrowheadUp, contentDescription = "scroll up")
     }
   }
 }
