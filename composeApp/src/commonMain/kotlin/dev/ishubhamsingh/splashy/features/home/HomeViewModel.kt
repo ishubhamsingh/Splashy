@@ -18,19 +18,17 @@ package dev.ishubhamsingh.splashy.features.home
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
-import dev.ishubhamsingh.splashy.core.network.UnsplashRepositoryImpl
-import dev.ishubhamsingh.splashy.core.network.api.UnsplashApi
-import dev.ishubhamsingh.splashy.core.utils.getHttpClient
 import dev.ishubhamsingh.splashy.features.home.ui.HomeEvent
 import dev.ishubhamsingh.splashy.features.home.ui.HomeState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class HomeViewModel : ViewModel() {
-  private val unsplashApi: UnsplashApi = UnsplashApi(getHttpClient())
-  private val unsplashRepository: UnsplashRepository = UnsplashRepositoryImpl(unsplashApi)
+class HomeViewModel : ViewModel(), KoinComponent {
+  private val unsplashRepository: UnsplashRepository by inject()
 
   private val _state = MutableStateFlow(HomeState())
   val state = _state.asStateFlow()

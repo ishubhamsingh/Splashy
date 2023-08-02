@@ -20,21 +20,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.ishubhamsingh.splashy.features.collections.ui.CollectionsScreen
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesScreen
+import dev.ishubhamsingh.splashy.features.home.HomeViewModel
 import dev.ishubhamsingh.splashy.features.home.ui.HomeScreen
+import io.github.aakira.napier.Napier
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
 fun Navigation(navigator: Navigator, paddingValues: PaddingValues) {
+  val homeViewModel = getViewModel("home-screen", factory = viewModelFactory { HomeViewModel() })
+
   NavHost(
     navigator = navigator,
     initialRoute = Screen.Home.route,
     modifier = Modifier.padding(paddingValues),
     persistNavState = true,
   ) {
-    scene(route = Screen.Home.route) { HomeScreen(navigator) }
+    scene(route = Screen.Home.route) {
+      Napier.v("hello")
+      HomeScreen(navigator, homeViewModel)
+    }
     scene(route = Screen.Collections.route) { CollectionsScreen(navigator) }
     scene(route = Screen.Favourites.route) { FavouritesScreen(navigator) }
   }
