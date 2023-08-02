@@ -22,7 +22,7 @@ data class HomeState(
   val networkError: String? = null,
   val isRefreshing: Boolean = false,
   val isLazyLoading: Boolean = false,
-  val searchQuery: String? = "wallpaper",
+  val searchQuery: String? = null,
   val currentPage: Int = 1,
   val totalPages: Int = 0
 )

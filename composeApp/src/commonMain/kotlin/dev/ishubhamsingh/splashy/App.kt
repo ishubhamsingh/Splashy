@@ -18,14 +18,25 @@ package dev.ishubhamsingh.splashy
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import compose.icons.EvaIcons
+import compose.icons.evaicons.Outline
+import compose.icons.evaicons.outline.Menu2
+import compose.icons.evaicons.outline.Person
 import dev.ishubhamsingh.splashy.core.navigation.Navigation
 import dev.ishubhamsingh.splashy.core.navigation.Screen
 import dev.ishubhamsingh.splashy.core.navigation.currentRoute
@@ -41,6 +52,15 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
 
   SplashyTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
     Scaffold(
+      topBar = {
+        when (currentRoute(navigator)) {
+          Screen.Home.route,
+          Screen.Collections.route,
+          Screen.Favourites.route -> {
+            AppTopBar(navigator)
+          }
+        }
+      },
       bottomBar = {
         when (currentRoute(navigator)) {
           Screen.Home.route,
@@ -87,4 +107,36 @@ fun BottomNavigationComponent(navigator: Navigator) {
       )
     }
   }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppTopBar(navigator: Navigator) {
+  CenterAlignedTopAppBar(
+    title = {
+      Text("SPLASHY", fontSize = 24.sp, fontWeight = FontWeight.Medium, letterSpacing = 4.sp)
+    },
+    colors =
+      TopAppBarDefaults.centerAlignedTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.surface,
+        titleContentColor = MaterialTheme.colorScheme.secondary,
+        actionIconContentColor = MaterialTheme.colorScheme.secondary,
+        navigationIconContentColor = MaterialTheme.colorScheme.secondary
+      ),
+    actions = {
+      Icon(
+        imageVector = EvaIcons.Outline.Menu2,
+        contentDescription = "settings",
+        tint = MaterialTheme.colorScheme.secondary
+      )
+    },
+    navigationIcon = {
+      Icon(
+        imageVector = EvaIcons.Outline.Person,
+        contentDescription = "profile",
+        tint = MaterialTheme.colorScheme.secondary
+      )
+    },
+    modifier = Modifier.padding(horizontal = 8.dp)
+  )
 }

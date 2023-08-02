@@ -46,7 +46,11 @@ class HomeViewModel : ViewModel(), KoinComponent {
         resetPage()
         fetchPhotos()
       }
-      is HomeEvent.OnSearchQueryChange -> {}
+      is HomeEvent.OnSearchQueryChange -> {
+        _state.update { homeState -> homeState.copy(searchQuery = event.query) }
+        resetPage(false)
+        fetchPhotos()
+      }
       is HomeEvent.LoadMore -> {
         nextPage()
         fetchPhotos()
@@ -58,39 +62,48 @@ class HomeViewModel : ViewModel(), KoinComponent {
     _state.update { it.copy(currentPage = it.currentPage + 1) }
   }
 
-  private fun resetPage() {
+  private fun resetPage(isResetQuery: Boolean = true) {
     _state.update {
-      it.copy(currentPage = 1, totalPages = 0, searchQuery = "wallpaper", photos = arrayListOf())
+      if (isResetQuery) {
+        it.copy(currentPage = 1, totalPages = 0, searchQuery = null, photos = arrayListOf())
+      } else {
+        it.copy(currentPage = 1, totalPages = 0, photos = arrayListOf())
+      }
     }
   }
 
   private fun fetchPhotos(page: Int = state.value.currentPage) {
     viewModelScope.launch {
-      unsplashRepository.searchPhotos("wallpaper", page).collect { networkResult ->
-        when (networkResult) {
-          is NetworkResult.Success -> {
-            networkResult.data?.let { resp ->
-              _state.update { homeState ->
-                val current = homeState.photos
-                current.addAll(resp.results)
-                homeState.copy(photos = current, totalPages = resp.totalPages)
+      unsplashRepository
+        .searchPhotos(
+          if (state.value.searchQuery.isNullOrEmpty()) "wallpaper" else state.value.searchQuery!!,
+          page
+        )
+        .collect { networkResult ->
+          when (networkResult) {
+            is NetworkResult.Success -> {
+              networkResult.data?.let { resp ->
+                _state.update { homeState ->
+                  val current = homeState.photos
+                  current.addAll(resp.results)
+                  homeState.copy(photos = current, totalPages = resp.totalPages)
+                }
               }
             }
-          }
-          is NetworkResult.Error -> {
-            _state.update { homeState -> homeState.copy(networkError = networkResult.message) }
-          }
-          is NetworkResult.Loading -> {
-            _state.update { homeState ->
-              if (homeState.currentPage == 1) {
-                homeState.copy(isRefreshing = networkResult.isLoading)
-              } else {
-                homeState.copy(isLazyLoading = networkResult.isLoading)
+            is NetworkResult.Error -> {
+              _state.update { homeState -> homeState.copy(networkError = networkResult.message) }
+            }
+            is NetworkResult.Loading -> {
+              _state.update { homeState ->
+                if (homeState.currentPage == 1) {
+                  homeState.copy(isRefreshing = networkResult.isLoading)
+                } else {
+                  homeState.copy(isLazyLoading = networkResult.isLoading)
+                }
               }
             }
           }
         }
-      }
     }
   }
 }

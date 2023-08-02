@@ -20,12 +20,14 @@ import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -34,6 +36,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FloatingActionButtonDefaults
@@ -42,8 +45,12 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -52,18 +59,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.ArrowheadUp
+import compose.icons.evaicons.outline.Search
 import dev.ishubhamsingh.splashy.features.home.HomeViewModel
 import dev.ishubhamsingh.splashy.ui.components.OnBottomReached
 import dev.ishubhamsingh.splashy.ui.components.PhotoCardItem
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.Navigator
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navigator: Navigator, viewModel: HomeViewModel) {
   val state by viewModel.state.collectAsState()
@@ -75,8 +86,6 @@ fun HomeScreen(navigator: Navigator, viewModel: HomeViewModel) {
   val isFabVisible by
     remember(threshold) { derivedStateOf { lazyGridState.firstVisibleItemIndex > threshold } }
 
-  //  LaunchedEffect(Unit) { viewModel.onEvent(HomeEvent.Load) }
-
   Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxSize()) {
     Column(modifier = Modifier.fillMaxSize()) {
       Box(Modifier.pullRefresh(pullRefreshState)) {
@@ -86,7 +95,8 @@ fun HomeScreen(navigator: Navigator, viewModel: HomeViewModel) {
           contentPadding = PaddingValues(4.dp),
           state = lazyGridState
         ) {
-          items(items = state.photos, key = { it.id }) { PhotoCardItem(navigator, it) }
+          item(span = { GridItemSpan(this.maxLineSpan) }) { SearchBar(state, viewModel) }
+          items(items = state.photos) { PhotoCardItem(navigator, it) }
           if (state.isLazyLoading) {
             item(span = { GridItemSpan(this.maxLineSpan) }) {
               Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
@@ -144,5 +154,45 @@ fun BoxScope.ScrollToTopFab(
     ) {
       Icon(imageVector = EvaIcons.Outline.ArrowheadUp, contentDescription = "scroll up")
     }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchBar(state: HomeState, viewModel: HomeViewModel) {
+  Surface(
+    modifier =
+      Modifier.fillMaxWidth()
+        .padding(16.dp)
+        .height(48.dp)
+        .border(2.dp, MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f), CircleShape),
+    shape = CircleShape
+  ) {
+    TextField(
+      value = state.searchQuery ?: "",
+      onValueChange = { viewModel.onEvent(HomeEvent.OnSearchQueryChange(it)) },
+      leadingIcon = {
+        Icon(
+          imageVector = EvaIcons.Outline.Search,
+          contentDescription = "search",
+          modifier = Modifier.size(22.dp),
+          tint = MaterialTheme.colorScheme.primary
+        )
+      },
+      placeholder = { Text("Search", fontSize = 16.sp) },
+      modifier = Modifier.fillMaxWidth().height(48.dp),
+      shape = CircleShape,
+      textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp),
+      colors =
+        TextFieldDefaults.textFieldColors(
+          containerColor = MaterialTheme.colorScheme.surface,
+          cursorColor = MaterialTheme.colorScheme.onSurface,
+          textColor = MaterialTheme.colorScheme.onSurface,
+          placeholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+          focusedIndicatorColor = Color.Transparent,
+          unfocusedIndicatorColor = Color.Transparent,
+          disabledIndicatorColor = Color.Transparent
+        )
+    )
   }
 }
