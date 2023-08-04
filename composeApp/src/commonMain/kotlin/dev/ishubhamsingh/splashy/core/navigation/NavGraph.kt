@@ -23,9 +23,11 @@ import androidx.compose.ui.Modifier
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.ishubhamsingh.splashy.features.collections.ui.CollectionsScreen
+import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesScreen
 import dev.ishubhamsingh.splashy.features.home.HomeViewModel
 import dev.ishubhamsingh.splashy.features.home.ui.HomeScreen
+import dev.ishubhamsingh.splashy.features.settings.ui.SettingsScreen
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
 
@@ -42,6 +44,8 @@ fun Navigation(navigator: Navigator, paddingValues: PaddingValues) {
     scene(route = Screen.Home.route) { HomeScreen(navigator, homeViewModel) }
     scene(route = Screen.Collections.route) { CollectionsScreen(navigator) }
     scene(route = Screen.Favourites.route) { FavouritesScreen(navigator) }
+    scene(route = Screen.PhotoDetails.route) { DetailsScreen(navigator) }
+    scene(route = Screen.Settings.route) { SettingsScreen(navigator) }
   }
 }
 

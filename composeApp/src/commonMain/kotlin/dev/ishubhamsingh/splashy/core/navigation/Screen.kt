@@ -34,10 +34,10 @@ import compose.icons.feathericons.Home
 sealed class Screen(
   val route: String,
   val title: String,
-  val selectedNavIcon: ImageVector,
-  val unselectedNavIcon: ImageVector
+  val selectedNavIcon: ImageVector? = null,
+  val unselectedNavIcon: ImageVector? = null
 ) {
-  object Home :
+  data object Home :
     Screen(
       route = "home",
       title = "Home",
@@ -45,7 +45,7 @@ sealed class Screen(
       unselectedNavIcon = EvaIcons.Outline.Home
     )
 
-  object Collections :
+  data object Collections :
     Screen(
       route = "collections",
       title = "Collections",
@@ -53,11 +53,15 @@ sealed class Screen(
       unselectedNavIcon = EvaIcons.Outline.Folder
     )
 
-  object Favourites :
+  data object Favourites :
     Screen(
       route = "favourites",
       title = "Favourites",
       selectedNavIcon = EvaIcons.Fill.Heart,
       unselectedNavIcon = EvaIcons.Outline.Heart
     )
+
+  data object PhotoDetails : Screen(route = "photo_details", title = "Photo Details")
+
+  data object Settings : Screen(route = "settings", title = "Settings")
 }

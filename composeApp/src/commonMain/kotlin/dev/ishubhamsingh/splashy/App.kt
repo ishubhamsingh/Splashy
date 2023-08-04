@@ -18,6 +18,7 @@ package dev.ishubhamsingh.splashy
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -95,10 +96,9 @@ fun BottomNavigationComponent(navigator: Navigator) {
             targetState = isSelected,
             animationSpec = tween(100, 20, FastOutSlowInEasing)
           ) { mIsSelected ->
-            Icon(
-              imageVector = if (mIsSelected) it.selectedNavIcon else it.unselectedNavIcon,
-              contentDescription = it.title
-            )
+            (if (mIsSelected) it.selectedNavIcon else it.unselectedNavIcon)?.let { navIcon ->
+              Icon(imageVector = navIcon, contentDescription = it.title)
+            }
           }
         },
         selectedContentColor = MaterialTheme.colorScheme.secondary,
@@ -127,7 +127,8 @@ fun AppTopBar(navigator: Navigator) {
       Icon(
         imageVector = EvaIcons.Outline.Menu2,
         contentDescription = "settings",
-        tint = MaterialTheme.colorScheme.secondary
+        tint = MaterialTheme.colorScheme.secondary,
+        modifier = Modifier.clickable { navigator.navigate(Screen.Settings.route) }
       )
     },
     navigationIcon = {

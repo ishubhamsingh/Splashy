@@ -16,6 +16,7 @@
 package dev.ishubhamsingh.splashy.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import dev.ishubhamsingh.splashy.core.navigation.Screen
 import dev.ishubhamsingh.splashy.models.Photo
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -60,6 +62,7 @@ fun PhotoCardItem(
           color = Color(parseColor(photo.color)) ?: MaterialTheme.colorScheme.surface,
           shape = RoundedCornerShape(16.dp)
         )
+        .clickable { navigator.navigate(Screen.PhotoDetails.route) }
   ) {
     KamelImage(
       resource = asyncPainterResource(data = photo.urls.regular),

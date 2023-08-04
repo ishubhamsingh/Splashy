@@ -21,6 +21,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -63,6 +64,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -89,7 +91,12 @@ fun HomeScreen(navigator: Navigator, viewModel: HomeViewModel) {
   val isFabVisible by
     remember(threshold) { derivedStateOf { lazyGridState.firstVisibleItemIndex > threshold } }
 
-  Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxSize()) {
+  val focusManager = LocalFocusManager.current
+
+  Surface(
+    color = MaterialTheme.colorScheme.surface,
+    modifier = Modifier.fillMaxSize().clickable { focusManager.clearFocus() }
+  ) {
     Column(modifier = Modifier.fillMaxSize()) {
       Box(Modifier.pullRefresh(pullRefreshState)) {
         LazyVerticalGrid(
