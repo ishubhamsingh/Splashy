@@ -21,6 +21,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FloatingActionButtonDefaults
@@ -49,7 +51,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -60,8 +61,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import compose.icons.EvaIcons
@@ -97,7 +100,7 @@ fun HomeScreen(navigator: Navigator, viewModel: HomeViewModel) {
         ) {
           item(span = { GridItemSpan(this.maxLineSpan) }) { SearchBar(state, viewModel) }
           items(items = state.photos) { PhotoCardItem(navigator, it) }
-          if (state.isLazyLoading) {
+          if (state.isPaginating) {
             item(span = { GridItemSpan(this.maxLineSpan) }) {
               Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
                 CircularProgressIndicator(
@@ -160,39 +163,63 @@ fun BoxScope.ScrollToTopFab(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(state: HomeState, viewModel: HomeViewModel) {
-  Surface(
+  val interactionSource = remember { MutableInteractionSource() }
+  val enabled = true
+  val singleLine = true
+
+  BasicTextField(
+    value = state.searchQuery ?: "",
+    onValueChange = { viewModel.onEvent(HomeEvent.OnSearchQueryChange(it)) },
     modifier =
       Modifier.fillMaxWidth()
         .padding(16.dp)
         .height(48.dp)
-        .border(2.dp, MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f), CircleShape),
-    shape = CircleShape
+        .border(
+          2.dp,
+          color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
+          shape = CircleShape
+        ),
+    interactionSource = interactionSource,
+    singleLine = singleLine,
+    enabled = enabled,
+    textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 20.sp),
+    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
   ) {
-    TextField(
+    TextFieldDefaults.OutlinedTextFieldDecorationBox(
       value = state.searchQuery ?: "",
-      onValueChange = { viewModel.onEvent(HomeEvent.OnSearchQueryChange(it)) },
+      visualTransformation = VisualTransformation.None,
+      innerTextField = it,
+      interactionSource = interactionSource,
+      singleLine = singleLine,
+      enabled = enabled,
       leadingIcon = {
         Icon(
           imageVector = EvaIcons.Outline.Search,
           contentDescription = "search",
-          modifier = Modifier.size(22.dp),
+          modifier = Modifier.size(20.dp),
           tint = MaterialTheme.colorScheme.primary
         )
       },
-      placeholder = { Text("Search", fontSize = 16.sp) },
-      modifier = Modifier.fillMaxWidth().height(48.dp),
-      shape = CircleShape,
-      textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp),
+      trailingIcon = {
+        AnimatedVisibility(visible = state.isSearching) {
+          CircularProgressIndicator(
+            modifier = Modifier.size(20.dp),
+            color = MaterialTheme.colorScheme.primary,
+            strokeWidth = 2.dp
+          )
+        }
+      },
+      placeholder = { Text("Search", fontSize = 20.sp) },
       colors =
-        TextFieldDefaults.textFieldColors(
+        TextFieldDefaults.outlinedTextFieldColors(
           containerColor = MaterialTheme.colorScheme.surface,
-          cursorColor = MaterialTheme.colorScheme.onSurface,
+          cursorColor = MaterialTheme.colorScheme.primary,
           textColor = MaterialTheme.colorScheme.onSurface,
           placeholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-          focusedIndicatorColor = Color.Transparent,
-          unfocusedIndicatorColor = Color.Transparent,
-          disabledIndicatorColor = Color.Transparent
-        )
+          focusedBorderColor = Color.Transparent,
+          unfocusedBorderColor = Color.Transparent
+        ),
+      contentPadding = PaddingValues(0.dp)
     )
   }
 }

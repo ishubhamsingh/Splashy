@@ -49,11 +49,11 @@ class HomeViewModel : ViewModel(), KoinComponent {
       is HomeEvent.OnSearchQueryChange -> {
         _state.update { homeState -> homeState.copy(searchQuery = event.query) }
         resetPage(false)
-        fetchPhotos()
+        fetchPhotos(loadingType = LoadingType.SEARCH)
       }
       is HomeEvent.LoadMore -> {
         nextPage()
-        fetchPhotos()
+        fetchPhotos(loadingType = LoadingType.PAGINATION)
       }
     }
   }
@@ -72,7 +72,10 @@ class HomeViewModel : ViewModel(), KoinComponent {
     }
   }
 
-  private fun fetchPhotos(page: Int = state.value.currentPage) {
+  private fun fetchPhotos(
+    page: Int = state.value.currentPage,
+    loadingType: LoadingType = LoadingType.REFRESH
+  ) {
     viewModelScope.launch {
       unsplashRepository
         .searchPhotos(
@@ -95,10 +98,10 @@ class HomeViewModel : ViewModel(), KoinComponent {
             }
             is NetworkResult.Loading -> {
               _state.update { homeState ->
-                if (homeState.currentPage == 1) {
-                  homeState.copy(isRefreshing = networkResult.isLoading)
-                } else {
-                  homeState.copy(isLazyLoading = networkResult.isLoading)
+                when (loadingType) {
+                  LoadingType.REFRESH -> homeState.copy(isRefreshing = networkResult.isLoading)
+                  LoadingType.PAGINATION -> homeState.copy(isPaginating = networkResult.isLoading)
+                  LoadingType.SEARCH -> homeState.copy(isSearching = networkResult.isLoading)
                 }
               }
             }
@@ -106,4 +109,10 @@ class HomeViewModel : ViewModel(), KoinComponent {
         }
     }
   }
+}
+
+enum class LoadingType {
+  REFRESH,
+  SEARCH,
+  PAGINATION
 }
