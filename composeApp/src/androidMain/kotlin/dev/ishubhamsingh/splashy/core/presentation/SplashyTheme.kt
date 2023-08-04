@@ -29,7 +29,7 @@ import androidx.core.view.WindowCompat
 import dev.ishubhamsingh.splashy.ui.theme.DarkColors
 import dev.ishubhamsingh.splashy.ui.theme.LightColors
 import dev.ishubhamsingh.splashy.ui.theme.Shapes
-import dev.ishubhamsingh.splashy.ui.theme.Typography
+import dev.ishubhamsingh.splashy.ui.theme.getTypography
 
 @Composable
 actual fun SplashyTheme(
@@ -58,7 +58,7 @@ actual fun SplashyTheme(
 
   MaterialTheme(
     colorScheme = colorScheme,
-    typography = Typography,
+    typography = getTypography(),
     shapes = Shapes,
     content = content
   )

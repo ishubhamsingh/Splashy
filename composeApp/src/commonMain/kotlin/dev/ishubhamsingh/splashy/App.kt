@@ -42,6 +42,7 @@ import dev.ishubhamsingh.splashy.core.navigation.Navigation
 import dev.ishubhamsingh.splashy.core.navigation.Screen
 import dev.ishubhamsingh.splashy.core.navigation.currentRoute
 import dev.ishubhamsingh.splashy.core.presentation.SplashyTheme
+import dev.ishubhamsingh.splashy.ui.theme.getLobsterRegular
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.rememberNavigator
@@ -114,7 +115,12 @@ fun BottomNavigationComponent(navigator: Navigator) {
 fun AppTopBar(navigator: Navigator) {
   CenterAlignedTopAppBar(
     title = {
-      Text("SPLASHY", fontSize = 24.sp, fontWeight = FontWeight.Medium, letterSpacing = 4.sp)
+      Text(
+        "Splashy",
+        fontFamily = getLobsterRegular(),
+        fontSize = 32.sp,
+        fontWeight = FontWeight.Normal
+      )
     },
     colors =
       TopAppBarDefaults.centerAlignedTopAppBarColors(

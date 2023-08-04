@@ -200,7 +200,9 @@ fun SearchBar(state: HomeState, viewModel: HomeViewModel) {
       singleLine = singleLine,
       visualTransformation = VisualTransformation.None,
       interactionSource = interactionSource,
-      placeholder = { Text("Search", fontSize = 20.sp) },
+      placeholder = {
+        Text("Search", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp))
+      },
       leadingIcon = {
         Icon(
           imageVector = EvaIcons.Outline.Search,
@@ -220,10 +222,12 @@ fun SearchBar(state: HomeState, viewModel: HomeViewModel) {
       },
       contentPadding = PaddingValues(0.dp),
       container = {
-          OutlinedTextFieldDefaults.ContainerBox(
-            enabled, false,
-            interactionSource,
-            colors = TextFieldDefaults.colors(
+        OutlinedTextFieldDefaults.ContainerBox(
+          enabled,
+          false,
+          interactionSource,
+          colors =
+            TextFieldDefaults.colors(
               unfocusedContainerColor = MaterialTheme.colorScheme.surface,
               focusedContainerColor = MaterialTheme.colorScheme.surface,
               cursorColor = MaterialTheme.colorScheme.primary,
@@ -234,9 +238,9 @@ fun SearchBar(state: HomeState, viewModel: HomeViewModel) {
               unfocusedIndicatorColor = Color.Transparent,
               focusedIndicatorColor = Color.Transparent
             ),
-            unfocusedBorderThickness = 0.dp,
-            focusedBorderThickness = 0.dp
-          )
+          unfocusedBorderThickness = 0.dp,
+          focusedBorderThickness = 0.dp
+        )
       },
     )
   }

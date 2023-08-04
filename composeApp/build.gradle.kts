@@ -20,7 +20,6 @@ plugins {
   alias(libs.plugins.compose)
   alias(libs.plugins.cocoapods)
   alias(libs.plugins.android.application)
-  alias(libs.plugins.libres)
   alias(libs.plugins.buildConfig)
   alias(libs.plugins.kotlinx.serialization)
   alias(libs.plugins.sqlDelight)
@@ -52,6 +51,7 @@ kotlin {
       baseName = "ComposeApp"
       isStatic = true
     }
+    extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
   }
 
   sourceSets {
@@ -62,7 +62,8 @@ kotlin {
         implementation(compose.animation)
         implementation(compose.material)
         implementation(compose.material3)
-        implementation(libs.libres)
+        @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+        implementation(compose.components.resources)
         implementation(libs.composeImageLoader)
         implementation(libs.napier)
         implementation(libs.kotlinx.coroutines.core)
@@ -128,17 +129,13 @@ android {
   }
   sourceSets["main"].apply {
     manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    res.srcDirs("src/androidMain/resources")
+    res.srcDirs("src/androidMain/resources", "src/commonMain/resources")
   }
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
   }
   packagingOptions { resources.excludes.add("META-INF/**") }
-}
-
-libres {
-  // https://github.com/Skeptick/libres#setup
 }
 
 buildConfig {

@@ -15,8 +15,15 @@
  */
 package dev.ishubhamsingh.splashy.core.utils
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.darwin.Darwin
+import kotlinx.coroutines.runBlocking
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.resource
 
 actual fun getHttpClient(): HttpClient {
   val httpClient =
@@ -30,4 +37,15 @@ actual fun getHttpClient(): HttpClient {
     }
 
   return httpClient
+}
+
+private val cache: MutableMap<String, Font> = mutableMapOf()
+
+@OptIn(ExperimentalResourceApi::class, ExperimentalResourceApi::class)
+@Composable
+actual fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font {
+  return cache.getOrPut(res) {
+    val byteArray = runBlocking { resource("font/$res.ttf").readBytes() }
+    androidx.compose.ui.text.platform.Font(res, byteArray, weight, style)
+  }
 }

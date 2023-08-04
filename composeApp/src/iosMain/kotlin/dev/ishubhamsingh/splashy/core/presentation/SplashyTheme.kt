@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import dev.ishubhamsingh.splashy.ui.theme.DarkColors
 import dev.ishubhamsingh.splashy.ui.theme.LightColors
 import dev.ishubhamsingh.splashy.ui.theme.Shapes
-import dev.ishubhamsingh.splashy.ui.theme.Typography
+import dev.ishubhamsingh.splashy.ui.theme.getTypography
 
 @Composable
 actual fun SplashyTheme(
@@ -30,7 +30,7 @@ actual fun SplashyTheme(
 ) {
   MaterialTheme(
     colorScheme = if (darkTheme) DarkColors else LightColors,
-    typography = Typography,
+    typography = getTypography(),
     shapes = Shapes,
     content = content
   )

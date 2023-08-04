@@ -17,14 +17,9 @@ package dev.ishubhamsingh.splashy.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
-import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 val LightColors =
   lightColorScheme(
@@ -99,10 +94,4 @@ val Shapes =
     medium = RoundedCornerShape(8.dp),
     large = RoundedCornerShape(16.dp),
     extraLarge = RoundedCornerShape(32.dp)
-  )
-
-val Typography =
-  Typography(
-    bodyMedium =
-      TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Medium, fontSize = 16.sp)
   )
