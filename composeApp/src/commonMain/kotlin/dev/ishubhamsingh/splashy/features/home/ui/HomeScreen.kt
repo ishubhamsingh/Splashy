@@ -50,6 +50,7 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -192,13 +193,14 @@ fun SearchBar(state: HomeState, viewModel: HomeViewModel) {
     textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 20.sp),
     cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
   ) {
-    TextFieldDefaults.OutlinedTextFieldDecorationBox(
+    OutlinedTextFieldDefaults.DecorationBox(
       value = state.searchQuery ?: "",
-      visualTransformation = VisualTransformation.None,
       innerTextField = it,
-      interactionSource = interactionSource,
-      singleLine = singleLine,
       enabled = enabled,
+      singleLine = singleLine,
+      visualTransformation = VisualTransformation.None,
+      interactionSource = interactionSource,
+      placeholder = { Text("Search", fontSize = 20.sp) },
       leadingIcon = {
         Icon(
           imageVector = EvaIcons.Outline.Search,
@@ -216,17 +218,26 @@ fun SearchBar(state: HomeState, viewModel: HomeViewModel) {
           )
         }
       },
-      placeholder = { Text("Search", fontSize = 20.sp) },
-      colors =
-        TextFieldDefaults.outlinedTextFieldColors(
-          containerColor = MaterialTheme.colorScheme.surface,
-          cursorColor = MaterialTheme.colorScheme.primary,
-          textColor = MaterialTheme.colorScheme.onSurface,
-          placeholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-          focusedBorderColor = Color.Transparent,
-          unfocusedBorderColor = Color.Transparent
-        ),
-      contentPadding = PaddingValues(0.dp)
+      contentPadding = PaddingValues(0.dp),
+      container = {
+          OutlinedTextFieldDefaults.ContainerBox(
+            enabled, false,
+            interactionSource,
+            colors = TextFieldDefaults.colors(
+              unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+              focusedContainerColor = MaterialTheme.colorScheme.surface,
+              cursorColor = MaterialTheme.colorScheme.primary,
+              unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+              focusedTextColor = MaterialTheme.colorScheme.onSurface,
+              unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+              focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+              unfocusedIndicatorColor = Color.Transparent,
+              focusedIndicatorColor = Color.Transparent
+            ),
+            unfocusedBorderThickness = 0.dp,
+            focusedBorderThickness = 0.dp
+          )
+      },
     )
   }
 }

@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../composeApp"
 
 SPEC CHECKSUMS:
-  composeApp: 2756b8858d39e898ce919ecaa0963cc279ad68a3
+  composeApp: aeeb2b75990fafde740933ea272ec843e44de35b
 
 PODFILE CHECKSUM: 3313a530e4ca4361dd2a9b97cf3c536967731c31
 
