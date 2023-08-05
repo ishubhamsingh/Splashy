@@ -19,7 +19,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Wallpapers(
+data class TopicSubmissionStatus(
   @SerialName("approved_on") val approvedOn: String = "",
   @SerialName("status") val status: String = ""
 )

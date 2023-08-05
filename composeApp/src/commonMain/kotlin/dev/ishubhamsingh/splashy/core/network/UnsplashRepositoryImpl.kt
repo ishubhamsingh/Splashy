@@ -64,4 +64,23 @@ class UnsplashRepositoryImpl(private val unsplashApi: UnsplashApi) : UnsplashRep
       }
     }
   }
+
+  override fun getPhotoDetails(id: String): Flow<NetworkResult<Photo>> {
+    return flow {
+      emit(NetworkResult.Loading(isLoading = true))
+      try {
+        val request = unsplashApi.fetchPhotoDetails(id)
+        if (request.status.value == 200) {
+          emit(NetworkResult.Success(request.body()))
+        } else {
+          emit(NetworkResult.Error(request.status.value.toString()))
+        }
+        emit(NetworkResult.Loading(isLoading = false))
+      } catch (e: Exception) {
+        e.printStackTrace()
+        emit(NetworkResult.Error(message = e.message ?: "Couldn't load data", exception = e))
+        emit(NetworkResult.Loading(isLoading = false))
+      }
+    }
+  }
 }

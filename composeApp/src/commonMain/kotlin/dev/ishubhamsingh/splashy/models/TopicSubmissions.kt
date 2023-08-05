@@ -20,10 +20,28 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TopicSubmissions(
-  @SerialName("architecture-interior") val architectureInterior: ArchitectureInterior? = null,
-  @SerialName("experimental") val experimental: Experimental? = null,
-  @SerialName("fashion-beauty") val fashionBeauty: FashionBeauty? = null,
-  @SerialName("street-photography") val streetPhotography: StreetPhotography? = null,
-  @SerialName("wallpapers") val wallpapers: Wallpapers? = null,
-  @SerialName("travel") val travel: Travel? = null
-)
+  @SerialName("architecture-interior") val architectureInterior: TopicSubmissionStatus? = null,
+  @SerialName("experimental") val experimental: TopicSubmissionStatus? = null,
+  @SerialName("fashion-beauty") val fashionBeauty: TopicSubmissionStatus? = null,
+  @SerialName("street-photography") val streetPhotography: TopicSubmissionStatus? = null,
+  @SerialName("wallpapers") val wallpapers: TopicSubmissionStatus? = null,
+  @SerialName("travel") val travel: TopicSubmissionStatus? = null
+) {
+  private val topicSubmissionMap =
+    hashMapOf<TopicSubmissionStatus?, String>(
+      wallpapers to "Wallpapers",
+      experimental to "Experimental",
+      travel to "Travel",
+      fashionBeauty to "Fashion Beauty",
+      streetPhotography to "Street Photography",
+      architectureInterior to "Architecture Interior"
+    )
+
+  fun getApprovedTopics(): ArrayList<String> {
+    val approvedList = arrayListOf<String>()
+    topicSubmissionMap.entries.forEach { item ->
+      item.key?.let { if (it.status == "approved") approvedList.add(item.value) }
+    }
+    return approvedList
+  }
+}

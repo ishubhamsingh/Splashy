@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.models
+package dev.ishubhamsingh.splashy.core.network
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import io.github.aakira.napier.Napier
+import io.ktor.client.plugins.logging.Logger
 
-@Serializable
-data class FashionBeauty(
-  @SerialName("approved_on") val approvedOn: String = "",
-  @SerialName("status") val status: String = ""
-)
+/** Created by Shubham Singh on 05/08/23. */
+class KtorLogger() : Logger {
+  override fun log(message: String) {
+    Napier.v(message)
+  }
+}

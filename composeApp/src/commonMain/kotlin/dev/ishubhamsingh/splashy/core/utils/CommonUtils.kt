@@ -24,3 +24,5 @@ import io.ktor.client.HttpClient
 expect fun getHttpClient(): HttpClient
 
 @Composable expect fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font
+
+expect fun getFormattedDateTime(timesStamp: String, format: String = "dd MMM yyyy, hh:mm a"): String

@@ -24,6 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import java.time.Duration
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 actual fun getHttpClient(): HttpClient {
   val httpClient =
@@ -31,7 +33,10 @@ actual fun getHttpClient(): HttpClient {
       engine {
         config {
           retryOnConnectionFailure(true)
-          callTimeout(Duration.ofMinutes(1))
+          callTimeout(Duration.ofMinutes(0))
+          connectTimeout(Duration.ofMinutes(0))
+          readTimeout(Duration.ofMinutes(0))
+          writeTimeout(Duration.ofMinutes(0))
         }
       }
     }
@@ -45,4 +50,10 @@ actual fun font(name: String, res: String, weight: FontWeight, style: FontStyle)
   val context = LocalContext.current
   val id = context.resources.getIdentifier(res, "font", context.packageName)
   return Font(id, weight, style)
+}
+
+actual fun getFormattedDateTime(timesStamp: String, format: String): String {
+  val date = ZonedDateTime.parse(timesStamp)
+  val formatter = DateTimeFormatter.ofPattern(format)
+  return date.format(formatter)
 }

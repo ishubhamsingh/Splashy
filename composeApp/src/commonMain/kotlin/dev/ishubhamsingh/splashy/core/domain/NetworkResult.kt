@@ -15,10 +15,15 @@
  */
 package dev.ishubhamsingh.splashy.core.domain
 
-sealed class NetworkResult<T>(val data: T? = null, val message: String? = null) {
+sealed class NetworkResult<T>(
+  val data: T? = null,
+  val message: String? = null,
+  exception: Exception? = null
+) {
   class Success<T>(data: T?) : NetworkResult<T>(data)
 
-  class Error<T>(message: String, data: T? = null) : NetworkResult<T>(data, message)
+  class Error<T>(message: String, exception: Exception? = null) :
+    NetworkResult<T>(message = message, exception = exception)
 
   class Loading<T>(val isLoading: Boolean = true) : NetworkResult<T>(null)
 }

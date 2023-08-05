@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.models
+package dev.ishubhamsingh.splashy.features.details.ui
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+sealed class DetailsEvent {
+  data class LoadDetails(val id: String) : DetailsEvent()
 
-@Serializable
-data class StreetPhotography(
-  @SerialName("approved_on") val approvedOn: String = "",
-  @SerialName("status") val status: String = ""
-)
+  data object DownloadPhoto : DetailsEvent()
+
+  data object ApplyAsWallpaper : DetailsEvent()
+}

@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.models
+package dev.ishubhamsingh.splashy.features.details.ui
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import dev.ishubhamsingh.splashy.models.Photo
 
-@Serializable
-data class Experimental(
-  @SerialName("approved_on") val approvedOn: String = "",
-  @SerialName("status") val status: String = ""
+data class DetailsState(
+  val id: String? = null,
+  val photo: Photo? = null,
+  val isLoading: Boolean = false,
+  val isDownloading: Boolean = false,
+  val isApplying: Boolean = false,
+  val networkError: String? = null,
 )

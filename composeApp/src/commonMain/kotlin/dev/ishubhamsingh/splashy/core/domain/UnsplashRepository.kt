@@ -27,4 +27,6 @@ interface UnsplashRepository {
     page: Int,
     forceFetch: Boolean = false
   ): Flow<NetworkResult<PhotoSearchCollection>>
+
+  fun getPhotoDetails(id: String): Flow<NetworkResult<Photo>>
 }

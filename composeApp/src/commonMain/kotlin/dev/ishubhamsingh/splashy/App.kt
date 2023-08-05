@@ -54,6 +54,7 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
 
   SplashyTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
     Scaffold(
+      //      modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
       topBar = {
         when (currentRoute(navigator)) {
           Screen.Home.route,
@@ -104,7 +105,9 @@ fun BottomNavigationComponent(navigator: Navigator) {
         },
         selectedContentColor = MaterialTheme.colorScheme.secondary,
         unselectedContentColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
-        onClick = { navigator.navigate(it.route, NavOptions(launchSingleTop = true)) }
+        onClick = {
+          navigator.navigate(it.route, NavOptions(launchSingleTop = true, includePath = true))
+        }
       )
     }
   }

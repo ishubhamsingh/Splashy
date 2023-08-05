@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.core.navigation
 
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -30,7 +31,9 @@ import dev.ishubhamsingh.splashy.features.home.ui.HomeScreen
 import dev.ishubhamsingh.splashy.features.settings.ui.SettingsScreen
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.Navigator
+import moe.tlaster.precompose.navigation.path
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Navigation(navigator: Navigator, paddingValues: PaddingValues) {
   val homeViewModel = getViewModel("home-screen", factory = viewModelFactory { HomeViewModel() })
@@ -44,7 +47,9 @@ fun Navigation(navigator: Navigator, paddingValues: PaddingValues) {
     scene(route = Screen.Home.route) { HomeScreen(navigator, homeViewModel) }
     scene(route = Screen.Collections.route) { CollectionsScreen(navigator) }
     scene(route = Screen.Favourites.route) { FavouritesScreen(navigator) }
-    scene(route = Screen.PhotoDetails.route) { DetailsScreen(navigator) }
+    scene(route = Screen.PhotoDetails.route.plus("/{id}")) { backStackEntry ->
+      backStackEntry.path<String>("id")?.let { DetailsScreen(navigator, it) }
+    }
     scene(route = Screen.Settings.route) { SettingsScreen(navigator) }
   }
 }

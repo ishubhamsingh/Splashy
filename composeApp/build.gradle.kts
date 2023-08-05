@@ -80,6 +80,7 @@ kotlin {
         implementation(libs.koin.core)
         implementation(libs.kamel.image)
         implementation(libs.materialKolor)
+        implementation(libs.kotlinx.datetime)
         api(libs.precompose)
         api(libs.moko.mvvm.compose)
         api(libs.moko.mvvm.flow.compose)

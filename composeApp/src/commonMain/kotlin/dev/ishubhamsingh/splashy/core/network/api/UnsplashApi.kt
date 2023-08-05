@@ -16,16 +16,17 @@
 package dev.ishubhamsingh.splashy.core.network.api
 
 import Splashy.composeApp.BuildConfig
-import io.github.aakira.napier.Napier
+import dev.ishubhamsingh.splashy.core.network.KtorLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.URLProtocol
+import io.ktor.http.isSuccess
 import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -47,12 +48,11 @@ class UnsplashApi(private val httpClient: HttpClient) {
           }
         )
       }
-    }
-  }
 
-  class KtorLogger() : Logger {
-    override fun log(message: String) {
-      Napier.v(message)
+      install(HttpRequestRetry) {
+        maxRetries = 3
+        retryIf { _, httpResponse -> !httpResponse.status.isSuccess() }
+      }
     }
   }
 
@@ -63,6 +63,7 @@ class UnsplashApi(private val httpClient: HttpClient) {
         host = HOST_URL
         path("photos")
         parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
+        parameters.append("per_page", "10")
         parameters.append("page", page.toString())
       }
     }
@@ -77,7 +78,24 @@ class UnsplashApi(private val httpClient: HttpClient) {
           path("search/photos")
           parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
           parameters.append("query", query)
+          parameters.append("per_page", "10")
+          parameters.append("order_by", "relevant")
+          parameters.append("orientation", "portrait")
+          parameters.append("content_filter", "high")
           parameters.append("page", page.toString())
+        }
+      }
+      .body()
+  }
+
+  suspend fun fetchPhotoDetails(id: String): HttpResponse {
+    return client
+      .get {
+        url {
+          protocol = URLProtocol.HTTPS
+          host = HOST_URL
+          path("/photos/$id")
+          parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
         }
       }
       .body()

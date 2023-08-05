@@ -24,13 +24,19 @@ import io.ktor.client.engine.darwin.Darwin
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
+import platform.Foundation.NSDateFormatter
+import platform.Foundation.NSISO8601DateFormatter
+import platform.Foundation.NSLocale
+import platform.Foundation.NSTimeZone
+import platform.Foundation.autoupdatingCurrentLocale
+import platform.Foundation.localTimeZone
 
 actual fun getHttpClient(): HttpClient {
   val httpClient =
     HttpClient(Darwin) {
       engine {
         configureRequest {
-          setTimeoutInterval(60.0)
+          setTimeoutInterval(5 * 60.0)
           setAllowsCellularAccess(true)
         }
       }
@@ -48,4 +54,14 @@ actual fun font(name: String, res: String, weight: FontWeight, style: FontStyle)
     val byteArray = runBlocking { resource("font/$res.ttf").readBytes() }
     androidx.compose.ui.text.platform.Font(res, byteArray, weight, style)
   }
+}
+
+actual fun getFormattedDateTime(timesStamp: String, format: String): String {
+  val date = NSISO8601DateFormatter().dateFromString(timesStamp) ?: return ""
+
+  val dateFormatter = NSDateFormatter()
+  dateFormatter.timeZone = NSTimeZone.localTimeZone
+  dateFormatter.locale = NSLocale.autoupdatingCurrentLocale
+  dateFormatter.dateFormat = format
+  return dateFormatter.stringFromDate(date)
 }
