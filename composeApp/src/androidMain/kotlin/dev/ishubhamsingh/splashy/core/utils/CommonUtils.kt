@@ -52,8 +52,8 @@ actual fun font(name: String, res: String, weight: FontWeight, style: FontStyle)
   return Font(id, weight, style)
 }
 
-actual fun getFormattedDateTime(timesStamp: String, format: String): String {
-  val date = ZonedDateTime.parse(timesStamp)
+actual fun getFormattedDateTime(timestamp: String, format: String): String {
+  val date = ZonedDateTime.parse(timestamp)
   val formatter = DateTimeFormatter.ofPattern(format)
   return date.format(formatter)
 }

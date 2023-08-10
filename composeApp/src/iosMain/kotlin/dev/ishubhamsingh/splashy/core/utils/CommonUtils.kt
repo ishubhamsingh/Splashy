@@ -56,8 +56,8 @@ actual fun font(name: String, res: String, weight: FontWeight, style: FontStyle)
   }
 }
 
-actual fun getFormattedDateTime(timesStamp: String, format: String): String {
-  val date = NSISO8601DateFormatter().dateFromString(timesStamp) ?: return ""
+actual fun getFormattedDateTime(timestamp: String, format: String): String {
+  val date = NSISO8601DateFormatter().dateFromString(timestamp) ?: return ""
 
   val dateFormatter = NSDateFormatter()
   dateFormatter.timeZone = NSTimeZone.localTimeZone
