@@ -20,6 +20,10 @@ import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.features.home.ui.HomeEvent
 import dev.ishubhamsingh.splashy.features.home.ui.HomeState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -33,16 +37,18 @@ class HomeViewModel : ViewModel(), KoinComponent {
   private val _state = MutableStateFlow(HomeState())
   val state = _state.asStateFlow()
 
+  private var job: Job? = null
+
   init {
     fetchPhotos()
   }
 
   fun onEvent(event: HomeEvent) {
     when (event) {
-      is HomeEvent.Load -> {
+      HomeEvent.Load -> {
         fetchPhotos()
       }
-      is HomeEvent.Refresh -> {
+      HomeEvent.Refresh -> {
         resetPage()
         fetchPhotos()
       }
@@ -51,7 +57,7 @@ class HomeViewModel : ViewModel(), KoinComponent {
         resetPage(false)
         fetchPhotos(loadingType = LoadingType.SEARCH)
       }
-      is HomeEvent.LoadMore -> {
+      HomeEvent.LoadMore -> {
         nextPage()
         fetchPhotos(loadingType = LoadingType.PAGINATION)
       }
@@ -76,7 +82,8 @@ class HomeViewModel : ViewModel(), KoinComponent {
     page: Int = state.value.currentPage,
     loadingType: LoadingType = LoadingType.REFRESH
   ) {
-    viewModelScope.launch {
+    cancelActiveJob() // Cancel ongoing call before launching new
+    job = viewModelScope.launch(Dispatchers.IO) {
       unsplashRepository
         .searchPhotos(
           if (state.value.searchQuery.isNullOrEmpty()) "wallpaper" else state.value.searchQuery!!,
@@ -107,6 +114,12 @@ class HomeViewModel : ViewModel(), KoinComponent {
             }
           }
         }
+    }
+  }
+
+  private fun cancelActiveJob() {
+    if(job?.isActive == true) {
+      job?.cancel()
     }
   }
 }
