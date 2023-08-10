@@ -22,5 +22,5 @@ sealed class HomeEvent {
 
   data object LoadMore : HomeEvent()
 
-  data class OnSearchQueryChange(val query: String) : HomeEvent()
+  data class OnSearchQueryChange(val query: String?) : HomeEvent()
 }

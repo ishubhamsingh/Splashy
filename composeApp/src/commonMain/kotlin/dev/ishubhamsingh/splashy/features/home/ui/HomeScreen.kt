@@ -19,7 +19,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,6 +32,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,6 +50,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -73,6 +80,7 @@ import androidx.compose.ui.unit.sp
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.ArrowheadUp
+import compose.icons.evaicons.outline.CloseCircle
 import compose.icons.evaicons.outline.Search
 import dev.ishubhamsingh.splashy.features.home.HomeViewModel
 import dev.ishubhamsingh.splashy.ui.components.OnBottomReached
@@ -212,7 +220,30 @@ fun SearchBar(state: HomeState, viewModel: HomeViewModel) {
         )
       },
       trailingIcon = {
-        AnimatedVisibility(visible = state.isSearching) {
+          AnimatedVisibility(
+            visible = state.searchQuery.isNullOrEmpty().not()
+                    && state.isSearching.not(),
+            enter = fadeIn(),
+            exit = fadeOut()
+          ) {
+            IconButton(
+              onClick = {
+                viewModel.onEvent(HomeEvent.OnSearchQueryChange(null))
+              },
+            ) {
+              Icon(
+                imageVector = EvaIcons.Outline.CloseCircle,
+                contentDescription = "clear",
+                tint = MaterialTheme.colorScheme.primary
+              )
+            }
+          }
+
+        AnimatedVisibility(
+          visible = state.isSearching,
+          enter = fadeIn(),
+          exit = fadeOut()
+        ) {
           CircularProgressIndicator(
             modifier = Modifier.size(20.dp),
             color = MaterialTheme.colorScheme.primary,
