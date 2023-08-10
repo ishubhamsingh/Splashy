@@ -16,16 +16,15 @@
 package dev.ishubhamsingh.splashy
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -42,6 +41,7 @@ import dev.ishubhamsingh.splashy.core.navigation.Navigation
 import dev.ishubhamsingh.splashy.core.navigation.Screen
 import dev.ishubhamsingh.splashy.core.navigation.currentRoute
 import dev.ishubhamsingh.splashy.core.presentation.SplashyTheme
+import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import dev.ishubhamsingh.splashy.ui.theme.getLobsterRegular
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
@@ -54,7 +54,6 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
 
   SplashyTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
     Scaffold(
-      //      modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
       topBar = {
         when (currentRoute(navigator)) {
           Screen.Home.route,
@@ -81,33 +80,50 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
 
 @Composable
 fun BottomNavigationComponent(navigator: Navigator) {
-  BottomNavigation(
-    backgroundColor = MaterialTheme.colorScheme.surface,
+  NavigationBar(
+    containerColor = MaterialTheme.colorScheme.surface,
     contentColor = MaterialTheme.colorScheme.onSurface,
-    elevation = 8.dp
   ) {
     val items = listOf(Screen.Home, Screen.Collections, Screen.Favourites)
 
     items.forEach {
       val isSelected = it.route == currentRoute(navigator)
-      BottomNavigationItem(
-        label = {},
+      NavigationBarItem(
+        label = { Text(text = it.title, fontFamily = getLatoRegular()) },
         selected = isSelected,
         icon = {
-          Crossfade(
-            targetState = isSelected,
-            animationSpec = tween(100, 20, FastOutSlowInEasing)
-          ) { mIsSelected ->
-            (if (mIsSelected) it.selectedNavIcon else it.unselectedNavIcon)?.let { navIcon ->
-              Icon(imageVector = navIcon, contentDescription = it.title)
+          Crossfade(targetState = isSelected) { mIsSelected ->
+            if (mIsSelected) {
+              it.selectedNavIcon?.let { icon ->
+                Icon(
+                  icon,
+                  contentDescription = it.title,
+                  tint = MaterialTheme.colorScheme.secondary
+                )
+              }
+            } else {
+              it.unselectedNavIcon?.let { icon ->
+                Icon(
+                  icon,
+                  contentDescription = it.title,
+                  tint = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f)
+                )
+              }
             }
           }
         },
-        selectedContentColor = MaterialTheme.colorScheme.secondary,
-        unselectedContentColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
+        colors =
+          NavigationBarItemDefaults.colors(
+            selectedIconColor = MaterialTheme.colorScheme.secondary,
+            selectedTextColor = MaterialTheme.colorScheme.secondary,
+            unselectedIconColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
+            unselectedTextColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
+            indicatorColor = MaterialTheme.colorScheme.secondaryContainer
+          ),
         onClick = {
           navigator.navigate(it.route, NavOptions(launchSingleTop = true, includePath = true))
-        }
+        },
+        alwaysShowLabel = true
       )
     }
   }
