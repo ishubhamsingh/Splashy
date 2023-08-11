@@ -1,0 +1,37 @@
+import dev.ishubhamsingh.splashy.models.TopicSubmissions;
+
+CREATE TABLE favouriteEntity (
+   id TEXT NOT NULL UNIQUE PRIMARY KEY,
+   color TEXT,
+   altDescription TEXT,
+   description TEXT,
+   topicSubmissions TEXT AS TopicSubmissions,
+   url TEXT
+);
+
+getFavourites:
+SELECT *
+FROM favouriteEntity;
+
+getFavouritesById:
+SELECT *
+FROM favouriteEntity
+WHERE id = :id;
+
+deleteFavourite:
+DELETE FROM favouriteEntity
+WHERE id = :id;
+
+deleteAllFavourites:
+DELETE FROM favouriteEntity;
+
+insertFavourite:
+INSERT OR REPLACE
+INTO favouriteEntity(
+ id,
+ color,
+ altDescription,
+ description,
+ topicSubmissions,
+ url
+) VALUES (?,?,?,?,?,?);

@@ -21,7 +21,6 @@ import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsEvent
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsState
 import io.github.aakira.napier.Napier
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

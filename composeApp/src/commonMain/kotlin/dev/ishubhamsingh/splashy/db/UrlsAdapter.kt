@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.models
+package dev.ishubhamsingh.splashy.db
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
+import app.cash.sqldelight.ColumnAdapter
+import dev.ishubhamsingh.splashy.models.Urls
 import kotlinx.serialization.json.Json
 
-@Serializable
-data class Urls(
-  @SerialName("full") val full: String = "",
-  @SerialName("raw") val raw: String = "",
-  @SerialName("regular") val regular: String = "",
-  @SerialName("small") val small: String = "",
-  @SerialName("small_s3") val smallS3: String = "",
-  @SerialName("thumb") val thumb: String = ""
-) {
-  override fun toString(): String {
-    return Json.encodeToString(this)
+/** Created by Shubham Singh on 11/08/23. */
+object UrlsAdapter : ColumnAdapter<Urls, String> {
+  override fun decode(databaseValue: String): Urls {
+    return Json.decodeFromString(databaseValue)
+  }
+
+  override fun encode(value: Urls): String {
+    return value.toString()
   }
 }

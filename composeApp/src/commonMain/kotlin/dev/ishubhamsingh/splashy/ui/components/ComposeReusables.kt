@@ -88,14 +88,16 @@ fun PhotoCardItem(
         )
         .clickable { navigator.navigate(Screen.PhotoDetails.route.plus("/${photo.id}")) }
   ) {
-    CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(photo.urls.regular)) {
-      KamelImage(
-        resource = asyncPainterResource(data = photo.urls.regular),
-        contentDescription = photo.altDescription,
-        modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.Crop,
-        animationSpec = tween()
-      )
+    photo.urls?.regular?.let {
+      CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
+        KamelImage(
+          resource = asyncPainterResource(data = it),
+          contentDescription = photo.altDescription,
+          modifier = Modifier.fillMaxSize(),
+          contentScale = ContentScale.Crop,
+          animationSpec = tween()
+        )
+      }
     }
   }
 }

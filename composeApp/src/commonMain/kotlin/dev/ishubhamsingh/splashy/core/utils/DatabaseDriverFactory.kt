@@ -13,21 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.models
+package dev.ishubhamsingh.splashy.core.utils
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import app.cash.sqldelight.db.SqlDriver
 
-@Serializable
-data class Links(
-  @SerialName("download") val download: String = "",
-  @SerialName("download_location") val downloadLocation: String = "",
-  @SerialName("html") val html: String = "",
-  @SerialName("self") val self: String = ""
-) {
-  override fun toString(): String {
-    return Json.encodeToString(this)
-  }
+/** Created by Shubham Singh on 11/08/23. */
+internal const val DB_NAME = "splashy.db"
+
+expect class DatabaseDriverFactory {
+  fun createDriver(): SqlDriver
 }

@@ -16,5 +16,6 @@
 package dev.ishubhamsingh.splashy.core.di
 
 import dev.ishubhamsingh.splashy.core.di.components.commonModule
+import dev.ishubhamsingh.splashy.core.di.components.platformModule
 
-fun appModule() = listOf(commonModule)
+fun appModule() = listOf(platformModule, commonModule)

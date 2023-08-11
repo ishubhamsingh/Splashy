@@ -145,11 +145,11 @@ fun DetailsScreen(
 @Composable
 fun PhotoContainer(modifier: Modifier = Modifier, photo: Photo) {
   Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-    photo.let {
-      CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(photo.urls.regular)) {
+    photo.urls?.regular?.let {
+      CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
         KamelImage(
-          resource = asyncPainterResource(data = it.urls.regular),
-          contentDescription = it.altDescription,
+          resource = asyncPainterResource(data = it),
+          contentDescription = photo.altDescription,
           modifier = Modifier.fillMaxSize(),
           contentScale = ContentScale.Crop,
           animationSpec = tween()
@@ -181,7 +181,7 @@ fun SheetProfileRow(photo: Photo) {
       horizontalArrangement = Arrangement.SpaceBetween
     ) {
       Row(verticalAlignment = Alignment.CenterVertically) {
-        user.profileImage?.let { profilePic ->
+        user?.profileImage?.let { profilePic ->
           CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(profilePic.medium)) {
             KamelImage(
               modifier = Modifier.size(36.dp).clip(CircleShape),
@@ -197,11 +197,11 @@ fun SheetProfileRow(photo: Photo) {
 
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
           Text(
-            text = user.name ?: "${user.firstName} ${user.lastName}",
+            text = user?.name ?: "${user?.firstName} ${user?.lastName}",
             style = MaterialTheme.typography.headlineMedium
           )
           Text(
-            text = "@${user.username ?: ""}",
+            text = "@${user?.username ?: ""}",
             style =
               MaterialTheme.typography.bodySmall.copy(
                 fontSize = 14.sp,
@@ -280,11 +280,13 @@ fun SheetPhotoDetails(photo: Photo) {
         )
       }
 
-      PhotoDetailItem("Posted on :") {
-        Text(
-          text = getFormattedDateTime(photo.createdAt),
-          style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
-        )
+      photo.createdAt?.let {
+        PhotoDetailItem("Posted on :") {
+          Text(
+            text = getFormattedDateTime(it),
+            style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
+          )
+        }
       }
 
       PhotoDetailItem("Size :") {

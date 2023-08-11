@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.models
+package dev.ishubhamsingh.splashy.db
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import dev.ishubhamsingh.splashy.models.Photo
 
-@Serializable
-data class Links(
-  @SerialName("download") val download: String = "",
-  @SerialName("download_location") val downloadLocation: String = "",
-  @SerialName("html") val html: String = "",
-  @SerialName("self") val self: String = ""
-) {
-  override fun toString(): String {
-    return Json.encodeToString(this)
-  }
-}
+/** Created by Shubham Singh on 11/08/23. */
+fun PhotoEntity.toPhoto(): Photo =
+  Photo(
+    id = id,
+    altDescription = altDescription ?: "",
+    color = color ?: "",
+    description = description ?: "",
+    width = width ?: 0,
+    height = height ?: 0,
+    likes = likes ?: 0,
+    user = user,
+    urls = urls,
+    links = links,
+    topicSubmissions = topicSubmissions,
+    createdAt = createdAt,
+    updatedAt = updatedAt,
+    promotedAt = promotedAt
+  )

@@ -13,23 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.models
+package dev.ishubhamsingh.splashy.core.utils
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import android.content.Context
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import dev.ishubhamsingh.splashy.db.SplashyDatabase
 
-@Serializable
-data class Urls(
-  @SerialName("full") val full: String = "",
-  @SerialName("raw") val raw: String = "",
-  @SerialName("regular") val regular: String = "",
-  @SerialName("small") val small: String = "",
-  @SerialName("small_s3") val smallS3: String = "",
-  @SerialName("thumb") val thumb: String = ""
-) {
-  override fun toString(): String {
-    return Json.encodeToString(this)
+/** Created by Shubham Singh on 11/08/23. */
+actual class DatabaseDriverFactory(private val context: Context) {
+  actual fun createDriver(): SqlDriver {
+    return AndroidSqliteDriver(schema = SplashyDatabase.Schema, context = context, name = DB_NAME)
   }
 }

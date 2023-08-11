@@ -50,16 +50,16 @@ class HomeViewModel : ViewModel(), KoinComponent {
       }
       HomeEvent.Refresh -> {
         resetPage()
-        fetchPhotos()
+        fetchPhotos(forceFetch = true)
       }
       is HomeEvent.OnSearchQueryChange -> {
         _state.update { homeState -> homeState.copy(searchQuery = event.query) }
         resetPage(false)
-        fetchPhotos(loadingType = LoadingType.SEARCH)
+        fetchPhotos(loadingType = LoadingType.SEARCH, forceFetch = true)
       }
       HomeEvent.LoadMore -> {
         nextPage()
-        fetchPhotos(loadingType = LoadingType.PAGINATION)
+        fetchPhotos(loadingType = LoadingType.PAGINATION, forceFetch = true)
       }
     }
   }
@@ -80,45 +80,48 @@ class HomeViewModel : ViewModel(), KoinComponent {
 
   private fun fetchPhotos(
     page: Int = state.value.currentPage,
-    loadingType: LoadingType = LoadingType.REFRESH
+    loadingType: LoadingType = LoadingType.REFRESH,
+    forceFetch: Boolean = false
   ) {
     cancelActiveJob() // Cancel ongoing call before launching new
-    job = viewModelScope.launch(Dispatchers.IO) {
-      unsplashRepository
-        .searchPhotos(
-          if (state.value.searchQuery.isNullOrEmpty()) "wallpaper" else state.value.searchQuery!!,
-          page
-        )
-        .collect { networkResult ->
-          when (networkResult) {
-            is NetworkResult.Success -> {
-              networkResult.data?.let { resp ->
-                _state.update { homeState ->
-                  val current = homeState.photos
-                  current.addAll(resp.results)
-                  homeState.copy(photos = current, totalPages = resp.totalPages)
+    job =
+      viewModelScope.launch(Dispatchers.IO) {
+        unsplashRepository
+          .searchPhotos(
+            if (state.value.searchQuery.isNullOrEmpty()) "wallpaper" else state.value.searchQuery!!,
+            page,
+            forceFetch
+          )
+          .collect { networkResult ->
+            when (networkResult) {
+              is NetworkResult.Success -> {
+                networkResult.data?.let { resp ->
+                  _state.update { homeState ->
+                    val current = homeState.photos
+                    current.addAll(resp.results)
+                    homeState.copy(photos = current, totalPages = resp.totalPages)
+                  }
                 }
               }
-            }
-            is NetworkResult.Error -> {
-              _state.update { homeState -> homeState.copy(networkError = networkResult.message) }
-            }
-            is NetworkResult.Loading -> {
-              _state.update { homeState ->
-                when (loadingType) {
-                  LoadingType.REFRESH -> homeState.copy(isRefreshing = networkResult.isLoading)
-                  LoadingType.PAGINATION -> homeState.copy(isPaginating = networkResult.isLoading)
-                  LoadingType.SEARCH -> homeState.copy(isSearching = networkResult.isLoading)
+              is NetworkResult.Error -> {
+                _state.update { homeState -> homeState.copy(networkError = networkResult.message) }
+              }
+              is NetworkResult.Loading -> {
+                _state.update { homeState ->
+                  when (loadingType) {
+                    LoadingType.REFRESH -> homeState.copy(isRefreshing = networkResult.isLoading)
+                    LoadingType.PAGINATION -> homeState.copy(isPaginating = networkResult.isLoading)
+                    LoadingType.SEARCH -> homeState.copy(isSearching = networkResult.isLoading)
+                  }
                 }
               }
             }
           }
-        }
-    }
+      }
   }
 
   private fun cancelActiveJob() {
-    if(job?.isActive == true) {
+    if (job?.isActive == true) {
       job?.cancel()
     }
   }

@@ -17,6 +17,8 @@ package dev.ishubhamsingh.splashy.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Serializable
 data class User(
@@ -39,4 +41,8 @@ data class User(
   @SerialName("twitter_username") val twitterUsername: String? = "",
   @SerialName("updated_at") val updatedAt: String? = "",
   @SerialName("username") val username: String? = ""
-)
+) {
+  override fun toString(): String {
+    return Json.encodeToString(this)
+  }
+}

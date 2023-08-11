@@ -13,21 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.models
+package dev.ishubhamsingh.splashy.core.di.components
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import dev.ishubhamsingh.splashy.core.utils.DatabaseDriverFactory
+import org.koin.dsl.module
 
-@Serializable
-data class Links(
-  @SerialName("download") val download: String = "",
-  @SerialName("download_location") val downloadLocation: String = "",
-  @SerialName("html") val html: String = "",
-  @SerialName("self") val self: String = ""
-) {
-  override fun toString(): String {
-    return Json.encodeToString(this)
-  }
-}
+/** Created by Shubham Singh on 11/08/23. */
+actual val platformModule = module { single { DatabaseDriverFactory(get()) } }

@@ -81,6 +81,7 @@ kotlin {
         implementation(libs.kamel.image)
         implementation(libs.materialKolor)
         implementation(libs.kotlinx.datetime)
+        implementation(libs.sqlDelight.coroutines.extensions)
         api(libs.precompose)
         api(libs.moko.mvvm.compose)
         api(libs.moko.mvvm.flow.compose)
@@ -140,8 +141,6 @@ android {
 }
 
 buildConfig {
-  // BuildConfig configuration here.
-  // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
   buildConfigField(
     "String",
     "UNSPLASH_API_KEY",
@@ -151,10 +150,9 @@ buildConfig {
 
 sqldelight {
   databases {
-    create("MyDatabase") {
-      // Database configuration here.
-      // https://cashapp.github.io/sqldelight
+    create("SplashyDatabase") {
       packageName.set("dev.ishubhamsingh.splashy.db")
+      dialect(libs.sqlDelight.sqlite.dialect)
     }
   }
 }

@@ -1,0 +1,59 @@
+import dev.ishubhamsingh.splashy.models.Links;
+import dev.ishubhamsingh.splashy.models.TopicSubmissions;
+import dev.ishubhamsingh.splashy.models.Urls;
+import dev.ishubhamsingh.splashy.models.User;
+import kotlin.Int;
+
+CREATE TABLE photoEntity (
+  id TEXT NOT NULL UNIQUE PRIMARY KEY,
+  color TEXT,
+  altDescription TEXT,
+  description TEXT,
+  likes INTEGER AS Int,
+  width INTEGER AS Int,
+  height INTEGER AS Int,
+  links TEXT AS Links,
+  topicSubmissions TEXT AS TopicSubmissions,
+  urls TEXT AS Urls,
+  user TEXT AS User,
+  promotedAt TEXT,
+  updatedAt TEXT,
+  createdAt TEXT
+);
+
+getPhotos:
+SELECT *
+FROM photoEntity;
+
+getPhotosById:
+SELECT *
+FROM photoEntity
+WHERE id = :id;
+
+deletePhoto:
+DELETE FROM photoEntity
+WHERE id = :id;
+
+deleteAllPhotos:
+DELETE FROM photoEntity;
+
+insertPhoto:
+INSERT OR REPLACE
+INTO photoEntity(
+id,
+color,
+altDescription,
+description,
+likes,
+width,
+height,
+links,
+topicSubmissions,
+urls,
+user,
+promotedAt,
+updatedAt,
+createdAt
+) VALUES (?,?,?,?,
+?,?,?,?,?,
+?,?,?,?,?);
