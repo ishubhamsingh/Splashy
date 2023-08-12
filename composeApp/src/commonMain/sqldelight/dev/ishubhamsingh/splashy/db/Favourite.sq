@@ -34,4 +34,4 @@ INTO favouriteEntity(
  description,
  topicSubmissions,
  url
-) VALUES (?,?,?,?,?,?);
+) VALUES ?;

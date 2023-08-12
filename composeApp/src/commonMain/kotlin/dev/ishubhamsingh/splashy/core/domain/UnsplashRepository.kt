@@ -15,18 +15,28 @@
  */
 package dev.ishubhamsingh.splashy.core.domain
 
+import dev.ishubhamsingh.splashy.db.FavouriteEntity
+import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
 import kotlinx.coroutines.flow.Flow
 
 interface UnsplashRepository {
-  fun getPhotos(page: Int, forceFetch: Boolean = false): Flow<NetworkResult<ArrayList<Photo>>>
+  fun getPhotos(page: Int, fetchFromRemote: Boolean = false): Flow<NetworkResult<ArrayList<Photo>>>
 
   fun searchPhotos(
     searchQuery: String,
     page: Int,
-    forceFetch: Boolean = false
+    fetchFromRemote: Boolean = false
   ): Flow<NetworkResult<PhotoSearchCollection>>
 
   fun getPhotoDetails(id: String): Flow<NetworkResult<Photo>>
+
+  fun addFavourite(favourite: Favourite): Flow<NetworkResult<Boolean>>
+
+  fun removeFavourite(id: String): Flow<NetworkResult<Boolean>>
+
+  fun isFavourite(id: String): Flow<NetworkResult<Boolean>>
+
+  fun getFavourites(): Flow<NetworkResult<ArrayList<Favourite>>>
 }

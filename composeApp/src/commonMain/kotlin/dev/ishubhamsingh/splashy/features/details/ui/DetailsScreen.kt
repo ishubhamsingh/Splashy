@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.features.details.ui
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -63,6 +64,7 @@ import androidx.compose.ui.unit.sp
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
+import compose.icons.evaicons.fill.Heart
 import compose.icons.evaicons.fill.Info
 import compose.icons.evaicons.outline.Heart
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -121,7 +123,7 @@ fun DetailsScreen(
       sheetSwipeEnabled = true,
       sheetContainerColor = MaterialTheme.colorScheme.surface,
       sheetContentColor = MaterialTheme.colorScheme.onSurface,
-      sheetContent = { PhotoDetailsContainer(photo) },
+      sheetContent = { PhotoDetailsContainer(photo, viewModel, state) },
       sheetPeekHeight = 180.dp,
       containerColor = MaterialTheme.colorScheme.surface,
       contentColor = MaterialTheme.colorScheme.onSurface,
@@ -144,7 +146,7 @@ fun DetailsScreen(
 
 @Composable
 fun PhotoContainer(modifier: Modifier = Modifier, photo: Photo) {
-  Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+  Column(modifier = modifier.fillMaxSize().background(color = Color(parseColor(photo.color))), verticalArrangement = Arrangement.Center) {
     photo.urls?.regular?.let {
       CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
         KamelImage(
@@ -160,20 +162,20 @@ fun PhotoContainer(modifier: Modifier = Modifier, photo: Photo) {
 }
 
 @Composable
-fun PhotoDetailsContainer(photo: Photo) {
+fun PhotoDetailsContainer(photo: Photo, viewModel: DetailsViewModel, state: DetailsState) {
   Column(
     modifier = Modifier.padding(16.dp).fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(16.dp),
     horizontalAlignment = Alignment.Start
   ) {
-    SheetProfileRow(photo)
+    SheetProfileRow(photo, viewModel, state)
     SheetActionRow(photo)
     SheetPhotoDetails(photo)
   }
 }
 
 @Composable
-fun SheetProfileRow(photo: Photo) {
+fun SheetProfileRow(photo: Photo, viewModel: DetailsViewModel, state: DetailsState) {
   photo.user.let { user ->
     Row(
       modifier = Modifier.fillMaxWidth(),
@@ -211,8 +213,20 @@ fun SheetProfileRow(photo: Photo) {
         }
       }
 
-      FilledTonalIconButton(onClick = {}) {
-        Icon(imageVector = EvaIcons.Outline.Heart, contentDescription = "Fav")
+      FilledTonalIconButton(onClick = {
+        if(state.isFavourite) {
+          viewModel.onEvent(DetailsEvent.RemoveFavourite)
+        } else {
+          viewModel.onEvent(DetailsEvent.AddFavourite)
+        }
+      }) {
+        Crossfade(targetState = state.isFavourite) { isFavourite ->
+          if(isFavourite) {
+            Icon(imageVector = EvaIcons.Fill.Heart, contentDescription = "Fav")
+          } else {
+            Icon(imageVector = EvaIcons.Outline.Heart, contentDescription = "Fav")
+          }
+        }
       }
     }
   }

@@ -16,6 +16,11 @@
 package dev.ishubhamsingh.splashy.db
 
 import dev.ishubhamsingh.splashy.core.utils.DatabaseDriverFactory
+import dev.ishubhamsingh.splashy.db.columnAdapters.IntAdapter
+import dev.ishubhamsingh.splashy.db.columnAdapters.LinksAdapter
+import dev.ishubhamsingh.splashy.db.columnAdapters.TopicSubmissionsAdapter
+import dev.ishubhamsingh.splashy.db.columnAdapters.UrlsAdapter
+import dev.ishubhamsingh.splashy.db.columnAdapters.UserAdapter
 
 /** Created by Shubham Singh on 11/08/23. */
 fun createDatabase(databaseDriverFactory: DatabaseDriverFactory): SplashyDatabase {

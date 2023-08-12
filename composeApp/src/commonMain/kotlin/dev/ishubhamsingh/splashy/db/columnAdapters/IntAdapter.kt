@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.db
+package dev.ishubhamsingh.splashy.db.columnAdapters
 
 import app.cash.sqldelight.ColumnAdapter
-import dev.ishubhamsingh.splashy.models.TopicSubmissions
-import kotlinx.serialization.json.Json
 
 /** Created by Shubham Singh on 11/08/23. */
-object TopicSubmissionsAdapter : ColumnAdapter<TopicSubmissions, String> {
-  override fun decode(databaseValue: String): TopicSubmissions {
-    return Json.decodeFromString(databaseValue)
+object IntAdapter : ColumnAdapter<Int, Long> {
+  override fun decode(databaseValue: Long): Int {
+    return databaseValue.toInt()
   }
 
-  override fun encode(value: TopicSubmissions): String {
-    return value.toString()
+  override fun encode(value: Int): Long {
+    return value.toLong()
   }
 }

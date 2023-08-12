@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.db
+package dev.ishubhamsingh.splashy.db.columnAdapters
 
 import app.cash.sqldelight.ColumnAdapter
 import dev.ishubhamsingh.splashy.models.Links

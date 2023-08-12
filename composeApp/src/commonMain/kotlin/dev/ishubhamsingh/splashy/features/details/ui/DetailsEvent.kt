@@ -21,4 +21,8 @@ sealed class DetailsEvent {
   data object DownloadPhoto : DetailsEvent()
 
   data object ApplyAsWallpaper : DetailsEvent()
+
+  data object AddFavourite : DetailsEvent()
+
+  data object RemoveFavourite : DetailsEvent()
 }

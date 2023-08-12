@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.db
+package dev.ishubhamsingh.splashy.db.mappers
 
+import dev.ishubhamsingh.splashy.db.PhotoEntity
 import dev.ishubhamsingh.splashy.models.Photo
+import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
 
 /** Created by Shubham Singh on 11/08/23. */
 fun PhotoEntity.toPhoto(): Photo =
@@ -35,3 +37,32 @@ fun PhotoEntity.toPhoto(): Photo =
     updatedAt = updatedAt,
     promotedAt = promotedAt
   )
+
+fun Photo.toPhotoEntity(): PhotoEntity =
+  PhotoEntity(
+    id = id,
+    altDescription = altDescription,
+    color = color,
+    description = description,
+    width = width,
+    height = height,
+    likes = likes,
+    user = user,
+    urls = urls,
+    links = links,
+    topicSubmissions = topicSubmissions,
+    createdAt = createdAt,
+    updatedAt = updatedAt,
+    promotedAt = promotedAt
+  )
+
+fun List<PhotoEntity>.toPhotoList(): List<Photo> = map { it.toPhoto()}
+fun List<Photo>.toPhotoEntityList(): List<PhotoEntity> = map { it.toPhotoEntity() }
+
+fun List<PhotoEntity>.toPhotoArrayList(): ArrayList<Photo> = ArrayList(toPhotoList())
+
+fun ArrayList<Photo>.toPhotoSearchCollection(): PhotoSearchCollection = PhotoSearchCollection(
+  results = this,
+  total = this.size,
+  totalPages = this.size/10
+)

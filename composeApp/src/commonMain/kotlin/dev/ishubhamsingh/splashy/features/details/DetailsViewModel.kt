@@ -18,8 +18,10 @@ package dev.ishubhamsingh.splashy.features.details
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
+import dev.ishubhamsingh.splashy.db.mappers.toFavourite
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsEvent
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsState
+import dev.ishubhamsingh.splashy.models.Favourite
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,8 +42,12 @@ class DetailsViewModel : ViewModel(), KoinComponent {
       DetailsEvent.DownloadPhoto -> TODO()
       is DetailsEvent.LoadDetails -> {
         _state.update { detailsState -> detailsState.copy(id = event.id) }
+        isFavourite()
         fetchPhotoDetails()
       }
+
+      DetailsEvent.AddFavourite -> addFavourite()
+      DetailsEvent.RemoveFavourite -> removeFavourite()
     }
   }
 
@@ -61,6 +67,49 @@ class DetailsViewModel : ViewModel(), KoinComponent {
           is NetworkResult.Success -> {
             _state.update { detailsState -> detailsState.copy(photo = networkResult.data) }
           }
+        }
+      }
+    }
+  }
+
+  private fun addFavourite(favourite: Favourite? = state.value.photo?.toFavourite()) {
+    favourite?.let {
+      viewModelScope.launch {
+        unsplashRepository.addFavourite(favourite).collect { result ->
+          when(result) {
+            is NetworkResult.Success -> {
+              _state.update { detailsState -> detailsState.copy(isFavourite = true) }
+            }
+            else -> {}
+          }
+        }
+      }
+    }
+  }
+
+  private fun removeFavourite(id: String = state.value.id ?: "") {
+    if(id.isEmpty()) return
+    viewModelScope.launch {
+      unsplashRepository.removeFavourite(id).collect { result ->
+        when(result) {
+          is NetworkResult.Success -> {
+            _state.update { detailsState -> detailsState.copy(isFavourite = false) }
+          }
+          else -> {}
+        }
+      }
+    }
+  }
+
+  private fun isFavourite(id: String = state.value.id ?: "") {
+    if(id.isEmpty()) return
+    viewModelScope.launch {
+      unsplashRepository.isFavourite(id).collect { result ->
+        when(result) {
+          is NetworkResult.Success -> {
+            _state.update { detailsState -> detailsState.copy(isFavourite = result.data == true) }
+          }
+          else -> {}
         }
       }
     }

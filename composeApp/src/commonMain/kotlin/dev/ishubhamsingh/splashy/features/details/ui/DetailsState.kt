@@ -20,6 +20,7 @@ import dev.ishubhamsingh.splashy.models.Photo
 data class DetailsState(
   val id: String? = null,
   val photo: Photo? = null,
+  val isFavourite: Boolean = false,
   val isLoading: Boolean = false,
   val isDownloading: Boolean = false,
   val isApplying: Boolean = false,
