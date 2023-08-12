@@ -289,7 +289,7 @@ fun SheetPhotoDetails(photo: Photo) {
     ) {
       PhotoDetailItem("Description :") {
         Text(
-          photo.altDescription,
+          if(photo.description.isNullOrEmpty()) photo.altDescription else photo.description,
           style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
         )
       }
