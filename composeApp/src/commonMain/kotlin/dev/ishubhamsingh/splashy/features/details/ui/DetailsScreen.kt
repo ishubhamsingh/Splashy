@@ -146,7 +146,10 @@ fun DetailsScreen(
 
 @Composable
 fun PhotoContainer(modifier: Modifier = Modifier, photo: Photo) {
-  Column(modifier = modifier.fillMaxSize().background(color = Color(parseColor(photo.color))), verticalArrangement = Arrangement.Center) {
+  Column(
+    modifier = modifier.fillMaxSize().background(color = Color(parseColor(photo.color))),
+    verticalArrangement = Arrangement.Center
+  ) {
     photo.urls?.regular?.let {
       CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
         KamelImage(
@@ -213,15 +216,17 @@ fun SheetProfileRow(photo: Photo, viewModel: DetailsViewModel, state: DetailsSta
         }
       }
 
-      FilledTonalIconButton(onClick = {
-        if(state.isFavourite) {
-          viewModel.onEvent(DetailsEvent.RemoveFavourite)
-        } else {
-          viewModel.onEvent(DetailsEvent.AddFavourite)
+      FilledTonalIconButton(
+        onClick = {
+          if (state.isFavourite) {
+            viewModel.onEvent(DetailsEvent.RemoveFavourite)
+          } else {
+            viewModel.onEvent(DetailsEvent.AddFavourite)
+          }
         }
-      }) {
+      ) {
         Crossfade(targetState = state.isFavourite) { isFavourite ->
-          if(isFavourite) {
+          if (isFavourite) {
             Icon(imageVector = EvaIcons.Fill.Heart, contentDescription = "Fav")
           } else {
             Icon(imageVector = EvaIcons.Outline.Heart, contentDescription = "Fav")
@@ -289,7 +294,7 @@ fun SheetPhotoDetails(photo: Photo) {
     ) {
       PhotoDetailItem("Description :") {
         Text(
-          if(photo.description.isNullOrEmpty()) photo.altDescription else photo.description,
+          if (photo.description.isNullOrEmpty()) photo.altDescription else photo.description,
           style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
         )
       }

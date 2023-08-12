@@ -56,13 +56,11 @@ fun Photo.toPhotoEntity(): PhotoEntity =
     promotedAt = promotedAt
   )
 
-fun List<PhotoEntity>.toPhotoList(): List<Photo> = map { it.toPhoto()}
+fun List<PhotoEntity>.toPhotoList(): List<Photo> = map { it.toPhoto() }
+
 fun List<Photo>.toPhotoEntityList(): List<PhotoEntity> = map { it.toPhotoEntity() }
 
 fun List<PhotoEntity>.toPhotoArrayList(): ArrayList<Photo> = ArrayList(toPhotoList())
 
-fun ArrayList<Photo>.toPhotoSearchCollection(): PhotoSearchCollection = PhotoSearchCollection(
-  results = this,
-  total = this.size,
-  totalPages = this.size/10
-)
+fun ArrayList<Photo>.toPhotoSearchCollection(): PhotoSearchCollection =
+  PhotoSearchCollection(results = this, total = this.size, totalPages = this.size / 10)

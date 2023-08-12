@@ -15,39 +15,78 @@
  */
 package dev.ishubhamsingh.splashy.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FloatingActionButtonDefaults
+import androidx.compose.material.IconButton
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.ArrowBack
-import dev.ishubhamsingh.splashy.core.navigation.Screen
+import compose.icons.evaicons.outline.ArrowheadUp
+import compose.icons.evaicons.outline.CloseCircle
+import compose.icons.evaicons.outline.Search
 import dev.ishubhamsingh.splashy.core.network.KtorLogger
+import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
 import io.kamel.core.config.DefaultCacheSize
 import io.kamel.core.config.KamelConfig
@@ -64,12 +103,101 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.CacheControl
 import io.ktor.http.isSuccess
+import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.Navigator
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun PhotoGridLayout(
+  isRefreshing: Boolean,
+  onRefresh: () -> Unit,
+  onSurfaceTouch: () -> Unit,
+  searchQuery: String?,
+  isSearching: Boolean,
+  onSearchQueryChange: (String?) -> Unit,
+  isPaginating: Boolean,
+  photos: ArrayList<Photo> = arrayListOf(),
+  favourites: ArrayList<Favourite> = arrayListOf(),
+  onLoadMore: () -> Unit,
+  onItemSelected: (String) -> Unit,
+  error: String?,
+  isFavourite: Boolean
+) {
+  val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
+  val lazyGridState = rememberLazyGridState()
+  val threshold = 5
+  val isFabVisible by
+    remember(threshold) { derivedStateOf { lazyGridState.firstVisibleItemIndex > threshold } }
+
+  Surface(
+    color = MaterialTheme.colorScheme.surface,
+    modifier = Modifier.fillMaxSize().clickable { onSurfaceTouch.invoke() }
+  ) {
+    Column(modifier = Modifier.fillMaxSize()) {
+      Box(Modifier.pullRefresh(pullRefreshState)) {
+        LazyVerticalGrid(
+          columns = GridCells.Fixed(2),
+          modifier = Modifier.fillMaxSize(),
+          contentPadding = PaddingValues(4.dp),
+          state = lazyGridState
+        ) {
+          if (isFavourite.not()) {
+            item(span = { GridItemSpan(this.maxLineSpan) }) {
+              SearchBar(searchQuery, isSearching, onSearchQueryChange)
+            }
+          }
+
+          if (isFavourite && favourites.isNotEmpty()) {
+            items(items = favourites) {
+              PhotoCardItem(onItemSelected, it.id, it.color, it.url, it.altDescription)
+            }
+          } else if (photos.isNotEmpty()) {
+            items(items = photos) {
+              PhotoCardItem(onItemSelected, it.id, it.color, it.urls?.regular, it.altDescription)
+            }
+          } else if (error.isNullOrEmpty().not()) {
+            // TODO: show error
+          }
+
+          if (isPaginating) {
+            item(span = { GridItemSpan(this.maxLineSpan) }) {
+              Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                CircularProgressIndicator(
+                  modifier = Modifier.align(Alignment.CenterHorizontally).size(24.dp),
+                  color = MaterialTheme.colorScheme.secondary
+                )
+              }
+            }
+          }
+        }
+        lazyGridState.OnBottomReached {
+          // do on load more
+          onLoadMore.invoke()
+        }
+        PullRefreshIndicator(
+          isRefreshing,
+          pullRefreshState,
+          Modifier.align(Alignment.TopCenter),
+          backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+          contentColor = MaterialTheme.colorScheme.secondary
+        )
+        ScrollToTopFab(
+          isFabVisible,
+          lazyGridState,
+          modifier = Modifier.align(Alignment.BottomEnd).padding(32.dp),
+        )
+      }
+    }
+  }
+}
 
 @Composable
 fun PhotoCardItem(
-  navigator: Navigator,
-  photo: Photo,
+  onItemSelected: (String) -> Unit,
+  id: String,
+  color: String?,
+  url: String?,
+  altDescription: String?,
   heightDp: Dp = 320.dp,
   widthDp: Dp = 160.dp,
   padding: Dp = 4.dp,
@@ -77,22 +205,29 @@ fun PhotoCardItem(
 
   Card(
     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-    colors = CardDefaults.cardColors(containerColor = Color(parseColor(photo.color))),
+    colors =
+      CardDefaults.cardColors(
+        containerColor =
+          if (color.isNullOrEmpty().not()) Color(parseColor(color!!))
+          else MaterialTheme.colorScheme.surface
+      ),
     modifier =
       Modifier.padding(vertical = padding, horizontal = padding)
         .fillMaxWidth()
         .height(heightDp)
         .background(
-          color = Color(parseColor(photo.color)) ?: MaterialTheme.colorScheme.surface,
+          color =
+            if (color.isNullOrEmpty().not()) Color(parseColor(color!!))
+            else MaterialTheme.colorScheme.surface,
           shape = RoundedCornerShape(16.dp)
         )
-        .clickable { navigator.navigate(Screen.PhotoDetails.route.plus("/${photo.id}")) }
+        .clickable { onItemSelected.invoke(id) }
   ) {
-    photo.urls?.regular?.let {
+    url?.let {
       CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
         KamelImage(
           resource = asyncPainterResource(data = it),
-          contentDescription = photo.altDescription,
+          contentDescription = altDescription,
           modifier = Modifier.fillMaxSize(),
           contentScale = ContentScale.Crop,
           animationSpec = tween()
@@ -167,6 +302,129 @@ fun BackButton(modifier: Modifier = Modifier, navigator: Navigator) {
       contentDescription = "back",
       modifier = Modifier.padding(8.dp).size(24.dp).clickable { navigator.goBack() },
       tint = MaterialTheme.colorScheme.primary
+    )
+  }
+}
+
+@Composable
+fun BoxScope.ScrollToTopFab(
+  isFabVisible: Boolean,
+  lazyGridState: LazyGridState,
+  modifier: Modifier
+) {
+  val coroutineScope = rememberCoroutineScope()
+  val density = LocalDensity.current
+
+  AnimatedVisibility(
+    modifier = modifier,
+    visible = isFabVisible,
+    enter = slideInVertically { with(density) { 40.dp.roundToPx() } } + fadeIn(),
+    exit = fadeOut(animationSpec = keyframes { this.durationMillis = 120 })
+  ) {
+    FloatingActionButton(
+      onClick = { coroutineScope.launch { lazyGridState.animateScrollToItem(0) } },
+      backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
+      contentColor = MaterialTheme.colorScheme.secondary,
+      elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 15.dp)
+    ) {
+      androidx.compose.material.Icon(
+        imageVector = EvaIcons.Outline.ArrowheadUp,
+        contentDescription = "scroll up"
+      )
+    }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchBar(searchQuery: String?, isSearching: Boolean, onQueryChanged: (String?) -> Unit) {
+  val interactionSource = remember { MutableInteractionSource() }
+  val enabled = true
+  val singleLine = true
+
+  BasicTextField(
+    value = searchQuery ?: "",
+    onValueChange = onQueryChanged,
+    modifier =
+      Modifier.fillMaxWidth()
+        .padding(16.dp)
+        .height(48.dp)
+        .border(
+          2.dp,
+          color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
+          shape = CircleShape
+        ),
+    interactionSource = interactionSource,
+    singleLine = singleLine,
+    enabled = enabled,
+    textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 20.sp),
+    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
+  ) {
+    OutlinedTextFieldDefaults.DecorationBox(
+      value = searchQuery ?: "",
+      innerTextField = it,
+      enabled = enabled,
+      singleLine = singleLine,
+      visualTransformation = VisualTransformation.None,
+      interactionSource = interactionSource,
+      placeholder = {
+        Text("Search", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp))
+      },
+      leadingIcon = {
+        androidx.compose.material.Icon(
+          imageVector = EvaIcons.Outline.Search,
+          contentDescription = "search",
+          modifier = Modifier.size(20.dp),
+          tint = MaterialTheme.colorScheme.primary
+        )
+      },
+      trailingIcon = {
+        AnimatedVisibility(
+          visible = searchQuery.isNullOrEmpty().not() && isSearching.not(),
+          enter = fadeIn(),
+          exit = fadeOut()
+        ) {
+          IconButton(
+            onClick = { onQueryChanged.invoke(null) },
+          ) {
+            androidx.compose.material.Icon(
+              imageVector = EvaIcons.Outline.CloseCircle,
+              contentDescription = "clear",
+              tint = MaterialTheme.colorScheme.primary
+            )
+          }
+        }
+
+        AnimatedVisibility(visible = isSearching, enter = fadeIn(), exit = fadeOut()) {
+          CircularProgressIndicator(
+            modifier = Modifier.size(20.dp),
+            color = MaterialTheme.colorScheme.primary,
+            strokeWidth = 2.dp
+          )
+        }
+      },
+      contentPadding = PaddingValues(0.dp),
+      container = {
+        OutlinedTextFieldDefaults.ContainerBox(
+          enabled,
+          false,
+          interactionSource,
+          colors =
+            TextFieldDefaults.colors(
+              unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+              focusedContainerColor = MaterialTheme.colorScheme.surface,
+              cursorColor = MaterialTheme.colorScheme.primary,
+              unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+              focusedTextColor = MaterialTheme.colorScheme.onSurface,
+              unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+              focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+              unfocusedIndicatorColor = Color.Transparent,
+              focusedIndicatorColor = Color.Transparent
+            ),
+          unfocusedBorderThickness = 0.dp,
+          focusedBorderThickness = 0.dp
+        )
+      },
     )
   }
 }

@@ -15,7 +15,9 @@
  */
 package dev.ishubhamsingh.splashy.features.home.ui
 
-sealed class HomeEvent {
+import dev.ishubhamsingh.splashy.core.domain.ScreenEvent
+
+sealed class HomeEvent : ScreenEvent {
   data object Load : HomeEvent()
 
   data object Refresh : HomeEvent()

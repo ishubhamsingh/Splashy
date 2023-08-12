@@ -15,17 +15,33 @@
  */
 package dev.ishubhamsingh.splashy.features.favourites.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import dev.ishubhamsingh.splashy.core.navigation.Screen
+import dev.ishubhamsingh.splashy.features.favourites.FavouritesViewModel
+import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
 import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
-fun FavouritesScreen(navigator: Navigator) {
-  Column(modifier = Modifier.fillMaxSize()) {
-    Text("Hello Favourites", style = MaterialTheme.typography.displayMedium)
-  }
+fun FavouritesScreen(navigator: Navigator, viewModel: FavouritesViewModel) {
+  val state by viewModel.state.collectAsState()
+
+  LaunchedEffect(Unit) { viewModel.onEvent(FavouritesEvent.LoadFavourites) }
+
+  PhotoGridLayout(
+    isRefreshing = state.isRefreshing,
+    onRefresh = { viewModel.onEvent(FavouritesEvent.Refresh) },
+    onSurfaceTouch = {},
+    searchQuery = state.searchQuery,
+    isSearching = false,
+    onSearchQueryChange = {},
+    isPaginating = false,
+    favourites = state.favourites,
+    onLoadMore = {},
+    onItemSelected = { navigator.navigate(Screen.PhotoDetails.route.plus("/${it}")) },
+    error = "",
+    isFavourite = true
+  )
 }

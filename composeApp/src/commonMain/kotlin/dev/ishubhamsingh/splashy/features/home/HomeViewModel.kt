@@ -40,7 +40,7 @@ class HomeViewModel : ViewModel(), KoinComponent {
   private var job: Job? = null
 
   init {
-    fetchPhotos()
+    fetchPhotos(forceFetch = true)
   }
 
   fun onEvent(event: HomeEvent) {

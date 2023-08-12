@@ -15,7 +15,9 @@
  */
 package dev.ishubhamsingh.splashy.features.details.ui
 
-sealed class DetailsEvent {
+import dev.ishubhamsingh.splashy.core.domain.ScreenEvent
+
+sealed class DetailsEvent : ScreenEvent {
   data class LoadDetails(val id: String) : DetailsEvent()
 
   data object DownloadPhoto : DetailsEvent()

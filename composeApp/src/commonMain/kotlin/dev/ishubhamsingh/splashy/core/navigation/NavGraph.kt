@@ -25,6 +25,7 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.ishubhamsingh.splashy.features.collections.ui.CollectionsScreen
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
+import dev.ishubhamsingh.splashy.features.favourites.FavouritesViewModel
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesScreen
 import dev.ishubhamsingh.splashy.features.home.HomeViewModel
 import dev.ishubhamsingh.splashy.features.home.ui.HomeScreen
@@ -37,6 +38,8 @@ import moe.tlaster.precompose.navigation.path
 @Composable
 fun Navigation(navigator: Navigator, paddingValues: PaddingValues) {
   val homeViewModel = getViewModel("home-screen", factory = viewModelFactory { HomeViewModel() })
+  val favouritesViewModel =
+    getViewModel("favourites-screen", factory = viewModelFactory { FavouritesViewModel() })
 
   NavHost(
     navigator = navigator,
@@ -46,7 +49,7 @@ fun Navigation(navigator: Navigator, paddingValues: PaddingValues) {
   ) {
     scene(route = Screen.Home.route) { HomeScreen(navigator, homeViewModel) }
     scene(route = Screen.Collections.route) { CollectionsScreen(navigator) }
-    scene(route = Screen.Favourites.route) { FavouritesScreen(navigator) }
+    scene(route = Screen.Favourites.route) { FavouritesScreen(navigator, favouritesViewModel) }
     scene(route = Screen.PhotoDetails.route.plus("/{id}")) { backStackEntry ->
       backStackEntry.path<String>("id")?.let { DetailsScreen(navigator, it) }
     }

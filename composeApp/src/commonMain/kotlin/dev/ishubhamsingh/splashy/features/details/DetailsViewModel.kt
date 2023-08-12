@@ -45,7 +45,6 @@ class DetailsViewModel : ViewModel(), KoinComponent {
         isFavourite()
         fetchPhotoDetails()
       }
-
       DetailsEvent.AddFavourite -> addFavourite()
       DetailsEvent.RemoveFavourite -> removeFavourite()
     }
@@ -76,7 +75,7 @@ class DetailsViewModel : ViewModel(), KoinComponent {
     favourite?.let {
       viewModelScope.launch {
         unsplashRepository.addFavourite(favourite).collect { result ->
-          when(result) {
+          when (result) {
             is NetworkResult.Success -> {
               _state.update { detailsState -> detailsState.copy(isFavourite = true) }
             }
@@ -88,10 +87,10 @@ class DetailsViewModel : ViewModel(), KoinComponent {
   }
 
   private fun removeFavourite(id: String = state.value.id ?: "") {
-    if(id.isEmpty()) return
+    if (id.isEmpty()) return
     viewModelScope.launch {
       unsplashRepository.removeFavourite(id).collect { result ->
-        when(result) {
+        when (result) {
           is NetworkResult.Success -> {
             _state.update { detailsState -> detailsState.copy(isFavourite = false) }
           }
@@ -102,10 +101,10 @@ class DetailsViewModel : ViewModel(), KoinComponent {
   }
 
   private fun isFavourite(id: String = state.value.id ?: "") {
-    if(id.isEmpty()) return
+    if (id.isEmpty()) return
     viewModelScope.launch {
       unsplashRepository.isFavourite(id).collect { result ->
-        when(result) {
+        when (result) {
           is NetworkResult.Success -> {
             _state.update { detailsState -> detailsState.copy(isFavourite = result.data == true) }
           }

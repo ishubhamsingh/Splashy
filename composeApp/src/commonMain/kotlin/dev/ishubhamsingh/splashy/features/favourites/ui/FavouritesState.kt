@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.models
+package dev.ishubhamsingh.splashy.features.favourites.ui
 
-import kotlinx.serialization.Serializable
+import dev.ishubhamsingh.splashy.models.Favourite
 
 /** Created by Shubham Singh on 12/08/23. */
-@Serializable
-data class Favourite(
-  val id: String,
-  val color: String?,
-  val altDescription: String?,
-  val description: String?,
-  val topicSubmissions: TopicSubmissions?,
-  val url: String?,
+data class FavouritesState(
+  val favourites: ArrayList<Favourite> = arrayListOf(),
+  val isRefreshing: Boolean = false,
+  val searchQuery: String? = null,
+  val error: String? = null
 )

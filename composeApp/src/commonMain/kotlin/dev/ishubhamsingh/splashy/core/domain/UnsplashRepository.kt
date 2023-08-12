@@ -15,7 +15,6 @@
  */
 package dev.ishubhamsingh.splashy.core.domain
 
-import dev.ishubhamsingh.splashy.db.FavouriteEntity
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
