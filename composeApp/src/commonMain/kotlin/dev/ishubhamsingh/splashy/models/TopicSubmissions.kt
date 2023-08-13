@@ -30,24 +30,38 @@ data class TopicSubmissions(
   @SerialName("travel") val travel: TopicSubmissionStatus? = null
 ) {
   private val topicSubmissionMap =
-    hashMapOf<TopicSubmissionStatus?, String>(
-      wallpapers to "Wallpapers",
-      experimental to "Experimental",
-      travel to "Travel",
-      fashionBeauty to "Fashion Beauty",
-      streetPhotography to "Street Photography",
-      architectureInterior to "Architecture Interior"
+    hashMapOf(
+      "Wallpapers" to wallpapers,
+      "Experimental" to experimental,
+      "Travel" to travel,
+      "Fashion Beauty" to fashionBeauty,
+      "Street Photography" to streetPhotography,
+      "Architecture Interior" to architectureInterior
     )
 
   fun getApprovedTopics(): ArrayList<String> {
     val approvedList = arrayListOf<String>()
     topicSubmissionMap.entries.forEach { item ->
-      item.key?.let { if (it.status == "approved") approvedList.add(item.value) }
+      item.let {
+        if (it.value != null && it.value?.status == "approved") approvedList.add(item.key)
+      }
     }
     return approvedList
   }
 
   override fun toString(): String {
     return Json.encodeToString(this)
+  }
+
+  fun containsAnyTopic(topicFilters: ArrayList<TopicFilter>): Boolean {
+    if (topicFilters.any { it.isSelected }.not()) return true
+
+    val selectedFilters: List<String> =
+      topicFilters.mapNotNull { if (it.isSelected) it.topic else null }
+    return selectedFilters.any { getApprovedTopics().contains(it) }
+  }
+
+  companion object {
+    val TOPICS = ArrayList(TopicSubmissions().topicSubmissionMap.keys.map { TopicFilter(it) })
   }
 }

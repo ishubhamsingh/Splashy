@@ -20,6 +20,8 @@ import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesEvent
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesState
+import dev.ishubhamsingh.splashy.models.TopicFilter
+import dev.ishubhamsingh.splashy.models.TopicSubmissions
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,9 +41,14 @@ class FavouritesViewModel : ViewModel(), KoinComponent {
 
   fun onEvent(favouritesEvent: FavouritesEvent) {
     when (favouritesEvent) {
-      is FavouritesEvent.Filter -> TODO()
+      is FavouritesEvent.Filter -> onFilterEvent(favouritesEvent.topic)
       FavouritesEvent.LoadFavourites -> fetchFavourites()
-      FavouritesEvent.Refresh -> fetchFavourites()
+      FavouritesEvent.Refresh -> {
+        _state.update { favouritesState ->
+          favouritesState.copy(filterTopics = TopicSubmissions.TOPICS)
+        }
+        fetchFavourites()
+      }
     }
   }
 
@@ -62,11 +69,39 @@ class FavouritesViewModel : ViewModel(), KoinComponent {
             is NetworkResult.Success -> {
               result.data?.let {
                 _state.update { favouritesState -> favouritesState.copy(favourites = it) }
+                updateFilteredList(state.value.filterTopics)
               }
             }
           }
         }
       }
+  }
+
+  private fun onFilterEvent(topic: String) {
+    val newFilterTopics =
+      ArrayList(
+        state.value.filterTopics.map {
+          if (it.topic == topic) {
+            TopicFilter(topic, !it.isSelected)
+          } else {
+            it
+          }
+        }
+      )
+
+    _state.update { favouritesState -> favouritesState.copy(filterTopics = newFilterTopics) }
+
+    updateFilteredList(newFilterTopics)
+  }
+
+  private fun updateFilteredList(newFilterTopics: ArrayList<TopicFilter>) {
+    val newFilteredFav =
+      state.value.favourites.filter { fav ->
+        fav.topicSubmissions?.containsAnyTopic(newFilterTopics) == true
+      }
+    _state.update { favouritesState ->
+      favouritesState.copy(filteredFavourites = ArrayList(newFilteredFav))
+    }
   }
 
   private fun cancelActiveJob() {

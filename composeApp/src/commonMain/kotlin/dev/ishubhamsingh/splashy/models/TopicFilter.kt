@@ -13,18 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.features.favourites.ui
+package dev.ishubhamsingh.splashy.models
 
-import dev.ishubhamsingh.splashy.models.Favourite
-import dev.ishubhamsingh.splashy.models.TopicFilter
-import dev.ishubhamsingh.splashy.models.TopicSubmissions
+import kotlinx.serialization.Serializable
 
-/** Created by Shubham Singh on 12/08/23. */
-data class FavouritesState(
-  val favourites: ArrayList<Favourite> = arrayListOf(),
-  val filterTopics: ArrayList<TopicFilter> = TopicSubmissions.TOPICS,
-  val filteredFavourites: ArrayList<Favourite> = arrayListOf(),
-  val isRefreshing: Boolean = false,
-  val searchQuery: String? = null,
-  val error: String? = null
-)
+/** Created by Shubham Singh on 13/08/23. */
+@Serializable data class TopicFilter(val topic: String, val isSelected: Boolean = false)
