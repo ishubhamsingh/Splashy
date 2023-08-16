@@ -18,6 +18,7 @@ package dev.ishubhamsingh.splashy.features.favourites.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -76,14 +77,22 @@ fun FavouritesScreen(navigator: Navigator, viewModel: FavouritesViewModel) {
 
 @Composable
 fun TopicFilterLayout(topics: ArrayList<TopicFilter>, onFilterSelected: (String) -> Unit) {
-  LazyRow(
+
+  Row(
     modifier = Modifier.padding(8.dp),
-    contentPadding = PaddingValues(4.dp),
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.spacedBy(8.dp)
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    verticalAlignment = Alignment.CenterVertically
   ) {
-    items(items = topics, key = { it.topic }) { topic ->
-      TopicFilterItem(topic.topic, topic.isSelected, onFilterSelected)
+    Text("Topics:", style = MaterialTheme.typography.bodyLarge)
+
+    LazyRow(
+      contentPadding = PaddingValues(4.dp),
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+      items(items = topics, key = { it.topic }) { topic ->
+        TopicFilterItem(topic.topic, topic.isSelected, onFilterSelected)
+      }
     }
   }
 }

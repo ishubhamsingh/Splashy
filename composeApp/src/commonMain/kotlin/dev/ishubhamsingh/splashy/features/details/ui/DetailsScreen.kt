@@ -364,7 +364,10 @@ fun PhotoDetailItem(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TopicDetailItem(approvedTopics: ArrayList<String>) {
-  FlowRow {
+  FlowRow(
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    verticalArrangement = Arrangement.spacedBy(8.dp)
+  ) {
     approvedTopics.forEach {
       SuggestionChip(
         label = {

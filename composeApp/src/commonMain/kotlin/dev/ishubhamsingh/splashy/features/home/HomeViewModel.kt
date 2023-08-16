@@ -40,26 +40,26 @@ class HomeViewModel : ViewModel(), KoinComponent {
   private var job: Job? = null
 
   init {
-    fetchPhotos(forceFetch = true)
+    onEvent(HomeEvent.Load)
   }
 
   fun onEvent(event: HomeEvent) {
     when (event) {
       HomeEvent.Load -> {
-        fetchPhotos()
+        getPhotosFromApi(forceFetch = true)
       }
       HomeEvent.Refresh -> {
         resetPage()
-        fetchPhotos(forceFetch = true)
+        getPhotosFromApi(forceFetch = true)
       }
       is HomeEvent.OnSearchQueryChange -> {
         _state.update { homeState -> homeState.copy(searchQuery = event.query) }
         resetPage(false)
-        fetchPhotos(loadingType = LoadingType.SEARCH, forceFetch = true)
+        getPhotosFromApi(loadingType = LoadingType.SEARCH, forceFetch = true)
       }
       HomeEvent.LoadMore -> {
         nextPage()
-        fetchPhotos(loadingType = LoadingType.PAGINATION, forceFetch = true)
+        getPhotosFromApi(loadingType = LoadingType.PAGINATION, forceFetch = true)
       }
     }
   }
@@ -78,7 +78,18 @@ class HomeViewModel : ViewModel(), KoinComponent {
     }
   }
 
-  private fun fetchPhotos(
+  private fun getPhotosFromApi(
+    loadingType: LoadingType = LoadingType.REFRESH,
+    forceFetch: Boolean = false
+  ) {
+    if (state.value.searchQuery.isNullOrEmpty().not()) {
+      searchPhotos(loadingType = loadingType, forceFetch = forceFetch)
+    } else {
+      fetchPhotos(loadingType = loadingType, forceFetch = forceFetch)
+    }
+  }
+
+  private fun searchPhotos(
     page: Int = state.value.currentPage,
     loadingType: LoadingType = LoadingType.REFRESH,
     forceFetch: Boolean = false
@@ -117,6 +128,42 @@ class HomeViewModel : ViewModel(), KoinComponent {
               }
             }
           }
+      }
+  }
+
+  private fun fetchPhotos(
+    page: Int = state.value.currentPage,
+    loadingType: LoadingType = LoadingType.REFRESH,
+    forceFetch: Boolean = false
+  ) {
+    cancelActiveJob() // Cancel ongoing call before launching new
+    job =
+      viewModelScope.launch(Dispatchers.IO) {
+        unsplashRepository.getPhotos(page, forceFetch).collect { networkResult ->
+          when (networkResult) {
+            is NetworkResult.Success -> {
+              networkResult.data?.let { resp ->
+                _state.update { homeState ->
+                  val current = homeState.photos
+                  current.addAll(resp)
+                  homeState.copy(photos = current, totalPages = 1000)
+                }
+              }
+            }
+            is NetworkResult.Error -> {
+              _state.update { homeState -> homeState.copy(networkError = networkResult.message) }
+            }
+            is NetworkResult.Loading -> {
+              _state.update { homeState ->
+                when (loadingType) {
+                  LoadingType.REFRESH -> homeState.copy(isRefreshing = networkResult.isLoading)
+                  LoadingType.PAGINATION -> homeState.copy(isPaginating = networkResult.isLoading)
+                  LoadingType.SEARCH -> homeState.copy(isSearching = networkResult.isLoading)
+                }
+              }
+            }
+          }
+        }
       }
   }
 

@@ -64,6 +64,9 @@ class UnsplashApi(private val httpClient: HttpClient) {
         path("photos")
         parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
         parameters.append("per_page", "10")
+        parameters.append("order_by", "popular")
+        parameters.append("orientation", "portrait")
+        parameters.append("content_filter", "high")
         parameters.append("page", page.toString())
       }
     }
