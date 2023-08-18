@@ -39,6 +39,7 @@ import compose.icons.evaicons.outline.Menu2
 import compose.icons.evaicons.outline.Person
 import dev.ishubhamsingh.splashy.core.navigation.Navigation
 import dev.ishubhamsingh.splashy.core.navigation.Screen
+import dev.ishubhamsingh.splashy.core.navigation.TOP_LEVEL_ROUTES
 import dev.ishubhamsingh.splashy.core.navigation.currentRoute
 import dev.ishubhamsingh.splashy.core.presentation.SplashyTheme
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
@@ -55,21 +56,13 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
   SplashyTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
     Scaffold(
       topBar = {
-        when (currentRoute(navigator)) {
-          Screen.Home.route,
-          Screen.Collections.route,
-          Screen.Favourites.route -> {
-            AppTopBar(navigator)
-          }
+        if(TOP_LEVEL_ROUTES.contains(currentRoute(navigator))) { //Only show for top level routes
+          AppTopBar(navigator)
         }
       },
       bottomBar = {
-        when (currentRoute(navigator)) {
-          Screen.Home.route,
-          Screen.Collections.route,
-          Screen.Favourites.route -> {
-            BottomNavigationComponent(navigator)
-          }
+        if(TOP_LEVEL_ROUTES.contains(currentRoute(navigator))) { //Only show for top level routes
+          BottomNavigationComponent(navigator)
         }
       }
     ) {
