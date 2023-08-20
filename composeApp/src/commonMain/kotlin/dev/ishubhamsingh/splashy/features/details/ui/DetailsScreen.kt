@@ -76,6 +76,9 @@ import compose.icons.evaicons.fill.Info
 import compose.icons.evaicons.outline.Heart
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import dev.ishubhamsingh.splashy.core.utils.getFormattedDateTime
 import dev.ishubhamsingh.splashy.features.details.DetailsViewModel
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
@@ -95,8 +98,12 @@ import moe.tlaster.precompose.navigation.Navigator
 fun DetailsScreen(
   navigator: Navigator,
   id: String,
+  factory: PermissionsControllerFactory = rememberPermissionsControllerFactory(),
   viewModel: DetailsViewModel =
-    getViewModel("details-screen", factory = viewModelFactory { DetailsViewModel() })
+    getViewModel(
+      "details-screen",
+      factory = viewModelFactory { DetailsViewModel(factory.createPermissionsController()) }
+    )
 ) {
   val state by viewModel.state.collectAsState()
 
@@ -105,6 +112,8 @@ fun DetailsScreen(
       bottomSheetState =
         rememberStandardBottomSheetState(initialValue = SheetValue.PartiallyExpanded)
     )
+
+  BindEffect(viewModel.permissionsController)
 
   LaunchedEffect(Unit) { viewModel.onEvent(DetailsEvent.LoadDetails(id)) }
   if (state.isLoading) {
@@ -269,7 +278,8 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
       AnimatedVisibility(visible = state.isDownloading) {
         CircularProgressIndicator(
           modifier = Modifier.size(16.dp),
-          color = MaterialTheme.colorScheme.onSurface
+          color = MaterialTheme.colorScheme.onSurface,
+          strokeWidth = 2.dp
         )
       }
       Spacer(modifier = Modifier.size(8.dp))
@@ -289,7 +299,8 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
       AnimatedVisibility(visible = state.isApplying) {
         CircularProgressIndicator(
           modifier = Modifier.size(16.dp),
-          color = MaterialTheme.colorScheme.onSurface
+          color = MaterialTheme.colorScheme.onSurface,
+          strokeWidth = 2.dp
         )
       }
       Spacer(modifier = Modifier.size(8.dp))

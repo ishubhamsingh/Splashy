@@ -20,12 +20,17 @@ import android.app.WallpaperManager.FLAG_LOCK
 import android.app.WallpaperManager.FLAG_SYSTEM
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
+import com.eygraber.uri.toAndroidUri
+import com.eygraber.uri.toUri
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 import java.io.File
 import kotlin.coroutines.coroutineContext
@@ -36,7 +41,11 @@ import kotlinx.coroutines.launch
 /** Created by Shubham Singh on 19/08/23. */
 actual class FileUtils(private val context: Context) {
 
-  actual suspend fun saveByteArrayToFile(fileName: String, data: ByteArray) {
+  actual suspend fun saveByteArrayToFile(
+    fileName: String,
+    data: ByteArray,
+    shouldOpenFile: Boolean
+  ) {
     var uri: Uri? = null
     var newFileName = ""
     var result = ""
@@ -75,15 +84,35 @@ actual class FileUtils(private val context: Context) {
             }
         }
         .onSuccess {
-          result = "File saved successfully in ${Environment.DIRECTORY_PICTURES}"
-          showMessage(result)
+          if (shouldOpenFile) {
+            openFile(uri?.toUri(), newFileName)
+          } else {
+            result = "File saved successfully in ${Environment.DIRECTORY_PICTURES}"
+            showMessage(result)
+          }
         }
         .onFailure {
-          result = "Saving file failed!"
+          result =
+            if (shouldOpenFile) {
+              "Opening file failed!"
+            } else {
+              "Saving file failed!"
+            }
           showMessage(result)
           it.printStackTrace()
         }
     }
+  }
+
+  actual suspend fun openFile(uri: com.eygraber.uri.Uri?, fileName: String) {
+    val intent = Intent(Intent.ACTION_ATTACH_DATA)
+    intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+    intent.addCategory(Intent.CATEGORY_DEFAULT)
+    intent.setDataAndType(uri?.toAndroidUri(), "image/jpeg")
+    intent.putExtra("mimeType", "image/jpeg")
+    val chooserIntent = Intent.createChooser(intent, "Set $fileName as:")
+    chooserIntent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+    context.startActivity(chooserIntent)
   }
 
   actual suspend fun applyWallpaper(data: ByteArray, wallpaperScreenType: WallpaperScreenType) {
@@ -97,7 +126,7 @@ actual class FileUtils(private val context: Context) {
         else -> FLAG_SYSTEM
       }
 
-    CoroutineScope(coroutineContext).launch(Dispatchers.IO) {
+    CoroutineScope(coroutineContext).launch(Dispatchers.Default) {
       runCatching {
           val imageBitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
           wallpaperManager.setBitmap(imageBitmap, null, true, flag)
@@ -112,6 +141,10 @@ actual class FileUtils(private val context: Context) {
           it.printStackTrace()
         }
     }
+  }
+
+  actual suspend fun shouldAskStorageRuntimePermission(): Boolean {
+    return Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
   }
 
   actual suspend fun showMessage(message: String) {

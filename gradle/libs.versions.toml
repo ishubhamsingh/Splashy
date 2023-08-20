@@ -24,6 +24,7 @@ spotless = "6.20.0"
 ktfmt = "0.44"
 precompose = "1.5.0-beta01"
 moko-mvvm = "0.16.1"
+moko-permissions = "0.16.0"
 kotlinx-datetime = "0.4.0"
 
 [libraries]
@@ -63,6 +64,7 @@ precompose = { module = "moe.tlaster:precompose", version.ref = "precompose" }
 precompose-viewmodel = { module = "moe.tlaster:precompose-viewmodel", version.ref = "precompose" }
 moko-mvvm-flow-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "moko-mvvm"}
 moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "moko-mvvm"}
+moko-permissions = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko-permissions"}
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime"}
 
 

@@ -85,6 +85,7 @@ kotlin {
         api(libs.precompose)
         api(libs.moko.mvvm.compose)
         api(libs.moko.mvvm.flow.compose)
+        api(libs.moko.permissions)
       }
     }
 

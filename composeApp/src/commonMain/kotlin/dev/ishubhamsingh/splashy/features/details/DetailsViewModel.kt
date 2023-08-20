@@ -16,6 +16,10 @@
 package dev.ishubhamsingh.splashy.features.details
 
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import dev.icerock.moko.permissions.DeniedAlwaysException
+import dev.icerock.moko.permissions.DeniedException
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.PermissionsController
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.core.network.api.UnsplashApi
@@ -34,7 +38,8 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class DetailsViewModel : ViewModel(), KoinComponent {
+class DetailsViewModel(val permissionsController: PermissionsController) :
+  ViewModel(), KoinComponent {
   private val unsplashRepository: UnsplashRepository by inject()
   private val unsplashApi: UnsplashApi by inject()
   private val fileUtils: FileUtils by inject()
@@ -47,14 +52,14 @@ class DetailsViewModel : ViewModel(), KoinComponent {
       is DetailsEvent.ApplyAsWallpaper -> {
         _state.update { detailsState -> detailsState.copy(isApplying = true) }
         if (event.wallpaperScreenType == WallpaperScreenType.OTHER_APPLICATION) {
-          getDownloadUrl()
+          checkPermission { getDownloadUrl(shouldOpenFile = true) }
         } else {
           getDownloadUrl(isSaveToFile = false, wallpaperScreenType = event.wallpaperScreenType)
         }
       }
       DetailsEvent.DownloadPhoto -> {
         _state.update { detailsState -> detailsState.copy(isDownloading = true) }
-        getDownloadUrl()
+        checkPermission { getDownloadUrl() }
       }
       is DetailsEvent.LoadDetails -> {
         _state.update { detailsState -> detailsState.copy(id = event.id) }
@@ -68,6 +73,32 @@ class DetailsViewModel : ViewModel(), KoinComponent {
       }
       DetailsEvent.ShowApplyWallpaperDialog -> {
         _state.update { detailsState -> detailsState.copy(shouldShowApplyWallpaperDialog = true) }
+      }
+    }
+  }
+
+  private fun checkPermission(postPermissionGranted: () -> Unit) {
+    viewModelScope.launch {
+      try {
+        if (fileUtils.shouldAskStorageRuntimePermission()) {
+          permissionsController.providePermission(Permission.WRITE_STORAGE)
+        }
+        postPermissionGranted.invoke()
+      } catch (deniedAlways: DeniedAlwaysException) {
+        fileUtils.showMessage(
+          "The storage permission is important for this action. Please grant the permission."
+        )
+        _state.update { detailsState ->
+          detailsState.copy(isDownloading = false, isApplying = false)
+        }
+        permissionsController.openAppSettings()
+      } catch (denied: DeniedException) {
+        fileUtils.showMessage(
+          "The storage permission is important for this action. Please grant the permission."
+        )
+        _state.update { detailsState ->
+          detailsState.copy(isDownloading = false, isApplying = false)
+        }
       }
     }
   }
@@ -96,6 +127,7 @@ class DetailsViewModel : ViewModel(), KoinComponent {
   private fun getDownloadUrl(
     photo: Photo? = state.value.photo,
     isSaveToFile: Boolean = true,
+    shouldOpenFile: Boolean = false,
     wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION
   ) {
     var url: String = ""
@@ -106,7 +138,13 @@ class DetailsViewModel : ViewModel(), KoinComponent {
           url = response.url
         }
         .invokeOnCompletion {
-          if (url.isNotEmpty()) downloadPhoto(url, isSaveToFile, wallpaperScreenType)
+          if (url.isNotEmpty())
+            downloadPhoto(
+              url = url,
+              isSaveToFile = isSaveToFile,
+              shouldOpenFile = shouldOpenFile,
+              wallpaperScreenType = wallpaperScreenType
+            )
         }
     }
   }
@@ -114,6 +152,7 @@ class DetailsViewModel : ViewModel(), KoinComponent {
   private fun downloadPhoto(
     url: String,
     isSaveToFile: Boolean,
+    shouldOpenFile: Boolean,
     wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION
   ) {
     var byteArray: ByteArray? = null
@@ -121,20 +160,24 @@ class DetailsViewModel : ViewModel(), KoinComponent {
       .launch { byteArray = unsplashApi.downloadFile(url).toByteArray() }
       .invokeOnCompletion {
         if (isSaveToFile) {
-          saveToFile(byteArray)
+          saveToFile(byteArray, shouldOpenFile)
         } else {
           applyWallpaper(byteArray, wallpaperScreenType)
         }
       }
   }
 
-  private fun saveToFile(byteArray: ByteArray?) {
+  private fun saveToFile(byteArray: ByteArray?, shouldOpenFile: Boolean) {
     viewModelScope
       .launch {
-        byteArray?.let { fileUtils.saveByteArrayToFile(state.value.photo?.id ?: "image", it) }
+        byteArray?.let {
+          fileUtils.saveByteArrayToFile(state.value.photo?.id ?: "image", it, shouldOpenFile)
+        }
       }
       .invokeOnCompletion {
-        _state.update { detailsState -> detailsState.copy(isDownloading = false) }
+        _state.update { detailsState ->
+          detailsState.copy(isDownloading = false, isApplying = false)
+        }
       }
   }
 

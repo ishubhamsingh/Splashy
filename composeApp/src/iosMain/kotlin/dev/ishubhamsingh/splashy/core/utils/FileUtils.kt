@@ -15,13 +15,24 @@
  */
 package dev.ishubhamsingh.splashy.core.utils
 
+import com.eygraber.uri.Uri
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 
 /** Created by Shubham Singh on 19/08/23. */
 actual class FileUtils {
-  actual suspend fun saveByteArrayToFile(fileName: String, data: ByteArray) {}
+  actual suspend fun saveByteArrayToFile(
+    fileName: String,
+    data: ByteArray,
+    shouldOpenFile: Boolean
+  ) {}
+
+  actual suspend fun openFile(uri: Uri?, fileName: String) {}
 
   actual suspend fun applyWallpaper(data: ByteArray, wallpaperScreenType: WallpaperScreenType) {}
+
+  actual suspend fun shouldAskStorageRuntimePermission(): Boolean {
+    return true
+  }
 
   actual suspend fun showMessage(message: String) {}
 }
