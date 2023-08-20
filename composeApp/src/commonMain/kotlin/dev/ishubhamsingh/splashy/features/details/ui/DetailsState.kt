@@ -25,4 +25,5 @@ data class DetailsState(
   val isDownloading: Boolean = false,
   val isApplying: Boolean = false,
   val networkError: String? = null,
+  val shouldShowApplyWallpaperDialog: Boolean = false
 )

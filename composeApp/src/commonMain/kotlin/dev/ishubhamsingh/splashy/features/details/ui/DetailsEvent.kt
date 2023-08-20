@@ -16,13 +16,18 @@
 package dev.ishubhamsingh.splashy.features.details.ui
 
 import dev.ishubhamsingh.splashy.core.domain.ScreenEvent
+import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 
 sealed class DetailsEvent : ScreenEvent {
   data class LoadDetails(val id: String) : DetailsEvent()
 
   data object DownloadPhoto : DetailsEvent()
 
-  data object ApplyAsWallpaper : DetailsEvent()
+  data class ApplyAsWallpaper(val wallpaperScreenType: WallpaperScreenType) : DetailsEvent()
+
+  data object ShowApplyWallpaperDialog : DetailsEvent()
+
+  data object DismissApplyWallpaperDialog : DetailsEvent()
 
   data object AddFavourite : DetailsEvent()
 

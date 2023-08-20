@@ -36,6 +36,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
@@ -59,9 +62,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
@@ -72,10 +78,12 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.ishubhamsingh.splashy.core.utils.getFormattedDateTime
 import dev.ishubhamsingh.splashy.features.details.DetailsViewModel
+import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.ui.components.BackButton
 import dev.ishubhamsingh.splashy.ui.components.getKamelConfig
 import dev.ishubhamsingh.splashy.ui.components.parseColor
+import dev.ishubhamsingh.splashy.ui.theme.getLatoBold
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
@@ -141,6 +149,13 @@ fun DetailsScreen(
     ) {
       PhotoContainer(photo = photo)
       BackButton(navigator = navigator)
+
+      if (state.shouldShowApplyWallpaperDialog) {
+        ApplyWallpaperDialog(
+          onActionSelected = { viewModel.onEvent(DetailsEvent.ApplyAsWallpaper(it)) },
+          onDialogDismiss = { viewModel.onEvent(DetailsEvent.DismissApplyWallpaperDialog) }
+        )
+      }
     }
   }
 }
@@ -246,9 +261,7 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
     OutlinedButton(
-      onClick = {
-          viewModel.onEvent(DetailsEvent.DownloadPhoto)
-      },
+      onClick = { viewModel.onEvent(DetailsEvent.DownloadPhoto) },
       modifier = Modifier.fillMaxWidth().weight(1f),
       shape = RoundedCornerShape(8.dp),
       enabled = !state.isDownloading
@@ -268,10 +281,18 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
     }
     Spacer(modifier = Modifier.size(16.dp))
     Button(
-      onClick = {},
+      onClick = { viewModel.onEvent(DetailsEvent.ShowApplyWallpaperDialog) },
       modifier = Modifier.fillMaxWidth().weight(1f),
-      shape = RoundedCornerShape(8.dp)
+      shape = RoundedCornerShape(8.dp),
+      enabled = !state.isApplying
     ) {
+      AnimatedVisibility(visible = state.isApplying) {
+        CircularProgressIndicator(
+          modifier = Modifier.size(16.dp),
+          color = MaterialTheme.colorScheme.onSurface
+        )
+      }
+      Spacer(modifier = Modifier.size(8.dp))
       Text(
         text = "Apply",
         style =
@@ -402,6 +423,131 @@ fun TopicDetailItem(approvedTopics: ArrayList<String>) {
             borderColor = MaterialTheme.colorScheme.secondary
           ),
       )
+    }
+  }
+}
+
+@Composable
+fun ApplyWallpaperDialog(
+  onActionSelected: (WallpaperScreenType) -> Unit,
+  onDialogDismiss: () -> Unit
+) {
+  Dialog(
+    onDismissRequest = onDialogDismiss,
+    properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
+  ) {
+    Card(
+      shape = RoundedCornerShape(12.dp),
+      colors =
+        CardDefaults.cardColors(
+          containerColor = MaterialTheme.colorScheme.surface,
+          contentColor = MaterialTheme.colorScheme.onSurface
+        )
+    ) {
+      Column(
+        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+      ) {
+        Text(
+          text = "Apply Wallpaper",
+          fontSize = 24.sp,
+          fontFamily = getLatoBold(),
+          textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        Text(
+          text = "Please select how you want to apply the wallpaper",
+          fontSize = 14.sp,
+          fontFamily = getLatoRegular(),
+          textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.size(16.dp))
+
+        OutlinedButton(
+          onClick = {
+            onActionSelected.invoke(WallpaperScreenType.OTHER_APPLICATION)
+            onDialogDismiss.invoke()
+          },
+          modifier = Modifier.fillMaxWidth(),
+          shape =
+            RoundedCornerShape(
+              topStart = 12.dp,
+              topEnd = 12.dp,
+              bottomStart = 4.dp,
+              bottomEnd = 4.dp
+            )
+        ) {
+          Text(
+            text = "Apply using other app",
+            color = MaterialTheme.colorScheme.onSurface,
+            fontFamily = getLatoRegular(),
+            modifier = Modifier.padding(8.dp)
+          )
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+
+        OutlinedButton(
+          onClick = {
+            onActionSelected.invoke(WallpaperScreenType.HOME_SCREEN)
+            onDialogDismiss.invoke()
+          },
+          modifier = Modifier.fillMaxWidth(),
+          shape = RoundedCornerShape(4.dp)
+        ) {
+          Text(
+            text = "Apply on Homescreen",
+            color = MaterialTheme.colorScheme.onSurface,
+            fontFamily = getLatoRegular(),
+            modifier = Modifier.padding(8.dp)
+          )
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+
+        OutlinedButton(
+          onClick = {
+            onActionSelected.invoke(WallpaperScreenType.LOCK_SCREEN)
+            onDialogDismiss.invoke()
+          },
+          modifier = Modifier.fillMaxWidth(),
+          shape = RoundedCornerShape(4.dp)
+        ) {
+          Text(
+            text = "Apply on Lockscreen",
+            color = MaterialTheme.colorScheme.onSurface,
+            fontFamily = getLatoRegular(),
+            modifier = Modifier.padding(8.dp)
+          )
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+
+        Button(
+          onClick = {
+            onActionSelected.invoke(WallpaperScreenType.BOTH)
+            onDialogDismiss.invoke()
+          },
+          modifier = Modifier.fillMaxWidth(),
+          colors =
+            ButtonDefaults.buttonColors(
+              containerColor = MaterialTheme.colorScheme.secondaryContainer,
+              contentColor = MaterialTheme.colorScheme.secondary
+            ),
+          shape =
+            RoundedCornerShape(
+              topStart = 4.dp,
+              topEnd = 4.dp,
+              bottomStart = 12.dp,
+              bottomEnd = 12.dp
+            )
+        ) {
+          Text(
+            text = "Apply on both screen",
+            color = MaterialTheme.colorScheme.onSurface,
+            fontFamily = getLatoRegular(),
+            modifier = Modifier.padding(8.dp)
+          )
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+      }
     }
   }
 }

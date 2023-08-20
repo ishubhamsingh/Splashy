@@ -110,21 +110,20 @@ class UnsplashApi(private val httpClient: HttpClient) {
       .body()
   }
 
-  suspend fun getDownloadUrl(url:String): DownloadUrl {
-    return client.get {
-      url(url).apply {
-        parameter("client_id", BuildConfig.UNSPLASH_API_KEY)
-      }
-    }.body()
+  suspend fun getDownloadUrl(url: String): DownloadUrl {
+    return client
+      .get { url(url).apply { parameter("client_id", BuildConfig.UNSPLASH_API_KEY) } }
+      .body()
   }
 
   suspend fun downloadFile(url: String): ByteReadChannel {
-    return client.get(url) {
-
-      onDownload { bytesSentTotal, contentLength ->
-        println("Downloaded $bytesSentTotal of $contentLength")
+    return client
+      .get(url) {
+        onDownload { bytesSentTotal, contentLength ->
+          println("Downloaded $bytesSentTotal of $contentLength")
+        }
       }
-    }.bodyAsChannel()
+      .bodyAsChannel()
   }
 
   companion object {

@@ -62,4 +62,5 @@ fun currentRoute(navigator: Navigator): String? {
   return navigator.currentEntry.collectAsState(null).value?.route?.route
 }
 
-val TOP_LEVEL_ROUTES = arrayListOf(Screen.Home.route, Screen.Collections.route, Screen.Favourites.route)
+val TOP_LEVEL_ROUTES =
+  arrayListOf(Screen.Home.route, Screen.Collections.route, Screen.Favourites.route)

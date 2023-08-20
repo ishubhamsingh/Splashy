@@ -56,12 +56,12 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
   SplashyTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
     Scaffold(
       topBar = {
-        if(TOP_LEVEL_ROUTES.contains(currentRoute(navigator))) { //Only show for top level routes
+        if (TOP_LEVEL_ROUTES.contains(currentRoute(navigator))) { // Only show for top level routes
           AppTopBar(navigator)
         }
       },
       bottomBar = {
-        if(TOP_LEVEL_ROUTES.contains(currentRoute(navigator))) { //Only show for top level routes
+        if (TOP_LEVEL_ROUTES.contains(currentRoute(navigator))) { // Only show for top level routes
           BottomNavigationComponent(navigator)
         }
       }

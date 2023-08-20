@@ -102,6 +102,7 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.CacheControl
+import io.ktor.http.headersOf
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.Navigator
@@ -247,7 +248,8 @@ fun getKamelConfig(url: String): KamelConfig {
     httpFetcher {
       defaultRequest { url(url) }
 
-      CacheControl.MaxAge(maxAgeSeconds = 10000)
+      CacheControl.MaxAge(maxAgeSeconds = 31536)
+      headersOf("Cache-Control", "max-age=31536000")
 
       install(HttpRequestRetry) {
         maxRetries = 3

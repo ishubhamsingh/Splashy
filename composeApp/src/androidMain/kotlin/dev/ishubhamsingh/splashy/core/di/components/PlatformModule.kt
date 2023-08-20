@@ -21,6 +21,6 @@ import org.koin.dsl.module
 
 /** Created by Shubham Singh on 11/08/23. */
 actual val platformModule = module {
-    single { DatabaseDriverFactory(get()) }
-    factory { FileUtils(get()) }
+  single { DatabaseDriverFactory(get()) }
+  factory { FileUtils(get()) }
 }
