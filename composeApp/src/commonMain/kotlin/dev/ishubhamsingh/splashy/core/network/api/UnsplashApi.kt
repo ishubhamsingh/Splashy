@@ -17,18 +17,24 @@ package dev.ishubhamsingh.splashy.core.network.api
 
 import Splashy.composeApp.BuildConfig
 import dev.ishubhamsingh.splashy.core.network.KtorLogger
+import dev.ishubhamsingh.splashy.models.DownloadUrl
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.onDownload
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.URLProtocol
 import io.ktor.http.isSuccess
 import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.utils.io.ByteReadChannel
 import kotlinx.serialization.json.Json
 
 class UnsplashApi(private val httpClient: HttpClient) {
@@ -102,6 +108,23 @@ class UnsplashApi(private val httpClient: HttpClient) {
         }
       }
       .body()
+  }
+
+  suspend fun getDownloadUrl(url:String): DownloadUrl {
+    return client.get {
+      url(url).apply {
+        parameter("client_id", BuildConfig.UNSPLASH_API_KEY)
+      }
+    }.body()
+  }
+
+  suspend fun downloadFile(url: String): ByteReadChannel {
+    return client.get(url) {
+
+      onDownload { bytesSentTotal, contentLength ->
+        println("Downloaded $bytesSentTotal of $contentLength")
+      }
+    }.bodyAsChannel()
   }
 
   companion object {

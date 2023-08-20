@@ -16,16 +16,28 @@
 package dev.ishubhamsingh.splashy.core.utils
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
+import java.io.File
 import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.coroutines.coroutineContext
 
 actual fun getHttpClient(): HttpClient {
   val httpClient =
@@ -57,3 +69,4 @@ actual fun getFormattedDateTime(timestamp: String, format: String): String {
   val formatter = DateTimeFormatter.ofPattern(format)
   return date.format(formatter)
 }
+

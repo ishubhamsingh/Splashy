@@ -16,6 +16,10 @@
 package dev.ishubhamsingh.splashy.core.di.components
 
 import dev.ishubhamsingh.splashy.core.utils.DatabaseDriverFactory
+import dev.ishubhamsingh.splashy.core.utils.FileUtils
 import org.koin.dsl.module
 
-actual val platformModule = module { single { DatabaseDriverFactory() } }
+actual val platformModule = module {
+    single { DatabaseDriverFactory() }
+    factory { FileUtils() }
+}

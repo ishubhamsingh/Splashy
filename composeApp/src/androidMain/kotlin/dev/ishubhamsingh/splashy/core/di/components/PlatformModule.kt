@@ -16,7 +16,11 @@
 package dev.ishubhamsingh.splashy.core.di.components
 
 import dev.ishubhamsingh.splashy.core.utils.DatabaseDriverFactory
+import dev.ishubhamsingh.splashy.core.utils.FileUtils
 import org.koin.dsl.module
 
 /** Created by Shubham Singh on 11/08/23. */
-actual val platformModule = module { single { DatabaseDriverFactory(get()) } }
+actual val platformModule = module {
+    single { DatabaseDriverFactory(get()) }
+    factory { FileUtils(get()) }
+}

@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.features.details.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -172,7 +173,7 @@ fun PhotoDetailsContainer(photo: Photo, viewModel: DetailsViewModel, state: Deta
     horizontalAlignment = Alignment.Start
   ) {
     SheetProfileRow(photo, viewModel, state)
-    SheetActionRow(photo)
+    SheetActionRow(viewModel, state)
     SheetPhotoDetails(photo)
   }
 }
@@ -238,17 +239,27 @@ fun SheetProfileRow(photo: Photo, viewModel: DetailsViewModel, state: DetailsSta
 }
 
 @Composable
-fun SheetActionRow(photo: Photo) {
+fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
   Row(
     modifier = Modifier.fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
     OutlinedButton(
-      onClick = {},
+      onClick = {
+          viewModel.onEvent(DetailsEvent.DownloadPhoto)
+      },
       modifier = Modifier.fillMaxWidth().weight(1f),
-      shape = RoundedCornerShape(8.dp)
+      shape = RoundedCornerShape(8.dp),
+      enabled = !state.isDownloading
     ) {
+      AnimatedVisibility(visible = state.isDownloading) {
+        CircularProgressIndicator(
+          modifier = Modifier.size(16.dp),
+          color = MaterialTheme.colorScheme.onSurface
+        )
+      }
+      Spacer(modifier = Modifier.size(8.dp))
       Text(
         text = "Download",
         style =
