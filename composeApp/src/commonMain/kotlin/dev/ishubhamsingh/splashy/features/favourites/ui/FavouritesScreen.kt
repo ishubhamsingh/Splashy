@@ -15,10 +15,10 @@
  */
 package dev.ishubhamsingh.splashy.features.favourites.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,6 +37,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import compose.icons.EvaIcons
+import compose.icons.evaicons.Outline
+import compose.icons.evaicons.outline.Checkmark
 import dev.ishubhamsingh.splashy.core.navigation.Screen
 import dev.ishubhamsingh.splashy.features.favourites.FavouritesViewModel
 import dev.ishubhamsingh.splashy.models.TopicFilter
@@ -78,12 +82,12 @@ fun FavouritesScreen(navigator: Navigator, viewModel: FavouritesViewModel) {
 @Composable
 fun TopicFilterLayout(topics: ArrayList<TopicFilter>, onFilterSelected: (String) -> Unit) {
 
-  Row(
-    modifier = Modifier.padding(8.dp),
-    horizontalArrangement = Arrangement.spacedBy(8.dp),
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    Text("Topics:", style = MaterialTheme.typography.bodyLarge)
+  Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Text(
+      "Filter by Topics",
+      style = MaterialTheme.typography.titleSmall,
+      modifier = Modifier.padding(start = 4.dp)
+    )
 
     LazyRow(
       contentPadding = PaddingValues(4.dp),
@@ -110,13 +114,24 @@ fun TopicFilterItem(topic: String, isSelected: Boolean, onFilterSelected: (Strin
       FilterChipDefaults.filterChipColors(
         containerColor = MaterialTheme.colorScheme.surface,
         labelColor = MaterialTheme.colorScheme.surfaceTint,
-        selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-        selectedLabelColor = MaterialTheme.colorScheme.secondary
+        selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+        selectedLabelColor = MaterialTheme.colorScheme.primary
       ),
     border =
       FilterChipDefaults.filterChipBorder(
         borderColor = MaterialTheme.colorScheme.surfaceTint,
         borderWidth = 2.dp,
-      )
+        selectedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+        selectedBorderWidth = 2.dp
+      ),
+    leadingIcon = {
+      AnimatedVisibility(isSelected) {
+        Icon(
+          imageVector = EvaIcons.Outline.Checkmark,
+          contentDescription = "check",
+          tint = MaterialTheme.colorScheme.primary
+        )
+      }
+    }
   )
 }
