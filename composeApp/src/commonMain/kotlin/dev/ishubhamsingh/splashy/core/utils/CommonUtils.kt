@@ -26,3 +26,10 @@ expect fun getHttpClient(): HttpClient
 @Composable expect fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font
 
 expect fun getFormattedDateTime(timestamp: String, format: String = "dd MMM yyyy, hh:mm a"): String
+
+expect fun getPlatform(): Platform
+
+enum class Platform {
+  Android,
+  iOS
+}

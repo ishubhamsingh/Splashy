@@ -15,7 +15,12 @@
  */
 package dev.ishubhamsingh.splashy.core.presentation
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 
 @Composable
-expect fun SplashyTheme(darkTheme: Boolean, dynamicColor: Boolean, content: @Composable () -> Unit)
+expect fun SplashyTheme(
+  darkTheme: Boolean = isSystemInDarkTheme(),
+  dynamicColor: Boolean,
+  content: @Composable () -> Unit
+)

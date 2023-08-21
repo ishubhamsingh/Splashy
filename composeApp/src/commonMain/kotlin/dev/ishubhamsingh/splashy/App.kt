@@ -18,6 +18,7 @@ package dev.ishubhamsingh.splashy
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,9 +27,15 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,6 +51,7 @@ import dev.ishubhamsingh.splashy.core.navigation.currentRoute
 import dev.ishubhamsingh.splashy.core.presentation.SplashyTheme
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import dev.ishubhamsingh.splashy.ui.theme.getLobsterRegular
+import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.rememberNavigator
@@ -52,6 +60,8 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 @Composable
 fun App(darkTheme: Boolean, dynamicColor: Boolean) {
   val navigator = rememberNavigator()
+  val snackBarHostState = remember { SnackbarHostState() }
+  val coroutineScope = rememberCoroutineScope()
 
   SplashyTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
     Scaffold(
@@ -64,9 +74,28 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
         if (TOP_LEVEL_ROUTES.contains(currentRoute(navigator))) { // Only show for top level routes
           BottomNavigationComponent(navigator)
         }
+      },
+      snackbarHost = {
+        SnackbarHost(hostState = snackBarHostState) {
+          Snackbar(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.secondary,
+            shape = CircleShape
+          ) {
+            Text(text = it.visuals.message, fontFamily = getLatoRegular(), fontSize = 16.sp)
+          }
+        }
       }
     ) {
-      Navigation(navigator, it)
+      Navigation(
+        navigator,
+        it,
+        onShowSnackBar = { message ->
+          coroutineScope.launch {
+            snackBarHostState.showSnackbar(message = message, duration = SnackbarDuration.Short)
+          }
+        }
+      )
     }
   }
 }

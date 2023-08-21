@@ -65,3 +65,5 @@ actual fun getFormattedDateTime(timestamp: String, format: String): String {
   dateFormatter.dateFormat = format
   return dateFormatter.stringFromDate(date)
 }
+
+actual fun getPlatform(): Platform = Platform.iOS

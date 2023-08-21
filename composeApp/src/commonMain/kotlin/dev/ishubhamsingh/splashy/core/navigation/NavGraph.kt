@@ -36,7 +36,11 @@ import moe.tlaster.precompose.navigation.path
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Navigation(navigator: Navigator, paddingValues: PaddingValues) {
+fun Navigation(
+  navigator: Navigator,
+  paddingValues: PaddingValues,
+  onShowSnackBar: (String) -> Unit
+) {
   val homeViewModel = getViewModel("home-screen", factory = viewModelFactory { HomeViewModel() })
   val favouritesViewModel =
     getViewModel("favourites-screen", factory = viewModelFactory { FavouritesViewModel() })
@@ -51,7 +55,9 @@ fun Navigation(navigator: Navigator, paddingValues: PaddingValues) {
     scene(route = Screen.Collections.route) { CollectionsScreen(navigator) }
     scene(route = Screen.Favourites.route) { FavouritesScreen(navigator, favouritesViewModel) }
     scene(route = Screen.PhotoDetails.route.plus("/{id}")) { backStackEntry ->
-      backStackEntry.path<String>("id")?.let { DetailsScreen(navigator, it) }
+      backStackEntry.path<String>("id")?.let {
+        DetailsScreen(navigator, it, onShowSnackBar = onShowSnackBar)
+      }
     }
     scene(route = Screen.Settings.route) { SettingsScreen(navigator) }
   }

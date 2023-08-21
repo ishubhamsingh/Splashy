@@ -57,3 +57,5 @@ actual fun getFormattedDateTime(timestamp: String, format: String): String {
   val formatter = DateTimeFormatter.ofPattern(format)
   return date.format(formatter)
 }
+
+actual fun getPlatform(): Platform = Platform.Android

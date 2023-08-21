@@ -79,7 +79,9 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
+import dev.ishubhamsingh.splashy.core.utils.Platform
 import dev.ishubhamsingh.splashy.core.utils.getFormattedDateTime
+import dev.ishubhamsingh.splashy.core.utils.getPlatform
 import dev.ishubhamsingh.splashy.features.details.DetailsViewModel
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 import dev.ishubhamsingh.splashy.models.Photo
@@ -103,7 +105,8 @@ fun DetailsScreen(
     getViewModel(
       "details-screen",
       factory = viewModelFactory { DetailsViewModel(factory.createPermissionsController()) }
-    )
+    ),
+  onShowSnackBar: (String) -> Unit
 ) {
   val state by viewModel.state.collectAsState()
 
@@ -114,6 +117,8 @@ fun DetailsScreen(
     )
 
   BindEffect(viewModel.permissionsController)
+
+  LaunchedEffect(state.snackBarMessage) { state.snackBarMessage?.let { onShowSnackBar.invoke(it) } }
 
   LaunchedEffect(Unit) { viewModel.onEvent(DetailsEvent.LoadDetails(id)) }
   if (state.isLoading) {
@@ -269,46 +274,78 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
-    OutlinedButton(
-      onClick = { viewModel.onEvent(DetailsEvent.DownloadPhoto) },
-      modifier = Modifier.fillMaxWidth().weight(1f),
-      shape = RoundedCornerShape(8.dp),
-      enabled = !state.isDownloading
-    ) {
-      AnimatedVisibility(visible = state.isDownloading) {
-        CircularProgressIndicator(
-          modifier = Modifier.size(16.dp),
-          color = MaterialTheme.colorScheme.onSurface,
-          strokeWidth = 2.dp
+    if (getPlatform() == Platform.iOS) {
+      Button(
+        onClick = { viewModel.onEvent(DetailsEvent.DownloadPhoto) },
+        modifier = Modifier.fillMaxWidth().weight(1f),
+        shape = RoundedCornerShape(8.dp),
+        enabled = !state.isDownloading
+      ) {
+        AnimatedVisibility(visible = state.isDownloading) {
+          CircularProgressIndicator(
+            modifier = Modifier.size(16.dp),
+            color = MaterialTheme.colorScheme.onSurface,
+            strokeWidth = 2.dp
+          )
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+        Text(
+          text = "Save to Photos",
+          style =
+            MaterialTheme.typography.titleSmall.copy(
+              fontFamily = getLatoRegular(),
+              fontSize = 14.sp
+            )
         )
       }
-      Spacer(modifier = Modifier.size(8.dp))
-      Text(
-        text = "Download",
-        style =
-          MaterialTheme.typography.titleSmall.copy(fontFamily = getLatoRegular(), fontSize = 14.sp)
-      )
-    }
-    Spacer(modifier = Modifier.size(16.dp))
-    Button(
-      onClick = { viewModel.onEvent(DetailsEvent.ShowApplyWallpaperDialog) },
-      modifier = Modifier.fillMaxWidth().weight(1f),
-      shape = RoundedCornerShape(8.dp),
-      enabled = !state.isApplying
-    ) {
-      AnimatedVisibility(visible = state.isApplying) {
-        CircularProgressIndicator(
-          modifier = Modifier.size(16.dp),
-          color = MaterialTheme.colorScheme.onSurface,
-          strokeWidth = 2.dp
+    } else {
+      OutlinedButton(
+        onClick = { viewModel.onEvent(DetailsEvent.DownloadPhoto) },
+        modifier = Modifier.fillMaxWidth().weight(1f),
+        shape = RoundedCornerShape(8.dp),
+        enabled = !state.isDownloading
+      ) {
+        AnimatedVisibility(visible = state.isDownloading) {
+          CircularProgressIndicator(
+            modifier = Modifier.size(16.dp),
+            color = MaterialTheme.colorScheme.onSurface,
+            strokeWidth = 2.dp
+          )
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+        Text(
+          text = "Download",
+          style =
+            MaterialTheme.typography.titleSmall.copy(
+              fontFamily = getLatoRegular(),
+              fontSize = 14.sp
+            )
         )
       }
-      Spacer(modifier = Modifier.size(8.dp))
-      Text(
-        text = "Apply",
-        style =
-          MaterialTheme.typography.titleSmall.copy(fontFamily = getLatoRegular(), fontSize = 14.sp)
-      )
+      Spacer(modifier = Modifier.size(16.dp))
+      Button(
+        onClick = { viewModel.onEvent(DetailsEvent.ShowApplyWallpaperDialog) },
+        modifier = Modifier.fillMaxWidth().weight(1f),
+        shape = RoundedCornerShape(8.dp),
+        enabled = !state.isApplying
+      ) {
+        AnimatedVisibility(visible = state.isApplying) {
+          CircularProgressIndicator(
+            modifier = Modifier.size(16.dp),
+            color = MaterialTheme.colorScheme.onSurface,
+            strokeWidth = 2.dp
+          )
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+        Text(
+          text = "Apply Wallpaper",
+          style =
+            MaterialTheme.typography.titleSmall.copy(
+              fontFamily = getLatoRegular(),
+              fontSize = 14.sp
+            )
+        )
+      }
     }
   }
 }

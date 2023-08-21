@@ -44,7 +44,8 @@ actual class FileUtils(private val context: Context) {
   actual suspend fun saveByteArrayToFile(
     fileName: String,
     data: ByteArray,
-    shouldOpenFile: Boolean
+    shouldOpenFile: Boolean,
+    updateMessage: (String) -> Unit
   ) {
     var uri: Uri? = null
     var newFileName = ""
@@ -88,7 +89,7 @@ actual class FileUtils(private val context: Context) {
             openFile(uri?.toUri(), newFileName)
           } else {
             result = "File saved successfully in ${Environment.DIRECTORY_PICTURES}"
-            showMessage(result)
+            updateMessage.invoke(result)
           }
         }
         .onFailure {
@@ -98,7 +99,7 @@ actual class FileUtils(private val context: Context) {
             } else {
               "Saving file failed!"
             }
-          showMessage(result)
+          updateMessage.invoke(result)
           it.printStackTrace()
         }
     }
@@ -115,7 +116,11 @@ actual class FileUtils(private val context: Context) {
     context.startActivity(chooserIntent)
   }
 
-  actual suspend fun applyWallpaper(data: ByteArray, wallpaperScreenType: WallpaperScreenType) {
+  actual suspend fun applyWallpaper(
+    data: ByteArray,
+    wallpaperScreenType: WallpaperScreenType,
+    updateMessage: (String) -> Unit
+  ) {
     val wallpaperManager = WallpaperManager.getInstance(context)
     var result = ""
     val flag =
@@ -132,13 +137,13 @@ actual class FileUtils(private val context: Context) {
           wallpaperManager.setBitmap(imageBitmap, null, true, flag)
         }
         .onSuccess {
-          result = "Applying wallpaper succeeded"
-          showMessage(result)
+          result = "Applied wallpaper successfully"
+          updateMessage.invoke(result)
         }
         .onFailure {
           result = "Applying wallpaper failed!"
           showMessage(result)
-          it.printStackTrace()
+          updateMessage.invoke(result)
         }
     }
   }

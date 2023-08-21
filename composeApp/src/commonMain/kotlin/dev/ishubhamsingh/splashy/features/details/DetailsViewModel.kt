@@ -167,11 +167,20 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
       }
   }
 
+  private fun updateSnackBarMessage(message: String) {
+    _state.update { detailsState -> detailsState.copy(snackBarMessage = message) }
+  }
+
   private fun saveToFile(byteArray: ByteArray?, shouldOpenFile: Boolean) {
     viewModelScope
       .launch {
         byteArray?.let {
-          fileUtils.saveByteArrayToFile(state.value.photo?.id ?: "image", it, shouldOpenFile)
+          fileUtils.saveByteArrayToFile(
+            state.value.photo?.id ?: "image",
+            it,
+            shouldOpenFile,
+            ::updateSnackBarMessage
+          )
         }
       }
       .invokeOnCompletion {
@@ -186,7 +195,11 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
     wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION
   ) {
     viewModelScope
-      .launch { byteArray?.let { fileUtils.applyWallpaper(byteArray, wallpaperScreenType) } }
+      .launch {
+        byteArray?.let {
+          fileUtils.applyWallpaper(byteArray, wallpaperScreenType, ::updateSnackBarMessage)
+        }
+      }
       .invokeOnCompletion {
         _state.update { detailsState -> detailsState.copy(isApplying = false) }
       }

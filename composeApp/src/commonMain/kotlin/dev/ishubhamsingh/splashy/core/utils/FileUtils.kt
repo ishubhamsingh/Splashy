@@ -21,11 +21,20 @@ import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 /** Created by Shubham Singh on 19/08/23. */
 expect class FileUtils {
 
-  suspend fun saveByteArrayToFile(fileName: String, data: ByteArray, shouldOpenFile: Boolean)
+  suspend fun saveByteArrayToFile(
+    fileName: String,
+    data: ByteArray,
+    shouldOpenFile: Boolean,
+    updateMessage: (String) -> Unit = {}
+  )
 
   suspend fun openFile(uri: Uri?, fileName: String)
 
-  suspend fun applyWallpaper(data: ByteArray, wallpaperScreenType: WallpaperScreenType)
+  suspend fun applyWallpaper(
+    data: ByteArray,
+    wallpaperScreenType: WallpaperScreenType,
+    updateMessage: (String) -> Unit = {}
+  )
 
   suspend fun shouldAskStorageRuntimePermission(): Boolean
 
