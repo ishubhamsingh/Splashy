@@ -23,6 +23,7 @@ plugins {
   alias(libs.plugins.buildConfig)
   alias(libs.plugins.kotlinx.serialization)
   alias(libs.plugins.sqlDelight)
+  alias(libs.plugins.libres)
 }
 
 lateinit var secretKeyProperties: Properties
@@ -82,6 +83,7 @@ kotlin {
         implementation(libs.materialKolor)
         implementation(libs.kotlinx.datetime)
         implementation(libs.sqlDelight.coroutines.extensions)
+        implementation(libs.libres)
         api(libs.precompose)
         api(libs.moko.mvvm.compose)
         api(libs.moko.mvvm.flow.compose)
@@ -147,6 +149,11 @@ buildConfig {
     "UNSPLASH_API_KEY",
     "\"${secretKeyProperties["unsplash.access.key"]}\""
   )
+}
+
+libres {
+  generatedClassName = "CommonRes"
+  generateNamedArguments = true
 }
 
 sqldelight {

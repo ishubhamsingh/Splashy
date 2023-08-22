@@ -20,7 +20,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Photo(
-  @SerialName("alt_description") val altDescription: String = "",
+  @SerialName("alt_description") val altDescription: String? = "",
   @SerialName("color") val color: String = "",
   @SerialName("created_at") val createdAt: String? = "",
   @SerialName("description") val description: String? = "",

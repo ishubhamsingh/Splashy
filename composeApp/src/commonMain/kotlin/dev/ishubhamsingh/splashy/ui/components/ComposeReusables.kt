@@ -85,6 +85,7 @@ import compose.icons.evaicons.outline.ArrowBack
 import compose.icons.evaicons.outline.ArrowheadUp
 import compose.icons.evaicons.outline.CloseCircle
 import compose.icons.evaicons.outline.Search
+import dev.ishubhamsingh.splashy.CommonRes
 import dev.ishubhamsingh.splashy.core.network.KtorLogger
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
@@ -370,7 +371,7 @@ fun SearchBar(searchQuery: String?, isSearching: Boolean, onQueryChanged: (Strin
       visualTransformation = VisualTransformation.None,
       interactionSource = interactionSource,
       placeholder = {
-        Text("Search", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp))
+        Text(CommonRes.string.lbl_search, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp))
       },
       leadingIcon = {
         androidx.compose.material.Icon(

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Splashy</string>
+    <string name="lbl_filter">Filter by Topics</string>
+    <string name="save_to_photos">Save to Photos</string>
+    <string name="lbl_download">Download</string>
+    <string name="lbl_apply_wallpaper">Apply Wallpaper</string>
+    <string name="lbl_details_caps">DETAILS</string>
+    <string name="lbl_desc">Description :</string>
+    <string name="lbl_posted_on">Posted on :</string>
+    <string name="lbl_size">Size :</string>
+    <string name="lbl_likes">Likes :</string>
+    <string name="lbl_color">Color :</string>
+    <string name="lbl_topics">Topics :</string>
+    <string name="lbl_search">Search</string>
+
+    <string name="title_apply_wallpaper_dialog">Apply Wallpaper</string>
+    <string name="desc_apply_wallpaper_dialog">Please select how you want to apply the wallpaper</string>
+    <string name="lbl_apply_wall_other_app">Apply using other app</string>
+    <string name="lbl_apply_wall_homescreen">Apply on Homescreen</string>
+    <string name="lbl_apply_wall_lockscreen">Apply on Lockscreen</string>
+    <string name="lbl_apply_wall_both">Apply on both screen</string>
+
+    <string name="lbl_home">Home</string>
+    <string name="lbl_collections">Collections</string>
+    <string name="lbl_favourites">Favourites</string>
+    <string name="lbl_details">Photo Details</string>
+    <string name="lbl_settings">Settings</string>
+</resources>

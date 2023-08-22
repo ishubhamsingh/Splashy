@@ -79,6 +79,7 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
+import dev.ishubhamsingh.splashy.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.Platform
 import dev.ishubhamsingh.splashy.core.utils.getFormattedDateTime
 import dev.ishubhamsingh.splashy.core.utils.getPlatform
@@ -290,7 +291,7 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
         }
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-          text = "Save to Photos",
+          text = CommonRes.string.save_to_photos,
           style =
             MaterialTheme.typography.titleSmall.copy(
               fontFamily = getLatoRegular(),
@@ -314,7 +315,7 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
         }
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-          text = "Download",
+          text = CommonRes.string.lbl_download,
           style =
             MaterialTheme.typography.titleSmall.copy(
               fontFamily = getLatoRegular(),
@@ -338,12 +339,14 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
         }
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-          text = "Apply Wallpaper",
+          text = CommonRes.string.lbl_apply_wallpaper,
           style =
             MaterialTheme.typography.titleSmall.copy(
               fontFamily = getLatoRegular(),
               fontSize = 14.sp
-            )
+            ),
+          maxLines = 1,
+          overflow = TextOverflow.Ellipsis
         )
       }
     }
@@ -362,25 +365,25 @@ fun SheetPhotoDetails(photo: Photo) {
       )
       Spacer(modifier = Modifier.size(8.dp))
       Text(
-        text = "DETAILS",
+        text = CommonRes.string.lbl_details_caps,
         color = MaterialTheme.colorScheme.onBackground,
         style = MaterialTheme.typography.bodyMedium
       )
     }
 
     Column(
-      modifier = Modifier.padding(vertical = 16.dp, horizontal = 32.dp),
+      modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp),
       verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-      PhotoDetailItem("Description :") {
+      PhotoDetailItem(CommonRes.string.lbl_desc) {
         Text(
-          if (photo.description.isNullOrEmpty()) photo.altDescription else photo.description,
+          if (photo.description.isNullOrEmpty()) photo.altDescription ?: "" else photo.description,
           style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
         )
       }
 
       photo.createdAt?.let {
-        PhotoDetailItem("Posted on :") {
+        PhotoDetailItem(CommonRes.string.lbl_posted_on) {
           Text(
             text = getFormattedDateTime(it),
             style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
@@ -388,21 +391,21 @@ fun SheetPhotoDetails(photo: Photo) {
         }
       }
 
-      PhotoDetailItem("Size :") {
+      PhotoDetailItem(CommonRes.string.lbl_size) {
         Text(
           "${photo.width} x ${photo.height}",
           style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
         )
       }
 
-      PhotoDetailItem("Likes :") {
+      PhotoDetailItem(CommonRes.string.lbl_likes) {
         Text(
           text = photo.likes.toString(),
           style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
         )
       }
 
-      PhotoDetailItem("Color :") {
+      PhotoDetailItem(CommonRes.string.lbl_color) {
         Box(
           modifier =
             Modifier.size(18.dp)
@@ -412,7 +415,7 @@ fun SheetPhotoDetails(photo: Photo) {
 
       photo.topicSubmissions?.let {
         if (it.getApprovedTopics().isNotEmpty()) {
-          PhotoDetailItem("Topics :", alignment = Alignment.CenterVertically) {
+          PhotoDetailItem(CommonRes.string.lbl_topics, alignment = Alignment.CenterVertically) {
             TopicDetailItem(it.getApprovedTopics())
           }
         }
@@ -497,14 +500,14 @@ fun ApplyWallpaperDialog(
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
         Text(
-          text = "Apply Wallpaper",
+          text = CommonRes.string.title_apply_wallpaper_dialog,
           fontSize = 24.sp,
           fontFamily = getLatoBold(),
           textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-          text = "Please select how you want to apply the wallpaper",
+          text = CommonRes.string.desc_apply_wallpaper_dialog,
           fontSize = 14.sp,
           fontFamily = getLatoRegular(),
           textAlign = TextAlign.Center
@@ -526,7 +529,7 @@ fun ApplyWallpaperDialog(
             )
         ) {
           Text(
-            text = "Apply using other app",
+            text = CommonRes.string.lbl_apply_wall_other_app,
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = getLatoRegular(),
             modifier = Modifier.padding(8.dp)
@@ -543,7 +546,7 @@ fun ApplyWallpaperDialog(
           shape = RoundedCornerShape(4.dp)
         ) {
           Text(
-            text = "Apply on Homescreen",
+            text = CommonRes.string.lbl_apply_wall_homescreen,
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = getLatoRegular(),
             modifier = Modifier.padding(8.dp)
@@ -560,7 +563,7 @@ fun ApplyWallpaperDialog(
           shape = RoundedCornerShape(4.dp)
         ) {
           Text(
-            text = "Apply on Lockscreen",
+            text = CommonRes.string.lbl_apply_wall_lockscreen,
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = getLatoRegular(),
             modifier = Modifier.padding(8.dp)
@@ -588,7 +591,7 @@ fun ApplyWallpaperDialog(
             )
         ) {
           Text(
-            text = "Apply on both screen",
+            text = CommonRes.string.lbl_apply_wall_both,
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = getLatoRegular(),
             modifier = Modifier.padding(8.dp)

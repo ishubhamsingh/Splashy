@@ -80,7 +80,8 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
           Snackbar(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.secondary,
-            shape = CircleShape
+            shape = CircleShape,
+            modifier = Modifier.padding(16.dp)
           ) {
             Text(text = it.visuals.message, fontFamily = getLatoRegular(), fontSize = 16.sp)
           }
@@ -157,7 +158,7 @@ fun AppTopBar(navigator: Navigator) {
   CenterAlignedTopAppBar(
     title = {
       Text(
-        "Splashy",
+        CommonRes.string.app_name,
         fontFamily = getLobsterRegular(),
         fontSize = 32.sp,
         fontWeight = FontWeight.Normal
