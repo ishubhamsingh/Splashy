@@ -371,7 +371,10 @@ fun SearchBar(searchQuery: String?, isSearching: Boolean, onQueryChanged: (Strin
       visualTransformation = VisualTransformation.None,
       interactionSource = interactionSource,
       placeholder = {
-        Text(CommonRes.string.lbl_search, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp))
+        Text(
+          CommonRes.string.lbl_search,
+          style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
+        )
       },
       leadingIcon = {
         androidx.compose.material.Icon(

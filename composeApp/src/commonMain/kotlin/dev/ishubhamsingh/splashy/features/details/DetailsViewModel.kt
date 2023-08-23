@@ -130,22 +130,31 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
     shouldOpenFile: Boolean = false,
     wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION
   ) {
-    var url: String = ""
     photo?.links?.downloadLocation?.let {
-      viewModelScope
-        .launch {
-          val response = unsplashApi.getDownloadUrl(it)
-          url = response.url
+      viewModelScope.launch {
+        unsplashRepository.getDownloadUrl(it).collect { networkResult ->
+          when (networkResult) {
+            is NetworkResult.Error -> {
+              _state.update { detailsState ->
+                detailsState.copy(isDownloading = false, isApplying = false)
+              }
+              Napier.e(networkResult.message.toString())
+            }
+            is NetworkResult.Loading -> {}
+            is NetworkResult.Success -> {
+              val url = networkResult.data?.url
+              url?.let {
+                downloadPhoto(
+                  url = url,
+                  isSaveToFile = isSaveToFile,
+                  shouldOpenFile = shouldOpenFile,
+                  wallpaperScreenType = wallpaperScreenType
+                )
+              }
+            }
+          }
         }
-        .invokeOnCompletion {
-          if (url.isNotEmpty())
-            downloadPhoto(
-              url = url,
-              isSaveToFile = isSaveToFile,
-              shouldOpenFile = shouldOpenFile,
-              wallpaperScreenType = wallpaperScreenType
-            )
-        }
+      }
     }
   }
 
@@ -169,6 +178,10 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
 
   private fun updateSnackBarMessage(message: String) {
     _state.update { detailsState -> detailsState.copy(snackBarMessage = message) }
+  }
+
+  fun resetSnackBarMessage() {
+    _state.update { detailsState -> detailsState.copy(snackBarMessage = null) }
   }
 
   private fun saveToFile(byteArray: ByteArray?, shouldOpenFile: Boolean) {

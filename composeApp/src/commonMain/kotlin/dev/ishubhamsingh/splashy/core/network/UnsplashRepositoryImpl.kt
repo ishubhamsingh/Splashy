@@ -25,6 +25,7 @@ import dev.ishubhamsingh.splashy.db.mappers.toPhoto
 import dev.ishubhamsingh.splashy.db.mappers.toPhotoArrayList
 import dev.ishubhamsingh.splashy.db.mappers.toPhotoEntity
 import dev.ishubhamsingh.splashy.db.mappers.toPhotoSearchCollection
+import dev.ishubhamsingh.splashy.models.DownloadUrl
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
@@ -200,6 +201,27 @@ class UnsplashRepositoryImpl(
       }
 
       emit(NetworkResult.Loading(false)) // End Loading
+    }
+  }
+
+  override fun getDownloadUrl(url: String): Flow<NetworkResult<DownloadUrl>> {
+    return flow {
+      emit(NetworkResult.Loading(isLoading = true)) // Start Loading
+      try {
+        val request = unsplashApi.getDownloadUrl(url) // Fetch from API
+        if (request.status.value == 200) { // Call successful
+          val data = request.body<DownloadUrl>()
+          emit(NetworkResult.Success(data = data)) // emit response
+        } else {
+          Napier.e("errorCode: ${request.status.value}")
+          Napier.e("errorMessage: ${request.status.description}")
+          emit(NetworkResult.Error(request.status.description))
+        }
+      } catch (e: Exception) {
+        e.printStackTrace()
+        emit(NetworkResult.Error(message = e.message ?: "Couldn't load data"))
+      }
+      emit(NetworkResult.Loading(isLoading = false)) // Stop Loading
     }
   }
 

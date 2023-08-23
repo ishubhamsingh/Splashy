@@ -119,7 +119,12 @@ fun DetailsScreen(
 
   BindEffect(viewModel.permissionsController)
 
-  LaunchedEffect(state.snackBarMessage) { state.snackBarMessage?.let { onShowSnackBar.invoke(it) } }
+  LaunchedEffect(state.snackBarMessage) {
+    state.snackBarMessage?.let {
+      onShowSnackBar.invoke(it)
+      viewModel.resetSnackBarMessage()
+    }
+  }
 
   LaunchedEffect(Unit) { viewModel.onEvent(DetailsEvent.LoadDetails(id)) }
   if (state.isLoading) {

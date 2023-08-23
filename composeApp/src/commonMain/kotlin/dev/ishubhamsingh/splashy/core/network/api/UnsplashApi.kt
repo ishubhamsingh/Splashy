@@ -17,7 +17,6 @@ package dev.ishubhamsingh.splashy.core.network.api
 
 import Splashy.composeApp.BuildConfig
 import dev.ishubhamsingh.splashy.core.network.KtorLogger
-import dev.ishubhamsingh.splashy.models.DownloadUrl
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpRequestRetry
@@ -110,7 +109,7 @@ class UnsplashApi(private val httpClient: HttpClient) {
       .body()
   }
 
-  suspend fun getDownloadUrl(url: String): DownloadUrl {
+  suspend fun getDownloadUrl(url: String): HttpResponse {
     return client
       .get { url(url).apply { parameter("client_id", BuildConfig.UNSPLASH_API_KEY) } }
       .body()

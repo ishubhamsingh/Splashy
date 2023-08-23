@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.core.domain
 
+import dev.ishubhamsingh.splashy.models.DownloadUrl
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
@@ -30,6 +31,8 @@ interface UnsplashRepository {
   ): Flow<NetworkResult<PhotoSearchCollection>>
 
   fun getPhotoDetails(id: String): Flow<NetworkResult<Photo>>
+
+  fun getDownloadUrl(url: String): Flow<NetworkResult<DownloadUrl>>
 
   fun addFavourite(favourite: Favourite): Flow<NetworkResult<Boolean>>
 
