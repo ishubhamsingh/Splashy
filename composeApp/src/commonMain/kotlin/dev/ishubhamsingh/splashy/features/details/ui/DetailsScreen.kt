@@ -152,7 +152,18 @@ fun DetailsScreen(
       sheetSwipeEnabled = true,
       sheetContainerColor = MaterialTheme.colorScheme.surface,
       sheetContentColor = MaterialTheme.colorScheme.onSurface,
-      sheetContent = { PhotoDetailsContainer(photo, viewModel, state) },
+      sheetContent = {
+        PhotoDetailsContainer(
+          photo = photo,
+          isFavourite = state.isFavourite,
+          isDownloading = state.isDownloading,
+          isApplying = state.isApplying,
+          onSetFavourite = { viewModel.onEvent(DetailsEvent.AddFavourite) },
+          onRemoveFavourite = { viewModel.onEvent(DetailsEvent.RemoveFavourite) },
+          onDownloadClicked = { viewModel.onEvent(DetailsEvent.DownloadPhoto) },
+          onApplyClicked = { viewModel.onEvent(DetailsEvent.ShowApplyWallpaperDialog) }
+        )
+      },
       sheetPeekHeight = 180.dp,
       containerColor = MaterialTheme.colorScheme.surface,
       contentColor = MaterialTheme.colorScheme.onSurface,
@@ -168,7 +179,7 @@ fun DetailsScreen(
       sheetShadowElevation = 16.dp,
     ) {
       PhotoContainer(photo = photo)
-      BackButton(navigator = navigator)
+      BackButton(onBackPressed = { navigator.goBack() })
 
       if (state.shouldShowApplyWallpaperDialog) {
         ApplyWallpaperDialog(
@@ -201,20 +212,44 @@ fun PhotoContainer(modifier: Modifier = Modifier, photo: Photo) {
 }
 
 @Composable
-fun PhotoDetailsContainer(photo: Photo, viewModel: DetailsViewModel, state: DetailsState) {
+fun PhotoDetailsContainer(
+  photo: Photo,
+  isFavourite: Boolean,
+  isDownloading: Boolean,
+  isApplying: Boolean,
+  onSetFavourite: () -> Unit,
+  onRemoveFavourite: () -> Unit,
+  onDownloadClicked: () -> Unit,
+  onApplyClicked: () -> Unit
+) {
   Column(
     modifier = Modifier.padding(16.dp).fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(16.dp),
     horizontalAlignment = Alignment.Start
   ) {
-    SheetProfileRow(photo, viewModel, state)
-    SheetActionRow(viewModel, state)
+    SheetProfileRow(
+      photo = photo,
+      isFavourite = isFavourite,
+      onSetFavourite = onSetFavourite,
+      onRemoveFavourite = onRemoveFavourite
+    )
+    SheetActionRow(
+      isDownloading = isDownloading,
+      isApplying = isApplying,
+      onDownloadClicked = onDownloadClicked,
+      onApplyClicked = onApplyClicked
+    )
     SheetPhotoDetails(photo)
   }
 }
 
 @Composable
-fun SheetProfileRow(photo: Photo, viewModel: DetailsViewModel, state: DetailsState) {
+fun SheetProfileRow(
+  photo: Photo,
+  isFavourite: Boolean,
+  onSetFavourite: () -> Unit,
+  onRemoveFavourite: () -> Unit
+) {
   photo.user.let { user ->
     Row(
       modifier = Modifier.fillMaxWidth(),
@@ -254,14 +289,14 @@ fun SheetProfileRow(photo: Photo, viewModel: DetailsViewModel, state: DetailsSta
 
       FilledTonalIconButton(
         onClick = {
-          if (state.isFavourite) {
-            viewModel.onEvent(DetailsEvent.RemoveFavourite)
+          if (isFavourite) {
+            onRemoveFavourite.invoke()
           } else {
-            viewModel.onEvent(DetailsEvent.AddFavourite)
+            onSetFavourite.invoke()
           }
         }
       ) {
-        Crossfade(targetState = state.isFavourite) { isFavourite ->
+        Crossfade(targetState = isFavourite) { isFavourite ->
           if (isFavourite) {
             Icon(imageVector = EvaIcons.Fill.Heart, contentDescription = "Fav")
           } else {
@@ -274,7 +309,12 @@ fun SheetProfileRow(photo: Photo, viewModel: DetailsViewModel, state: DetailsSta
 }
 
 @Composable
-fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
+fun SheetActionRow(
+  isDownloading: Boolean,
+  isApplying: Boolean,
+  onDownloadClicked: () -> Unit,
+  onApplyClicked: () -> Unit
+) {
   Row(
     modifier = Modifier.fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically,
@@ -282,12 +322,12 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
   ) {
     if (getPlatform() == Platform.iOS) {
       Button(
-        onClick = { viewModel.onEvent(DetailsEvent.DownloadPhoto) },
+        onClick = { onDownloadClicked.invoke() },
         modifier = Modifier.fillMaxWidth().weight(1f),
         shape = RoundedCornerShape(8.dp),
-        enabled = !state.isDownloading
+        enabled = !isDownloading
       ) {
-        AnimatedVisibility(visible = state.isDownloading) {
+        AnimatedVisibility(visible = isDownloading) {
           CircularProgressIndicator(
             modifier = Modifier.size(16.dp),
             color = MaterialTheme.colorScheme.onSurface,
@@ -306,12 +346,12 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
       }
     } else {
       OutlinedButton(
-        onClick = { viewModel.onEvent(DetailsEvent.DownloadPhoto) },
+        onClick = { onDownloadClicked.invoke() },
         modifier = Modifier.fillMaxWidth().weight(1f),
         shape = RoundedCornerShape(8.dp),
-        enabled = !state.isDownloading
+        enabled = !isDownloading
       ) {
-        AnimatedVisibility(visible = state.isDownloading) {
+        AnimatedVisibility(visible = isDownloading) {
           CircularProgressIndicator(
             modifier = Modifier.size(16.dp),
             color = MaterialTheme.colorScheme.onSurface,
@@ -330,12 +370,12 @@ fun SheetActionRow(viewModel: DetailsViewModel, state: DetailsState) {
       }
       Spacer(modifier = Modifier.size(16.dp))
       Button(
-        onClick = { viewModel.onEvent(DetailsEvent.ShowApplyWallpaperDialog) },
+        onClick = { onApplyClicked.invoke() },
         modifier = Modifier.fillMaxWidth().weight(1f),
         shape = RoundedCornerShape(8.dp),
-        enabled = !state.isApplying
+        enabled = !isApplying
       ) {
-        AnimatedVisibility(visible = state.isApplying) {
+        AnimatedVisibility(visible = isApplying) {
           CircularProgressIndicator(
             modifier = Modifier.size(16.dp),
             color = MaterialTheme.colorScheme.onSurface,

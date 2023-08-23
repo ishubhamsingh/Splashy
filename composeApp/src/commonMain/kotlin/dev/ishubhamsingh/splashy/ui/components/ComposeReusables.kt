@@ -106,7 +106,6 @@ import io.ktor.http.CacheControl
 import io.ktor.http.headersOf
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.launch
-import moe.tlaster.precompose.navigation.Navigator
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -288,7 +287,7 @@ fun LazyGridState.OnBottomReached(loadMore: () -> Unit) {
 }
 
 @Composable
-fun BackButton(modifier: Modifier = Modifier, navigator: Navigator) {
+fun BackButton(modifier: Modifier = Modifier, onBackPressed: () -> Unit) {
   Box(
     modifier =
       modifier
@@ -303,7 +302,7 @@ fun BackButton(modifier: Modifier = Modifier, navigator: Navigator) {
     Icon(
       imageVector = EvaIcons.Outline.ArrowBack,
       contentDescription = "back",
-      modifier = Modifier.padding(8.dp).size(24.dp).clickable { navigator.goBack() },
+      modifier = Modifier.padding(8.dp).size(24.dp).clickable { onBackPressed.invoke() },
       tint = MaterialTheme.colorScheme.primary
     )
   }
