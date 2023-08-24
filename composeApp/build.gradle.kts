@@ -132,6 +132,40 @@ android {
     versionCode = 1
     versionName = "1.0.0"
   }
+
+  signingConfigs {
+    create("release") {
+      storeFile = file("$rootDir/keystore/splashy.jks")
+      storePassword = "${secretKeyProperties["splashy.keystore.password"]}"
+      keyAlias = "${secretKeyProperties["splashy.key.alias"]}"
+      keyPassword = "${secretKeyProperties["splashy.key.password"]}"
+    }
+  }
+
+  buildTypes {
+    debug {
+      isMinifyEnabled = false
+      isDebuggable = true
+      applicationIdSuffix = ".debug"
+      signingConfig = signingConfigs.getByName("release")
+
+      buildConfig{
+        buildConfigField("boolean", "IS_DEBUG", "${true}")
+      }
+    }
+
+    release {
+      isMinifyEnabled = true
+      isShrinkResources = true
+      isDebuggable = false
+      signingConfig = signingConfigs.getByName("release")
+      proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+      buildConfig{
+        buildConfigField("boolean", "IS_DEBUG", "${false}")
+      }
+    }
+  }
   sourceSets["main"].apply {
     manifest.srcFile("src/androidMain/AndroidManifest.xml")
     res.srcDirs("src/androidMain/resources", "src/commonMain/resources")

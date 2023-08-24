@@ -31,6 +31,8 @@ import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
 import io.github.aakira.napier.Napier
 import io.ktor.util.toByteArray
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -166,7 +168,7 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
   ) {
     var byteArray: ByteArray? = null
     viewModelScope
-      .launch { byteArray = unsplashApi.downloadFile(url).toByteArray() }
+      .launch(Dispatchers.IO) { byteArray = unsplashApi.downloadFile(url).toByteArray() }
       .invokeOnCompletion {
         if (isSaveToFile) {
           saveToFile(byteArray, shouldOpenFile)

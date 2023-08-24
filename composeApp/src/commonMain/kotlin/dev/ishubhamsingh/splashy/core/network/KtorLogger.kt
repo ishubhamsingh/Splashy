@@ -15,12 +15,13 @@
  */
 package dev.ishubhamsingh.splashy.core.network
 
+import Splashy.composeApp.BuildConfig
 import io.github.aakira.napier.Napier
 import io.ktor.client.plugins.logging.Logger
 
 /** Created by Shubham Singh on 05/08/23. */
 class KtorLogger() : Logger {
   override fun log(message: String) {
-    Napier.v(message)
+    Napier.d(message)
   }
 }

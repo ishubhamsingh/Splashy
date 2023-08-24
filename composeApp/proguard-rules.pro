@@ -1,0 +1,5 @@
+-dontwarn org.slf4j.impl.StaticLoggerBinder
+-dontwarn kotlinx.serialization.KSerializer
+-dontwarn kotlinx.serialization.Serializable
+-keep class io.kamel.** { *; }
+-keep class dev.ishubhamsingh.splashy.models.** { *; }

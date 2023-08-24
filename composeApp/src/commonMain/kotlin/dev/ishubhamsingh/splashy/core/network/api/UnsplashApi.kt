@@ -17,6 +17,7 @@ package dev.ishubhamsingh.splashy.core.network.api
 
 import Splashy.composeApp.BuildConfig
 import dev.ishubhamsingh.splashy.core.network.KtorLogger
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpRequestRetry
@@ -119,7 +120,7 @@ class UnsplashApi(private val httpClient: HttpClient) {
     return client
       .get(url) {
         onDownload { bytesSentTotal, contentLength ->
-          println("Downloaded $bytesSentTotal of $contentLength")
+          Napier.i("Downloaded $bytesSentTotal of $contentLength")
         }
       }
       .bodyAsChannel()
