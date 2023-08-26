@@ -31,6 +31,7 @@ import android.provider.MediaStore
 import android.widget.Toast
 import com.eygraber.uri.toAndroidUri
 import com.eygraber.uri.toUri
+import dev.ishubhamsingh.splashy.CommonRes
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 import java.io.File
 import kotlin.coroutines.coroutineContext
@@ -57,7 +58,7 @@ actual class FileUtils(private val context: Context) {
 
           val pictureFolder =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-          val splashyFolder = File(pictureFolder, "Splashy")
+          val splashyFolder = File(pictureFolder, CommonRes.string.app_name)
           if (!splashyFolder.exists()) {
             splashyFolder.mkdir()
           }
@@ -88,16 +89,16 @@ actual class FileUtils(private val context: Context) {
           if (shouldOpenFile) {
             openFile(uri?.toUri(), newFileName)
           } else {
-            result = "File saved successfully in ${Environment.DIRECTORY_PICTURES}"
+            result = CommonRes.string.downloading_file_success_message.format(path = Environment.DIRECTORY_PICTURES)
             updateMessage.invoke(result)
           }
         }
         .onFailure {
           result =
             if (shouldOpenFile) {
-              "Opening file failed!"
+              CommonRes.string.opening_file_failed_message
             } else {
-              "Saving file failed!"
+              CommonRes.string.downloading_file_failed_message
             }
           updateMessage.invoke(result)
           it.printStackTrace()
@@ -111,7 +112,7 @@ actual class FileUtils(private val context: Context) {
     intent.addCategory(Intent.CATEGORY_DEFAULT)
     intent.setDataAndType(uri?.toAndroidUri(), "image/jpeg")
     intent.putExtra("mimeType", "image/jpeg")
-    val chooserIntent = Intent.createChooser(intent, "Set $fileName as:")
+    val chooserIntent = Intent.createChooser(intent, CommonRes.string.wallpaper_chooser_title.format(fileName = fileName))
     chooserIntent.addFlags(FLAG_ACTIVITY_NEW_TASK)
     context.startActivity(chooserIntent)
   }
@@ -137,11 +138,11 @@ actual class FileUtils(private val context: Context) {
           wallpaperManager.setBitmap(imageBitmap, null, true, flag)
         }
         .onSuccess {
-          result = "Applied wallpaper successfully"
+          result = CommonRes.string.applying_wallpaper_success_message
           updateMessage.invoke(result)
         }
         .onFailure {
-          result = "Applying wallpaper failed!"
+          result = CommonRes.string.applying_wallpaper_failed_message
           showMessage(result)
           updateMessage.invoke(result)
         }

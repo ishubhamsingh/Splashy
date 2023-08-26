@@ -26,4 +26,13 @@
     <string name="lbl_favourites">Favourites</string>
     <string name="lbl_details">Photo Details</string>
     <string name="lbl_settings">Settings</string>
+
+    <string name="saved_success_message">Saved to photos successfully</string>
+    <string name="saved_failure_message">Saving to photos failed!</string>
+    <string name="opening_file_failed_message">Opening file failed!</string>
+    <string name="downloading_file_success_message">File saved successfully in ${path}</string>
+    <string name="downloading_file_failed_message">Saving file failed!</string>
+    <string name="applying_wallpaper_success_message">Applied wallpaper successfully</string>
+    <string name="applying_wallpaper_failed_message">Applying wallpaper failed!</string>
+    <string name="wallpaper_chooser_title">Set ${fileName} as:</string>
 </resources>

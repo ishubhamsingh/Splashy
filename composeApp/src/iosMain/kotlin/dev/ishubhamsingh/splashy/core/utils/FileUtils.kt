@@ -16,6 +16,7 @@
 package dev.ishubhamsingh.splashy.core.utils
 
 import com.eygraber.uri.Uri
+import dev.ishubhamsingh.splashy.CommonRes
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 import kotlin.coroutines.coroutineContext
 import kotlinx.cinterop.BetaInteropApi
@@ -54,11 +55,11 @@ actual class FileUtils {
           }
         }
         .onSuccess {
-          result = "Saved to photos successfully"
+          result = CommonRes.string.saved_success_message
           updateMessage.invoke(result)
         }
         .onFailure {
-          result = "Saving to photos failed!"
+          result = CommonRes.string.saved_failure_message
           updateMessage.invoke(result)
           it.printStackTrace()
         }
