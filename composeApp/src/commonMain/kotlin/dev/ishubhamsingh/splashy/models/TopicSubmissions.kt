@@ -27,7 +27,15 @@ data class TopicSubmissions(
   @SerialName("fashion-beauty") val fashionBeauty: TopicSubmissionStatus? = null,
   @SerialName("street-photography") val streetPhotography: TopicSubmissionStatus? = null,
   @SerialName("wallpapers") val wallpapers: TopicSubmissionStatus? = null,
-  @SerialName("travel") val travel: TopicSubmissionStatus? = null
+  @SerialName("travel") val travel: TopicSubmissionStatus? = null,
+  @SerialName("arts-culture") val artsCulture : TopicSubmissionStatus? = null,
+  @SerialName("athletics") val athletics: TopicSubmissionStatus? = null,
+  @SerialName("color-of-water") val colorOfWater: TopicSubmissionStatus? = null,
+  @SerialName("health") val health: TopicSubmissionStatus? = null,
+  @SerialName("nature") val nature: TopicSubmissionStatus? = null,
+  @SerialName("people") val people: TopicSubmissionStatus? = null,
+  @SerialName("spirituality") val spirituality: TopicSubmissionStatus? = null,
+  @SerialName("textures-patterns") val texturesPatterns: TopicSubmissionStatus? = null
 ) {
   private val topicSubmissionMap =
     hashMapOf(
@@ -36,7 +44,16 @@ data class TopicSubmissions(
       "Travel" to travel,
       "Fashion Beauty" to fashionBeauty,
       "Street Photography" to streetPhotography,
-      "Architecture Interior" to architectureInterior
+      "Architecture Interior" to architectureInterior,
+      "Travel" to travel,
+      "Arts Culture" to artsCulture,
+      "Athletics" to athletics,
+      "Color Of Water" to colorOfWater,
+      "Health" to health,
+      "Nature" to nature,
+      "People" to people,
+      "Spirituality" to spirituality,
+      "Textures Patterns" to texturesPatterns
     )
 
   fun getApprovedTopics(): ArrayList<String> {

@@ -23,7 +23,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import dev.ishubhamsingh.splashy.features.collections.ui.CollectionsScreen
+import dev.ishubhamsingh.splashy.features.categories.CategoriesViewModel
+import dev.ishubhamsingh.splashy.features.categories.ui.CategoriesScreen
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.features.favourites.FavouritesViewModel
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesScreen
@@ -42,6 +43,7 @@ fun Navigation(
   onShowSnackBar: (String) -> Unit
 ) {
   val homeViewModel = getViewModel("home-screen", factory = viewModelFactory { HomeViewModel() })
+  val categoriesViewModel = getViewModel("categories-screen", factory = viewModelFactory { CategoriesViewModel() })
   val favouritesViewModel =
     getViewModel("favourites-screen", factory = viewModelFactory { FavouritesViewModel() })
 
@@ -52,7 +54,7 @@ fun Navigation(
     persistNavState = true,
   ) {
     scene(route = Screen.Home.route) { HomeScreen(navigator, homeViewModel) }
-    scene(route = Screen.Collections.route) { CollectionsScreen(navigator) }
+    scene(route = Screen.Categories.route) { CategoriesScreen(navigator, categoriesViewModel) }
     scene(route = Screen.Favourites.route) { FavouritesScreen(navigator, favouritesViewModel) }
     scene(route = Screen.PhotoDetails.route.plus("/{id}")) { backStackEntry ->
       backStackEntry.path<String>("id")?.let {
@@ -69,4 +71,4 @@ fun currentRoute(navigator: Navigator): String? {
 }
 
 val TOP_LEVEL_ROUTES =
-  arrayListOf(Screen.Home.route, Screen.Collections.route, Screen.Favourites.route)
+  arrayListOf(Screen.Home.route, Screen.Categories.route, Screen.Favourites.route)

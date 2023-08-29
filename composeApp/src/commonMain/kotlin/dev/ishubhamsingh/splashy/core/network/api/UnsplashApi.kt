@@ -110,6 +110,96 @@ class UnsplashApi(private val httpClient: HttpClient) {
       .body()
   }
 
+  suspend fun fetchCollections(page: Int): HttpResponse {
+    return client
+      .get {
+        url {
+          protocol = URLProtocol.HTTPS
+          host = HOST_URL
+          path("/collections")
+          parameters.append("page", page.toString())
+          parameters.append("per_page", "10")
+          parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
+        }
+      }
+      .body()
+  }
+
+  suspend fun fetchCollectionByID(id: String): HttpResponse {
+    return client
+      .get {
+        url {
+          protocol = URLProtocol.HTTPS
+          host = HOST_URL
+          path("/collections/$id")
+          parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
+        }
+      }
+      .body()
+  }
+
+  suspend fun fetchPhotosByCollection(id: String, page: Int): HttpResponse {
+    return client
+      .get {
+        url {
+          protocol = URLProtocol.HTTPS
+          host = HOST_URL
+          path("/collections/$id/photos")
+          parameters.append("page", page.toString())
+          parameters.append("per_page", "10")
+          parameters.append("orientation", "portrait")
+          parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
+        }
+      }
+      .body()
+  }
+
+  suspend fun fetchTopics(page: Int): HttpResponse {
+    return client
+      .get {
+        url {
+          protocol = URLProtocol.HTTPS
+          host = HOST_URL
+          path("/topics")
+          parameters.append("page", page.toString())
+          parameters.append("per_page", "10")
+          parameters.append("order_by", "featured")
+          parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
+        }
+      }
+      .body()
+  }
+
+  suspend fun fetchTopicBySlug(slug: String): HttpResponse {
+    return client
+      .get {
+        url {
+          protocol = URLProtocol.HTTPS
+          host = HOST_URL
+          path("/topics/$slug")
+          parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
+        }
+      }
+      .body()
+  }
+
+  suspend fun fetchPhotosByTopic(slug: String, page: Int): HttpResponse {
+    return client
+      .get {
+        url {
+          protocol = URLProtocol.HTTPS
+          host = HOST_URL
+          path("/topics/$slug/photos")
+          parameters.append("page", page.toString())
+          parameters.append("per_page", "10")
+          parameters.append("orientation", "portrait")
+          parameters.append("order_by", "popular")
+          parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
+        }
+      }
+      .body()
+  }
+
   suspend fun getDownloadUrl(url: String): HttpResponse {
     return client
       .get { url(url).apply { parameter("client_id", BuildConfig.UNSPLASH_API_KEY) } }

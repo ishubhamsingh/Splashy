@@ -25,6 +25,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -70,12 +72,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -150,11 +155,11 @@ fun PhotoGridLayout(
 
           if (isFavourite && favourites.isNotEmpty()) {
             items(items = favourites) {
-              PhotoCardItem(onItemSelected, it.id, it.color, it.url, it.altDescription)
+              PhotoCardItem(onItemSelected, it.id, it.color, it.url, it.altDescription, modifier = Modifier.fillMaxWidth())
             }
           } else if (photos.isNotEmpty()) {
             items(items = photos) {
-              PhotoCardItem(onItemSelected, it.id, it.color, it.urls?.regular, it.altDescription)
+              PhotoCardItem(onItemSelected, it.id, it.color, it.urls?.regular, it.altDescription, modifier = Modifier.fillMaxWidth())
             }
           } else if (error.isNullOrEmpty().not()) {
             // TODO: show error
@@ -200,8 +205,12 @@ fun PhotoCardItem(
   url: String?,
   altDescription: String?,
   heightDp: Dp = 320.dp,
-  widthDp: Dp = 160.dp,
+  widthDp: Dp = 200.dp,
   padding: Dp = 4.dp,
+  shouldShowOverlay: Boolean = false,
+  overlayTitle: String = "",
+  overlaySubtitle: String = "",
+  modifier: Modifier = Modifier
 ) {
 
   Card(
@@ -213,8 +222,8 @@ fun PhotoCardItem(
           else MaterialTheme.colorScheme.surface
       ),
     modifier =
-      Modifier.padding(vertical = padding, horizontal = padding)
-        .fillMaxWidth()
+      modifier.padding(vertical = padding, horizontal = padding)
+        .width(widthDp)
         .height(heightDp)
         .background(
           color =
@@ -224,15 +233,64 @@ fun PhotoCardItem(
         )
         .clickable { onItemSelected.invoke(id) }
   ) {
-    url?.let {
-      CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
-        KamelImage(
-          resource = asyncPainterResource(data = it),
-          contentDescription = altDescription,
-          modifier = Modifier.fillMaxSize(),
-          contentScale = ContentScale.Crop,
-          animationSpec = tween()
-        )
+    if (shouldShowOverlay) {
+      val gradient = Brush.verticalGradient(
+        colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)))
+      Box(
+        modifier = Modifier
+          .fillMaxSize(),
+        contentAlignment = Alignment.BottomStart
+      ) {
+        url?.let {
+          CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
+            KamelImage(
+              resource = asyncPainterResource(data = it),
+              contentDescription = altDescription,
+              modifier = Modifier.fillMaxSize(),
+              contentScale = ContentScale.Crop,
+              animationSpec = tween()
+            )
+          }
+        }
+        Box(
+          modifier.matchParentSize()
+            .background(gradient),
+          contentAlignment = Alignment.Center
+        ) {
+          Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+            Text(
+              text = overlayTitle,
+              style = MaterialTheme.typography.titleMedium.copy(fontSize = if(widthDp <= 180.dp) 18.sp else 22.sp),
+              color = Color.White,
+              maxLines = 1,
+              modifier = Modifier.padding(horizontal = 8.dp),
+              overflow = TextOverflow.Visible,
+              letterSpacing = if(widthDp <= 180.dp) 2.sp else 4.sp
+            )
+
+            Text(
+              text = overlaySubtitle,
+              style = MaterialTheme.typography.bodySmall.copy(fontSize = if(widthDp <= 180.dp) 14.sp else 16.sp),
+              color = Color.White
+            )
+          }
+        }
+      }
+    } else {
+      url?.let {
+        CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
+          KamelImage(
+            resource = asyncPainterResource(data = it),
+            contentDescription = altDescription,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+            animationSpec = tween()
+          )
+        }
       }
     }
   }

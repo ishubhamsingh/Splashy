@@ -46,10 +46,10 @@ sealed class Screen(
       unselectedNavIcon = EvaIcons.Outline.Home
     )
 
-  data object Collections :
+  data object Categories :
     Screen(
-      route = "collections",
-      title = CommonRes.string.lbl_collections,
+      route = "categories",
+      title = CommonRes.string.lbl_categories,
       selectedNavIcon = EvaIcons.Fill.Folder,
       unselectedNavIcon = EvaIcons.Outline.Folder
     )

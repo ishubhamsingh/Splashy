@@ -107,7 +107,7 @@ fun BottomNavigationComponent(navigator: Navigator) {
     containerColor = MaterialTheme.colorScheme.surface,
     contentColor = MaterialTheme.colorScheme.onSurface,
   ) {
-    val items = listOf(Screen.Home, Screen.Collections, Screen.Favourites)
+    val items = listOf(Screen.Home, Screen.Categories, Screen.Favourites)
 
     items.forEach {
       val isSelected = it.route == currentRoute(navigator)

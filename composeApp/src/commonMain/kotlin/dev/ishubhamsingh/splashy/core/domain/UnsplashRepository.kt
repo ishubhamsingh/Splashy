@@ -15,12 +15,13 @@
  */
 package dev.ishubhamsingh.splashy.core.domain
 
+import dev.ishubhamsingh.splashy.models.CollectionItem
 import dev.ishubhamsingh.splashy.models.DownloadUrl
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
+import dev.ishubhamsingh.splashy.models.Topic
 import kotlinx.coroutines.flow.Flow
-
 interface UnsplashRepository {
   fun getPhotos(page: Int, fetchFromRemote: Boolean = false): Flow<NetworkResult<ArrayList<Photo>>>
 
@@ -31,6 +32,18 @@ interface UnsplashRepository {
   ): Flow<NetworkResult<PhotoSearchCollection>>
 
   fun getPhotoDetails(id: String): Flow<NetworkResult<Photo>>
+
+  fun getCollections(page: Int): Flow<NetworkResult<ArrayList<CollectionItem>>>
+
+  fun getCollectionById(id: String): Flow<NetworkResult<CollectionItem>>
+
+  fun getPhotosByCollection(id: String, page: Int): Flow<NetworkResult<ArrayList<Photo>>>
+
+  fun getTopics(page: Int): Flow<NetworkResult<ArrayList<Topic>>>
+
+  fun getTopicBySlug(slug: String): Flow<NetworkResult<Topic>>
+
+  fun getPhotosByTopic(slug: String, page: Int): Flow<NetworkResult<ArrayList<Photo>>>
 
   fun getDownloadUrl(url: String): Flow<NetworkResult<DownloadUrl>>
 

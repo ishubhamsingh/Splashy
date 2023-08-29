@@ -22,7 +22,7 @@
     <string name="lbl_apply_wall_both">Apply on both screen</string>
 
     <string name="lbl_home">Home</string>
-    <string name="lbl_collections">Collections</string>
+    <string name="lbl_categories">Categories</string>
     <string name="lbl_favourites">Favourites</string>
     <string name="lbl_details">Photo Details</string>
     <string name="lbl_settings">Settings</string>
