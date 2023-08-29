@@ -35,5 +35,5 @@ Pod::Spec.new do |spec|
             SCRIPT
         }
     ]
-    spec.resources = ['build/compose/ios/ComposeApp/compose-resources', 'build/generated/libres/apple/libres-bundles']
+    spec.resources = ['src/commonMain/resources/**', 'src/iosMain/resources/**', 'build/generated/libres/apple/libres-bundles']
 end
