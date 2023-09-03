@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.features.categories.ui
+package dev.ishubhamsingh.splashy.features.categoriesPhotos.ui
 
 import dev.ishubhamsingh.splashy.models.CollectionItem
+import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.Topic
 
-/** Created by Shubham Singh on 30/08/23. */
-data class CategoriesState(
-  val isTopicsLoading: Boolean = false,
-  val isCollectionsLoading: Boolean = false,
-  val collections: ArrayList<CollectionItem> = arrayListOf(),
-  val topics: ArrayList<Topic> = arrayListOf(),
-  val networkError: String? = null
-) {
-  val isCategoriesLoading: Boolean
-    get() = isCollectionsLoading && isTopicsLoading
-}
+data class CategoriesPhotosState(
+  val id: String? = null,
+  val isRefreshing: Boolean = false,
+  val photos: ArrayList<Photo> = arrayListOf(),
+  val topic: Topic? = null,
+  val collection: CollectionItem? = null,
+  val networkError: String? = null,
+  val isPaginating: Boolean = false,
+  val currentPage: Int = 1,
+  val totalPages: Int = 0,
+  val categoryType: CategoryType? = null
+)

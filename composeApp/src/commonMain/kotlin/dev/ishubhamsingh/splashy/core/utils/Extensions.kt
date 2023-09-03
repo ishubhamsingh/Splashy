@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.ishubhamsingh.splashy.features.categories.ui
+package dev.ishubhamsingh.splashy.core.utils
 
 import dev.ishubhamsingh.splashy.models.CollectionItem
-import dev.ishubhamsingh.splashy.models.Topic
 
-/** Created by Shubham Singh on 30/08/23. */
-data class CategoriesState(
-  val isTopicsLoading: Boolean = false,
-  val isCollectionsLoading: Boolean = false,
-  val collections: ArrayList<CollectionItem> = arrayListOf(),
-  val topics: ArrayList<Topic> = arrayListOf(),
-  val networkError: String? = null
-) {
-  val isCategoriesLoading: Boolean
-    get() = isCollectionsLoading && isTopicsLoading
+inline fun <reified T : Enum<T>> Int.toEnum(): T? {
+  return enumValues<T>().firstOrNull { it.ordinal == this }
+}
+
+fun ArrayList<CollectionItem>.getNonPremiumCollections(): ArrayList<CollectionItem> {
+  val filteredList =
+    this.filter { it.coverPhoto?.urls?.regular?.contains("plus.unsplash") == false }
+  return ArrayList(filteredList)
 }

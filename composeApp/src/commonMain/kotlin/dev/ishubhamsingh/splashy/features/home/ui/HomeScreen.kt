@@ -49,6 +49,6 @@ fun HomeScreen(navigator: Navigator, viewModel: HomeViewModel) {
     },
     onItemSelected = { navigator.navigate(Screen.PhotoDetails.route.plus("/${it}")) },
     error = state.networkError,
-    isFavourite = false
+    shouldShowSearch = true
   )
 }

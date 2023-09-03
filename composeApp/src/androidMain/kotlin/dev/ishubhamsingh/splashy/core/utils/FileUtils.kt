@@ -89,7 +89,10 @@ actual class FileUtils(private val context: Context) {
           if (shouldOpenFile) {
             openFile(uri?.toUri(), newFileName)
           } else {
-            result = CommonRes.string.downloading_file_success_message.format(path = Environment.DIRECTORY_PICTURES)
+            result =
+              CommonRes.string.downloading_file_success_message.format(
+                path = Environment.DIRECTORY_PICTURES
+              )
             updateMessage.invoke(result)
           }
         }
@@ -112,7 +115,11 @@ actual class FileUtils(private val context: Context) {
     intent.addCategory(Intent.CATEGORY_DEFAULT)
     intent.setDataAndType(uri?.toAndroidUri(), "image/jpeg")
     intent.putExtra("mimeType", "image/jpeg")
-    val chooserIntent = Intent.createChooser(intent, CommonRes.string.wallpaper_chooser_title.format(fileName = fileName))
+    val chooserIntent =
+      Intent.createChooser(
+        intent,
+        CommonRes.string.wallpaper_chooser_title.format(fileName = fileName)
+      )
     chooserIntent.addFlags(FLAG_ACTIVITY_NEW_TASK)
     context.startActivity(chooserIntent)
   }

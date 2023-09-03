@@ -29,6 +29,8 @@ expect fun getFormattedDateTime(timestamp: String, format: String = "dd MMM yyyy
 
 expect fun getPlatform(): Platform
 
+expect fun isDebug(): Boolean
+
 enum class Platform {
   Android,
   iOS

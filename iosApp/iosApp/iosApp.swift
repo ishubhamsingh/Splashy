@@ -6,9 +6,7 @@ import ComposeApp
 struct iosApp: App {
 
 init() {
-        #if DEBUG
-           LoggingKt.initialiseLogging()
-        #endif
+        LoggingKt.initialiseLogging()
 		DIHelperKt.doInitKoin()
 	}
     var body: some Scene {

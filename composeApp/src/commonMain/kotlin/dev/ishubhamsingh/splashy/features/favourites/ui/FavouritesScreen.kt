@@ -66,15 +66,11 @@ fun FavouritesScreen(navigator: Navigator, viewModel: FavouritesViewModel) {
         isRefreshing = state.isRefreshing,
         onRefresh = { viewModel.onEvent(FavouritesEvent.Refresh) },
         onSurfaceTouch = {},
-        searchQuery = state.searchQuery,
-        isSearching = false,
-        onSearchQueryChange = {},
         isPaginating = false,
         favourites = state.filteredFavourites,
         onLoadMore = {},
         onItemSelected = { navigator.navigate(Screen.PhotoDetails.route.plus("/${it}")) },
         error = "",
-        isFavourite = true
       )
     }
   }

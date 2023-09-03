@@ -133,6 +133,8 @@ android {
     versionName = "1.0.0"
   }
 
+  buildFeatures { buildConfig = true }
+
   signingConfigs {
     create("release") {
       storeFile = file("$rootDir/keystore/splashy.jks")
@@ -148,10 +150,6 @@ android {
       isDebuggable = true
       applicationIdSuffix = ".debug"
       signingConfig = signingConfigs.getByName("release")
-
-      buildConfig{
-        buildConfigField("boolean", "IS_DEBUG", "${true}")
-      }
     }
 
     release {
@@ -160,10 +158,6 @@ android {
       isDebuggable = false
       signingConfig = signingConfigs.getByName("release")
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-
-      buildConfig{
-        buildConfigField("boolean", "IS_DEBUG", "${false}")
-      }
     }
   }
   sourceSets["main"].apply {

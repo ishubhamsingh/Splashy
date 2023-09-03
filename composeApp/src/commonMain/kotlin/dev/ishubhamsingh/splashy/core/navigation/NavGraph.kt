@@ -23,8 +23,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import dev.ishubhamsingh.splashy.core.utils.toEnum
 import dev.ishubhamsingh.splashy.features.categories.CategoriesViewModel
 import dev.ishubhamsingh.splashy.features.categories.ui.CategoriesScreen
+import dev.ishubhamsingh.splashy.features.categoriesPhotos.CategoriesPhotosViewModel
+import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoriesPhotosScreen
+import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.features.favourites.FavouritesViewModel
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesScreen
@@ -43,9 +47,15 @@ fun Navigation(
   onShowSnackBar: (String) -> Unit
 ) {
   val homeViewModel = getViewModel("home-screen", factory = viewModelFactory { HomeViewModel() })
-  val categoriesViewModel = getViewModel("categories-screen", factory = viewModelFactory { CategoriesViewModel() })
+  val categoriesViewModel =
+    getViewModel("categories-screen", factory = viewModelFactory { CategoriesViewModel() })
   val favouritesViewModel =
     getViewModel("favourites-screen", factory = viewModelFactory { FavouritesViewModel() })
+  val categoriesPhotosViewModel: CategoriesPhotosViewModel =
+    getViewModel(
+      "categories-photos-screen",
+      factory = viewModelFactory { CategoriesPhotosViewModel() }
+    )
 
   NavHost(
     navigator = navigator,
@@ -60,6 +70,12 @@ fun Navigation(
       backStackEntry.path<String>("id")?.let {
         DetailsScreen(navigator, it, onShowSnackBar = onShowSnackBar)
       }
+    }
+    scene(route = Screen.CategoriesPhotos.route.plus("/{id}/{type}/{name}")) { backStackEntry ->
+      val id = backStackEntry.path<String>("id") ?: ""
+      val type = (backStackEntry.path<Int>("type") ?: 0).toEnum() ?: CategoryType.COLLECTION
+      val name = backStackEntry.path<String>("name") ?: ""
+      CategoriesPhotosScreen(navigator, id, type, name, categoriesPhotosViewModel)
     }
     scene(route = Screen.Settings.route) { SettingsScreen(navigator) }
   }

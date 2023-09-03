@@ -25,6 +25,7 @@
     <string name="lbl_categories">Categories</string>
     <string name="lbl_favourites">Favourites</string>
     <string name="lbl_details">Photo Details</string>
+    <string name="lbl_categories_photos">Categories Photos</string>
     <string name="lbl_settings">Settings</string>
 
     <string name="saved_success_message">Saved to photos successfully</string>
@@ -35,4 +36,8 @@
     <string name="applying_wallpaper_success_message">Applied wallpaper successfully</string>
     <string name="applying_wallpaper_failed_message">Applying wallpaper failed!</string>
     <string name="wallpaper_chooser_title">Set ${fileName} as:</string>
+
+    <string name="lbl_collections_title">Collections</string>
+    <string name="lbl_topics_title">Topics</string>
+    <string name="lbl_photos_count">${count} Photos</string>
 </resources>

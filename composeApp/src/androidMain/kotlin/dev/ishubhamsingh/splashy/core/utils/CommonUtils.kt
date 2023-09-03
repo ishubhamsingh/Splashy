@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import dev.ishubhamsingh.splashy.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import java.time.Duration
@@ -59,3 +60,5 @@ actual fun getFormattedDateTime(timestamp: String, format: String): String {
 }
 
 actual fun getPlatform(): Platform = Platform.Android
+
+actual fun isDebug(): Boolean = BuildConfig.DEBUG

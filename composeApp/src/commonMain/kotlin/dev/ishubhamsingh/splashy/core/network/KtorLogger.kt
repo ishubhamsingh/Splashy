@@ -15,7 +15,6 @@
  */
 package dev.ishubhamsingh.splashy.core.network
 
-import Splashy.composeApp.BuildConfig
 import io.github.aakira.napier.Napier
 import io.ktor.client.plugins.logging.Logger
 

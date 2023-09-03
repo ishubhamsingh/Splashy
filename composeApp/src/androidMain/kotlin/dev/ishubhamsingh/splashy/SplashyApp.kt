@@ -15,7 +15,6 @@
  */
 package dev.ishubhamsingh.splashy
 
-import Splashy.composeApp.BuildConfig
 import android.app.Application
 import dev.ishubhamsingh.splashy.core.di.appModule
 import dev.ishubhamsingh.splashy.core.utils.initialiseLogging
@@ -36,8 +35,6 @@ class SplashyApp : Application() {
       androidLogger()
       modules(appModule())
     }
-    if(BuildConfig.IS_DEBUG) {
-      initialiseLogging()
-    }
+    initialiseLogging()
   }
 }

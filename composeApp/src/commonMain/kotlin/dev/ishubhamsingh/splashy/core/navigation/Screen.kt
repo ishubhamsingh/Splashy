@@ -64,5 +64,8 @@ sealed class Screen(
 
   data object PhotoDetails : Screen(route = "photo_details", title = CommonRes.string.lbl_details)
 
+  data object CategoriesPhotos :
+    Screen(route = "categories_photos", title = CommonRes.string.lbl_details)
+
   data object Settings : Screen(route = "settings", title = CommonRes.string.lbl_settings)
 }

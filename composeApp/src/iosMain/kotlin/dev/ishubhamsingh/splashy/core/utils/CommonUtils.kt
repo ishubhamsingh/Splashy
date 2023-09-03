@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.darwin.Darwin
+import kotlin.experimental.ExperimentalNativeApi
+import kotlin.native.Platform as NativePlatform
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.resource
@@ -67,3 +69,5 @@ actual fun getFormattedDateTime(timestamp: String, format: String): String {
 }
 
 actual fun getPlatform(): Platform = Platform.iOS
+
+@OptIn(ExperimentalNativeApi::class) actual fun isDebug(): Boolean = NativePlatform.isDebugBinary

@@ -25,6 +25,5 @@ data class FavouritesState(
   val filterTopics: ArrayList<TopicFilter> = TopicSubmissions.TOPICS,
   val filteredFavourites: ArrayList<Favourite> = arrayListOf(),
   val isRefreshing: Boolean = false,
-  val searchQuery: String? = null,
   val error: String? = null
 )

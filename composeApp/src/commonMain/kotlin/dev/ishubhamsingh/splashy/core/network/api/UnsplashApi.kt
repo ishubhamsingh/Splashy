@@ -118,7 +118,7 @@ class UnsplashApi(private val httpClient: HttpClient) {
           host = HOST_URL
           path("/collections")
           parameters.append("page", page.toString())
-          parameters.append("per_page", "10")
+          parameters.append("per_page", "15")
           parameters.append("client_id", BuildConfig.UNSPLASH_API_KEY)
         }
       }

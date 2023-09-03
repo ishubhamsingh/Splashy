@@ -72,7 +72,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -86,12 +85,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
-import compose.icons.evaicons.outline.ArrowBack
+import compose.icons.evaicons.outline.ArrowIosBack
 import compose.icons.evaicons.outline.ArrowheadUp
 import compose.icons.evaicons.outline.CloseCircle
 import compose.icons.evaicons.outline.Search
 import dev.ishubhamsingh.splashy.CommonRes
 import dev.ishubhamsingh.splashy.core.network.KtorLogger
+import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
 import io.kamel.core.config.DefaultCacheSize
@@ -118,16 +118,17 @@ fun PhotoGridLayout(
   isRefreshing: Boolean,
   onRefresh: () -> Unit,
   onSurfaceTouch: () -> Unit,
-  searchQuery: String?,
-  isSearching: Boolean,
-  onSearchQueryChange: (String?) -> Unit,
+  searchQuery: String? = null,
+  isSearching: Boolean = false,
+  onSearchQueryChange: (String?) -> Unit = {},
   isPaginating: Boolean,
   photos: ArrayList<Photo> = arrayListOf(),
   favourites: ArrayList<Favourite> = arrayListOf(),
   onLoadMore: () -> Unit,
   onItemSelected: (String) -> Unit,
   error: String?,
-  isFavourite: Boolean
+  shouldShowSearch: Boolean = false,
+  modifier: Modifier = Modifier
 ) {
   val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
   val lazyGridState = rememberLazyGridState()
@@ -137,7 +138,7 @@ fun PhotoGridLayout(
 
   Surface(
     color = MaterialTheme.colorScheme.surface,
-    modifier = Modifier.fillMaxSize().clickable { onSurfaceTouch.invoke() }
+    modifier = modifier.fillMaxSize().clickable { onSurfaceTouch.invoke() }
   ) {
     Column(modifier = Modifier.fillMaxSize()) {
       Box(Modifier.pullRefresh(pullRefreshState)) {
@@ -147,19 +148,33 @@ fun PhotoGridLayout(
           contentPadding = PaddingValues(4.dp),
           state = lazyGridState
         ) {
-          if (isFavourite.not()) {
+          if (shouldShowSearch) {
             item(span = { GridItemSpan(this.maxLineSpan) }) {
               SearchBar(searchQuery, isSearching, onSearchQueryChange)
             }
           }
 
-          if (isFavourite && favourites.isNotEmpty()) {
+          if (favourites.isNotEmpty()) {
             items(items = favourites) {
-              PhotoCardItem(onItemSelected, it.id, it.color, it.url, it.altDescription, modifier = Modifier.fillMaxWidth())
+              PhotoCardItem(
+                onItemSelected,
+                it.id,
+                it.color,
+                it.url,
+                it.altDescription,
+                modifier = Modifier.fillMaxWidth()
+              )
             }
           } else if (photos.isNotEmpty()) {
             items(items = photos) {
-              PhotoCardItem(onItemSelected, it.id, it.color, it.urls?.regular, it.altDescription, modifier = Modifier.fillMaxWidth())
+              PhotoCardItem(
+                onItemSelected,
+                it.id,
+                it.color,
+                it.urls?.regular,
+                it.altDescription,
+                modifier = Modifier.fillMaxWidth()
+              )
             }
           } else if (error.isNullOrEmpty().not()) {
             // TODO: show error
@@ -222,7 +237,8 @@ fun PhotoCardItem(
           else MaterialTheme.colorScheme.surface
       ),
     modifier =
-      modifier.padding(vertical = padding, horizontal = padding)
+      modifier
+        .padding(vertical = padding, horizontal = padding)
         .width(widthDp)
         .height(heightDp)
         .background(
@@ -234,13 +250,9 @@ fun PhotoCardItem(
         .clickable { onItemSelected.invoke(id) }
   ) {
     if (shouldShowOverlay) {
-      val gradient = Brush.verticalGradient(
-        colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)))
-      Box(
-        modifier = Modifier
-          .fillMaxSize(),
-        contentAlignment = Alignment.BottomStart
-      ) {
+      val gradient =
+        Brush.verticalGradient(colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)))
+      Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomStart) {
         url?.let {
           CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
             KamelImage(
@@ -252,11 +264,7 @@ fun PhotoCardItem(
             )
           }
         }
-        Box(
-          modifier.matchParentSize()
-            .background(gradient),
-          contentAlignment = Alignment.Center
-        ) {
+        Box(modifier.matchParentSize().background(gradient), contentAlignment = Alignment.Center) {
           Column(
             modifier = Modifier.padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -264,17 +272,123 @@ fun PhotoCardItem(
           ) {
             Text(
               text = overlayTitle,
-              style = MaterialTheme.typography.titleMedium.copy(fontSize = if(widthDp <= 180.dp) 18.sp else 22.sp),
+              style =
+                MaterialTheme.typography.titleMedium.copy(
+                  fontSize = if (widthDp <= 180.dp) 18.sp else 22.sp
+                ),
               color = Color.White,
               maxLines = 1,
               modifier = Modifier.padding(horizontal = 8.dp),
               overflow = TextOverflow.Visible,
-              letterSpacing = if(widthDp <= 180.dp) 2.sp else 4.sp
+              letterSpacing = if (widthDp <= 180.dp) 2.sp else 4.sp
             )
 
             Text(
               text = overlaySubtitle,
-              style = MaterialTheme.typography.bodySmall.copy(fontSize = if(widthDp <= 180.dp) 14.sp else 16.sp),
+              style =
+                MaterialTheme.typography.bodySmall.copy(
+                  fontSize = if (widthDp <= 180.dp) 14.sp else 16.sp
+                ),
+              color = Color.White
+            )
+          }
+        }
+      }
+    } else {
+      url?.let {
+        CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
+          KamelImage(
+            resource = asyncPainterResource(data = it),
+            contentDescription = altDescription,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+            animationSpec = tween()
+          )
+        }
+      }
+    }
+  }
+}
+
+@Composable
+fun CategoriesCardItem(
+  onItemSelected: (String, String, CategoryType) -> Unit,
+  id: String,
+  name: String,
+  categoryType: CategoryType,
+  color: String?,
+  url: String?,
+  altDescription: String?,
+  heightDp: Dp = 320.dp,
+  widthDp: Dp = 200.dp,
+  padding: Dp = 4.dp,
+  shouldShowOverlay: Boolean = false,
+  overlayTitle: String = "",
+  overlaySubtitle: String = "",
+  modifier: Modifier = Modifier
+) {
+
+  Card(
+    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+    colors =
+      CardDefaults.cardColors(
+        containerColor =
+          if (color.isNullOrEmpty().not()) Color(parseColor(color!!))
+          else MaterialTheme.colorScheme.surface
+      ),
+    modifier =
+      modifier
+        .padding(vertical = padding, horizontal = padding)
+        .width(widthDp)
+        .height(heightDp)
+        .background(
+          color =
+            if (color.isNullOrEmpty().not()) Color(parseColor(color!!))
+            else MaterialTheme.colorScheme.surface,
+          shape = RoundedCornerShape(16.dp)
+        )
+        .clickable { onItemSelected.invoke(id, name, categoryType) }
+  ) {
+    if (shouldShowOverlay) {
+      val gradient =
+        Brush.verticalGradient(colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)))
+      Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomStart) {
+        url?.let {
+          CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
+            KamelImage(
+              resource = asyncPainterResource(data = it),
+              contentDescription = altDescription,
+              modifier = Modifier.fillMaxSize(),
+              contentScale = ContentScale.Crop,
+              animationSpec = tween()
+            )
+          }
+        }
+        Box(modifier.matchParentSize().background(gradient), contentAlignment = Alignment.Center) {
+          Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+            Text(
+              text = overlayTitle,
+              style =
+                MaterialTheme.typography.titleMedium.copy(
+                  fontSize = if (widthDp <= 180.dp) 18.sp else 22.sp
+                ),
+              color = Color.White,
+              maxLines = 1,
+              modifier = Modifier.padding(horizontal = 8.dp),
+              overflow = TextOverflow.Visible,
+              letterSpacing = if (widthDp <= 180.dp) 2.sp else 4.sp
+            )
+
+            Text(
+              text = overlaySubtitle,
+              style =
+                MaterialTheme.typography.bodySmall.copy(
+                  fontSize = if (widthDp <= 180.dp) 14.sp else 16.sp
+                ),
               color = Color.White
             )
           }
@@ -358,7 +472,7 @@ fun BackButton(modifier: Modifier = Modifier, onBackPressed: () -> Unit) {
     contentAlignment = Alignment.Center
   ) {
     Icon(
-      imageVector = EvaIcons.Outline.ArrowBack,
+      imageVector = EvaIcons.Outline.ArrowIosBack,
       contentDescription = "back",
       modifier = Modifier.padding(8.dp).size(24.dp).clickable { onBackPressed.invoke() },
       tint = MaterialTheme.colorScheme.primary

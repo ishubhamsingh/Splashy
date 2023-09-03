@@ -22,6 +22,7 @@ import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.PhotoSearchCollection
 import dev.ishubhamsingh.splashy.models.Topic
 import kotlinx.coroutines.flow.Flow
+
 interface UnsplashRepository {
   fun getPhotos(page: Int, fetchFromRemote: Boolean = false): Flow<NetworkResult<ArrayList<Photo>>>
 

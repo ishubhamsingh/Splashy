@@ -28,7 +28,7 @@ data class TopicSubmissions(
   @SerialName("street-photography") val streetPhotography: TopicSubmissionStatus? = null,
   @SerialName("wallpapers") val wallpapers: TopicSubmissionStatus? = null,
   @SerialName("travel") val travel: TopicSubmissionStatus? = null,
-  @SerialName("arts-culture") val artsCulture : TopicSubmissionStatus? = null,
+  @SerialName("arts-culture") val artsCulture: TopicSubmissionStatus? = null,
   @SerialName("athletics") val athletics: TopicSubmissionStatus? = null,
   @SerialName("color-of-water") val colorOfWater: TopicSubmissionStatus? = null,
   @SerialName("health") val health: TopicSubmissionStatus? = null,
