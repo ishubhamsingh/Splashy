@@ -1,12 +1,11 @@
 [versions]
 
-kotlin = "1.9.0"
-agp = "8.1.0"
-compose = "1.5.0"
+kotlin = "1.9.10"
+agp = "8.1.1"
+compose = "1.5.1"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.7.2"
-compose-uitooling = "1.5.0"
-libres = "1.2.0-beta01"
+compose-uitooling = "1.5.1"
 composeImageLoader = "1.4.1"
 napier = "2.6.1"
 buildConfig = "3.1.0"
@@ -32,7 +31,6 @@ kotlinx-datetime = "0.4.0"
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
-libres = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
 composeImageLoader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "composeImageLoader" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -74,7 +72,6 @@ multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotl
 cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 android-application = { id = "com.android.application", version.ref = "agp" }
-libres = { id = "io.github.skeptick.libres", version.ref = "libres" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }

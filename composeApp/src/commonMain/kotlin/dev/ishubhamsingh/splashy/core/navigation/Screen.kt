@@ -30,7 +30,7 @@ import compose.icons.evaicons.outline.Home
 import compose.icons.feathericons.Folder
 import compose.icons.feathericons.Heart
 import compose.icons.feathericons.Home
-import dev.ishubhamsingh.splashy.CommonRes
+import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 
 sealed class Screen(
   val route: String,
@@ -41,7 +41,7 @@ sealed class Screen(
   data object Home :
     Screen(
       route = "home",
-      title = CommonRes.string.lbl_home,
+      title = CommonRes.lbl_home,
       selectedNavIcon = EvaIcons.Fill.Home,
       unselectedNavIcon = EvaIcons.Outline.Home
     )
@@ -49,7 +49,7 @@ sealed class Screen(
   data object Categories :
     Screen(
       route = "categories",
-      title = CommonRes.string.lbl_categories,
+      title = CommonRes.lbl_categories,
       selectedNavIcon = EvaIcons.Fill.Folder,
       unselectedNavIcon = EvaIcons.Outline.Folder
     )
@@ -57,15 +57,14 @@ sealed class Screen(
   data object Favourites :
     Screen(
       route = "favourites",
-      title = CommonRes.string.lbl_favourites,
+      title = CommonRes.lbl_favourites,
       selectedNavIcon = EvaIcons.Fill.Heart,
       unselectedNavIcon = EvaIcons.Outline.Heart
     )
 
-  data object PhotoDetails : Screen(route = "photo_details", title = CommonRes.string.lbl_details)
+  data object PhotoDetails : Screen(route = "photo_details", title = CommonRes.lbl_details)
 
-  data object CategoriesPhotos :
-    Screen(route = "categories_photos", title = CommonRes.string.lbl_details)
+  data object CategoriesPhotos : Screen(route = "categories_photos", title = CommonRes.lbl_details)
 
-  data object Settings : Screen(route = "settings", title = CommonRes.string.lbl_settings)
+  data object Settings : Screen(route = "settings", title = CommonRes.lbl_settings)
 }

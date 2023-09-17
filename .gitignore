@@ -10,7 +10,6 @@ captures
 .cxx
 local.properties
 xcuserdata/
-Pods/
 *.jks
 *yarn.lock
 secrets.properties

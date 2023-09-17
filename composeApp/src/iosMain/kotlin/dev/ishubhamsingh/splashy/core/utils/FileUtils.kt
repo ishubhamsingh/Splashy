@@ -16,7 +16,7 @@
 package dev.ishubhamsingh.splashy.core.utils
 
 import com.eygraber.uri.Uri
-import dev.ishubhamsingh.splashy.CommonRes
+import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 import kotlin.coroutines.coroutineContext
 import kotlinx.cinterop.BetaInteropApi
@@ -55,11 +55,11 @@ actual class FileUtils {
           }
         }
         .onSuccess {
-          result = CommonRes.string.saved_success_message
+          result = CommonRes.saved_success_message
           updateMessage.invoke(result)
         }
         .onFailure {
-          result = CommonRes.string.saved_failure_message
+          result = CommonRes.saved_failure_message
           updateMessage.invoke(result)
           it.printStackTrace()
         }

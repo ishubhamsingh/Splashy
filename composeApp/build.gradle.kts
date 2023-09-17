@@ -18,12 +18,10 @@ import java.util.Properties
 plugins {
   alias(libs.plugins.multiplatform)
   alias(libs.plugins.compose)
-  alias(libs.plugins.cocoapods)
   alias(libs.plugins.android.application)
   alias(libs.plugins.buildConfig)
   alias(libs.plugins.kotlinx.serialization)
   alias(libs.plugins.sqlDelight)
-  alias(libs.plugins.libres)
 }
 
 lateinit var secretKeyProperties: Properties
@@ -35,24 +33,13 @@ kotlin {
   secretKeyProperties =
     Properties().apply { secretKeyPropertiesFile.inputStream().use { secret -> load(secret) } }
 
-  android { compilations.all { kotlinOptions { jvmTarget = "17" } } }
+  androidTarget()
 
-  iosX64()
-  iosArm64()
-  iosSimulatorArm64()
-
-  cocoapods {
-    version = "1.0.0"
-    summary =
-      "An Unsplash based wallpaper app built with Compose Multiplatform and KMM for Android and iOS"
-    homepage = "https://github.com/ishubhamsingh/Splashy"
-    ios.deploymentTarget = "16.0"
-    podfile = project.file("../iosApp/Podfile")
-    framework {
+  listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+    iosTarget.binaries.framework {
       baseName = "ComposeApp"
       isStatic = true
     }
-    extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
   }
 
   sourceSets {
@@ -83,7 +70,6 @@ kotlin {
         implementation(libs.materialKolor)
         implementation(libs.kotlinx.datetime)
         implementation(libs.sqlDelight.coroutines.extensions)
-        implementation(libs.libres)
         api(libs.precompose)
         api(libs.moko.mvvm.compose)
         api(libs.moko.mvvm.flow.compose)
@@ -110,7 +96,14 @@ kotlin {
       }
     }
 
+    val iosX64Main by getting
+    val iosArm64Main by getting
+    val iosSimulatorArm64Main by getting
     val iosMain by getting {
+      dependsOn(commonMain)
+      iosX64Main.dependsOn(this)
+      iosArm64Main.dependsOn(this)
+      iosSimulatorArm64Main.dependsOn(this)
       dependencies {
         implementation(libs.ktor.client.darwin)
         implementation(libs.sqlDelight.driver.native)
@@ -160,15 +153,17 @@ android {
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
     }
   }
-  sourceSets["main"].apply {
-    manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    res.srcDirs("src/androidMain/resources", "src/commonMain/resources")
-  }
+
+  sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+  sourceSets["main"].res.srcDirs("src/androidMain/res", "src/commonMain/resources")
+  sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
   }
-  packagingOptions { resources.excludes.add("META-INF/**") }
+
+  kotlin { jvmToolchain(17) }
 }
 
 buildConfig {
@@ -177,11 +172,6 @@ buildConfig {
     "UNSPLASH_API_KEY",
     "\"${secretKeyProperties["unsplash.access.key"]}\""
   )
-}
-
-libres {
-  generatedClassName = "CommonRes"
-  generateNamedArguments = true
 }
 
 sqldelight {

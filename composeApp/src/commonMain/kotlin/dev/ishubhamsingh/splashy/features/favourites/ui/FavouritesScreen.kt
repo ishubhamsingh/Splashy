@@ -40,8 +40,8 @@ import androidx.compose.ui.unit.dp
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.Checkmark
-import dev.ishubhamsingh.splashy.CommonRes
 import dev.ishubhamsingh.splashy.core.navigation.Screen
+import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.features.favourites.FavouritesViewModel
 import dev.ishubhamsingh.splashy.models.TopicFilter
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
@@ -81,7 +81,7 @@ fun TopicFilterLayout(topics: ArrayList<TopicFilter>, onFilterSelected: (String)
 
   Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
     Text(
-      CommonRes.string.lbl_filter,
+      CommonRes.lbl_filter,
       style = MaterialTheme.typography.titleSmall,
       modifier = Modifier.padding(start = 4.dp)
     )

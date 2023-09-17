@@ -48,6 +48,7 @@ import dev.ishubhamsingh.splashy.core.navigation.Navigation
 import dev.ishubhamsingh.splashy.core.navigation.Screen
 import dev.ishubhamsingh.splashy.core.navigation.TOP_LEVEL_ROUTES
 import dev.ishubhamsingh.splashy.core.navigation.currentRoute
+import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.presentation.SplashyTheme
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import dev.ishubhamsingh.splashy.ui.theme.getLobsterRegular
@@ -158,7 +159,7 @@ fun AppTopBar(navigator: Navigator) {
   CenterAlignedTopAppBar(
     title = {
       Text(
-        CommonRes.string.app_name,
+        CommonRes.app_name,
         fontFamily = getLobsterRegular(),
         fontSize = 32.sp,
         fontWeight = FontWeight.Normal

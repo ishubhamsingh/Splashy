@@ -118,7 +118,7 @@ class CategoriesPhotosViewModel : ViewModel(), KoinComponent {
           is NetworkResult.Success -> {
             networkResult.data?.let {
               _state.update { categoriesPhotosState ->
-                if(categoriesPhotosState.photos.isEmpty().not()) {
+                if (categoriesPhotosState.photos.isEmpty().not()) {
                   val current = categoriesPhotosState.photos
                   current.addAll(it)
                   categoriesPhotosState.copy(photos = current)
@@ -162,7 +162,7 @@ class CategoriesPhotosViewModel : ViewModel(), KoinComponent {
           is NetworkResult.Success -> {
             networkResult.data?.let {
               _state.update { categoriesPhotosState ->
-                if(categoriesPhotosState.photos.isEmpty().not()) {
+                if (categoriesPhotosState.photos.isEmpty().not()) {
                   val current = categoriesPhotosState.photos
                   current.addAll(it)
                   categoriesPhotosState.copy(photos = current)

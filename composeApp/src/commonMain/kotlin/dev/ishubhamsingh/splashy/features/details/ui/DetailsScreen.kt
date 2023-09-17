@@ -79,7 +79,7 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
-import dev.ishubhamsingh.splashy.CommonRes
+import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.Platform
 import dev.ishubhamsingh.splashy.core.utils.getFormattedDateTime
 import dev.ishubhamsingh.splashy.core.utils.getPlatform
@@ -336,7 +336,7 @@ fun SheetActionRow(
         }
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-          text = CommonRes.string.save_to_photos,
+          text = CommonRes.save_to_photos,
           style =
             MaterialTheme.typography.titleSmall.copy(
               fontFamily = getLatoRegular(),
@@ -360,7 +360,7 @@ fun SheetActionRow(
         }
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-          text = CommonRes.string.lbl_download,
+          text = CommonRes.lbl_download,
           style =
             MaterialTheme.typography.titleSmall.copy(
               fontFamily = getLatoRegular(),
@@ -384,7 +384,7 @@ fun SheetActionRow(
         }
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-          text = CommonRes.string.lbl_apply_wallpaper,
+          text = CommonRes.lbl_apply_wallpaper,
           style =
             MaterialTheme.typography.titleSmall.copy(
               fontFamily = getLatoRegular(),
@@ -410,7 +410,7 @@ fun SheetPhotoDetails(photo: Photo) {
       )
       Spacer(modifier = Modifier.size(8.dp))
       Text(
-        text = CommonRes.string.lbl_details_caps,
+        text = CommonRes.lbl_details_caps,
         color = MaterialTheme.colorScheme.onBackground,
         style = MaterialTheme.typography.bodyMedium
       )
@@ -420,7 +420,7 @@ fun SheetPhotoDetails(photo: Photo) {
       modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp),
       verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-      PhotoDetailItem(CommonRes.string.lbl_desc) {
+      PhotoDetailItem(CommonRes.lbl_desc) {
         Text(
           if (photo.description.isNullOrEmpty()) photo.altDescription ?: "" else photo.description,
           style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
@@ -428,7 +428,7 @@ fun SheetPhotoDetails(photo: Photo) {
       }
 
       photo.createdAt?.let {
-        PhotoDetailItem(CommonRes.string.lbl_posted_on) {
+        PhotoDetailItem(CommonRes.lbl_posted_on) {
           Text(
             text = getFormattedDateTime(it),
             style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
@@ -436,21 +436,21 @@ fun SheetPhotoDetails(photo: Photo) {
         }
       }
 
-      PhotoDetailItem(CommonRes.string.lbl_size) {
+      PhotoDetailItem(CommonRes.lbl_size) {
         Text(
           "${photo.width} x ${photo.height}",
           style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
         )
       }
 
-      PhotoDetailItem(CommonRes.string.lbl_likes) {
+      PhotoDetailItem(CommonRes.lbl_likes) {
         Text(
           text = photo.likes.toString(),
           style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
         )
       }
 
-      PhotoDetailItem(CommonRes.string.lbl_color) {
+      PhotoDetailItem(CommonRes.lbl_color) {
         Box(
           modifier =
             Modifier.size(18.dp)
@@ -460,7 +460,7 @@ fun SheetPhotoDetails(photo: Photo) {
 
       photo.topicSubmissions?.let {
         if (it.getApprovedTopics().isNotEmpty()) {
-          PhotoDetailItem(CommonRes.string.lbl_topics, alignment = Alignment.CenterVertically) {
+          PhotoDetailItem(CommonRes.lbl_topics, alignment = Alignment.CenterVertically) {
             TopicDetailItem(it.getApprovedTopics())
           }
         }
@@ -545,14 +545,14 @@ fun ApplyWallpaperDialog(
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
         Text(
-          text = CommonRes.string.title_apply_wallpaper_dialog,
+          text = CommonRes.title_apply_wallpaper_dialog,
           fontSize = 24.sp,
           fontFamily = getLatoBold(),
           textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-          text = CommonRes.string.desc_apply_wallpaper_dialog,
+          text = CommonRes.desc_apply_wallpaper_dialog,
           fontSize = 14.sp,
           fontFamily = getLatoRegular(),
           textAlign = TextAlign.Center
@@ -574,7 +574,7 @@ fun ApplyWallpaperDialog(
             )
         ) {
           Text(
-            text = CommonRes.string.lbl_apply_wall_other_app,
+            text = CommonRes.lbl_apply_wall_other_app,
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = getLatoRegular(),
             modifier = Modifier.padding(8.dp)
@@ -591,7 +591,7 @@ fun ApplyWallpaperDialog(
           shape = RoundedCornerShape(4.dp)
         ) {
           Text(
-            text = CommonRes.string.lbl_apply_wall_homescreen,
+            text = CommonRes.lbl_apply_wall_homescreen,
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = getLatoRegular(),
             modifier = Modifier.padding(8.dp)
@@ -608,7 +608,7 @@ fun ApplyWallpaperDialog(
           shape = RoundedCornerShape(4.dp)
         ) {
           Text(
-            text = CommonRes.string.lbl_apply_wall_lockscreen,
+            text = CommonRes.lbl_apply_wall_lockscreen,
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = getLatoRegular(),
             modifier = Modifier.padding(8.dp)
@@ -636,7 +636,7 @@ fun ApplyWallpaperDialog(
             )
         ) {
           Text(
-            text = CommonRes.string.lbl_apply_wall_both,
+            text = CommonRes.lbl_apply_wall_both,
             color = MaterialTheme.colorScheme.onSurface,
             fontFamily = getLatoRegular(),
             modifier = Modifier.padding(8.dp)

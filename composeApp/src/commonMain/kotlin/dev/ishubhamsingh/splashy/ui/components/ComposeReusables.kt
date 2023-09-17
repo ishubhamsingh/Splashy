@@ -89,8 +89,8 @@ import compose.icons.evaicons.outline.ArrowIosBack
 import compose.icons.evaicons.outline.ArrowheadUp
 import compose.icons.evaicons.outline.CloseCircle
 import compose.icons.evaicons.outline.Search
-import dev.ishubhamsingh.splashy.CommonRes
 import dev.ishubhamsingh.splashy.core.network.KtorLogger
+import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
@@ -543,7 +543,7 @@ fun SearchBar(searchQuery: String?, isSearching: Boolean, onQueryChanged: (Strin
       interactionSource = interactionSource,
       placeholder = {
         Text(
-          CommonRes.string.lbl_search,
+          CommonRes.lbl_search,
           style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
         )
       },

@@ -41,8 +41,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.ishubhamsingh.splashy.CommonRes
 import dev.ishubhamsingh.splashy.core.navigation.Screen
+import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.getNonPremiumCollections
 import dev.ishubhamsingh.splashy.features.categories.CategoriesViewModel
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
@@ -105,20 +105,14 @@ fun CategoriesList(
   LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
     item(
       content = {
-        Text(
-          text = CommonRes.string.lbl_collections_title,
-          style = MaterialTheme.typography.displayMedium
-        )
+        Text(text = CommonRes.lbl_collections_title, style = MaterialTheme.typography.displayMedium)
       }
     )
     item(content = { CollectionsList(collections, onItemSelected) })
     item(content = { Spacer(modifier = Modifier.size(16.dp)) })
     item(
       content = {
-        Text(
-          text = CommonRes.string.lbl_topics_title,
-          style = MaterialTheme.typography.displayMedium
-        )
+        Text(text = CommonRes.lbl_topics_title, style = MaterialTheme.typography.displayMedium)
       }
     )
     items(topics) {
@@ -134,8 +128,7 @@ fun CategoriesList(
         modifier = Modifier.fillMaxWidth(),
         shouldShowOverlay = true,
         overlayTitle = it.title ?: "",
-        overlaySubtitle =
-          CommonRes.string.lbl_photos_count.format(count = it.totalPhotos.toString())
+        overlaySubtitle = CommonRes.lbl_photos_count.replace("%count", it.totalPhotos.toString())
       )
     }
   }
