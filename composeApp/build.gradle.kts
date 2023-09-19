@@ -163,9 +163,7 @@ android {
     targetCompatibility = JavaVersion.VERSION_17
   }
 
-  packaging {
-    resources.excludes.add("META-INF/*")
-  }
+  packaging { resources.excludes.add("META-INF/*") }
 
   kotlin { jvmToolchain(17) }
 }

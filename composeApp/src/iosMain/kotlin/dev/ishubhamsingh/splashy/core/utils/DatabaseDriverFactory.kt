@@ -27,10 +27,12 @@ actual class DatabaseDriverFactory {
     return NativeSqliteDriver(
       DatabaseConfiguration(
         name = DB_NAME,
-        version = SplashyDatabase.Schema.version,
+        version = SplashyDatabase.Schema.version.toInt(),
         create = { connection -> wrapConnection(connection) { SplashyDatabase.Schema.create(it) } },
         upgrade = { connection, oldVersion, newVersion ->
-          wrapConnection(connection) { SplashyDatabase.Schema.migrate(it, oldVersion, newVersion) }
+          wrapConnection(connection) {
+            SplashyDatabase.Schema.migrate(it, oldVersion.toLong(), newVersion.toLong())
+          }
         }
       )
     )
