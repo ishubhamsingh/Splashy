@@ -49,7 +49,7 @@ fun CategoriesPhotosScreen(
 
   val state by viewModel.state.collectAsState()
 
-  LaunchedEffect(id) { viewModel.onEvent(CategoriesPhotosEvent.Load(id, categoryType)) }
+  LaunchedEffect(Unit) { viewModel.onEvent(CategoriesPhotosEvent.Load(id, categoryType)) }
 
   Scaffold(
     topBar = {
@@ -71,7 +71,7 @@ fun CategoriesPhotosScreen(
         }
       )
     }
-  ) {
+  ) { paddingValues ->
     PhotoGridLayout(
       isRefreshing = state.isRefreshing,
       onRefresh = { viewModel.onEvent(CategoriesPhotosEvent.Refresh) },
@@ -86,7 +86,7 @@ fun CategoriesPhotosScreen(
       onItemSelected = { navigator.navigate(Screen.PhotoDetails.route.plus("/${it}")) },
       error = state.networkError,
       shouldShowSearch = false,
-      modifier = Modifier.padding(it)
+      modifier = Modifier.padding(paddingValues)
     )
   }
 }

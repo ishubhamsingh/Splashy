@@ -15,8 +15,6 @@
  */
 package dev.ishubhamsingh.splashy.core.navigation
 
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
@@ -27,9 +25,6 @@ import compose.icons.evaicons.fill.Home
 import compose.icons.evaicons.outline.Folder
 import compose.icons.evaicons.outline.Heart
 import compose.icons.evaicons.outline.Home
-import compose.icons.feathericons.Folder
-import compose.icons.feathericons.Heart
-import compose.icons.feathericons.Home
 import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 
 sealed class Screen(

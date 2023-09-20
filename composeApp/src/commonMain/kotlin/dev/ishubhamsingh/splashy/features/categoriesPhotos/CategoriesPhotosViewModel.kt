@@ -40,6 +40,8 @@ class CategoriesPhotosViewModel : ViewModel(), KoinComponent {
       is CategoriesPhotosEvent.Load -> {
         if (state.value.id != event.id) {
           _state.update { CategoriesPhotosState() } // Reset state
+        } else {
+          return
         }
         _state.update { categoriesPhotosState ->
           categoriesPhotosState.copy(id = event.id, categoryType = event.type)
