@@ -10,6 +10,5 @@ captures
 .cxx
 local.properties
 xcuserdata/
-*.jks
 *yarn.lock
 secrets.properties
