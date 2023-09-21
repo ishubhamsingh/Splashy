@@ -1,9 +1,17 @@
+<p align="center">
+<img src="/assets/splashy_banner.png" > 
+</p>
+
+<hr>
+
+<img src="/assets/icon.png" width="120" height="120"> 
+
 # Splashy
+
+An Unsplash based wallpaper app built with Compose Multiplatform and KMP for Android and iOS.
 
 [![Check](https://github.com/ishubhamsingh/Splashy/actions/workflows/Check.yaml/badge.svg?branch=main)](https://github.com/ishubhamsingh/Splashy/actions/workflows/Check.yaml)
 
-## :scroll: Description
-An Unsplash based wallpaper app built with Compose Multiplatform and KMP for Android and iOS.
 
 ## :hammer_and_wrench: Tech Stack
 
