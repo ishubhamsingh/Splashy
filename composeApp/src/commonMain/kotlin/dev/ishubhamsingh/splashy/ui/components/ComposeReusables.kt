@@ -63,7 +63,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -94,21 +93,19 @@ import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
-import io.kamel.core.config.DefaultCacheSize
 import io.kamel.core.config.KamelConfig
 import io.kamel.core.config.httpFetcher
 import io.kamel.core.config.takeFrom
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import io.kamel.image.config.Default
-import io.kamel.image.config.LocalKamelConfig
 import io.kamel.image.config.imageBitmapDecoder
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.header
 import io.ktor.http.CacheControl
-import io.ktor.http.headersOf
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.launch
 
@@ -253,17 +250,7 @@ fun PhotoCardItem(
       val gradient =
         Brush.verticalGradient(colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)))
       Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomStart) {
-        url?.let {
-          CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
-            KamelImage(
-              resource = asyncPainterResource(data = it),
-              contentDescription = altDescription,
-              modifier = Modifier.fillMaxSize(),
-              contentScale = ContentScale.Crop,
-              animationSpec = tween()
-            )
-          }
-        }
+        url?.let { ImageViewComponent(it, altDescription) }
         Box(modifier.matchParentSize().background(gradient), contentAlignment = Alignment.Center) {
           Column(
             modifier = Modifier.padding(8.dp),
@@ -295,17 +282,7 @@ fun PhotoCardItem(
         }
       }
     } else {
-      url?.let {
-        CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
-          KamelImage(
-            resource = asyncPainterResource(data = it),
-            contentDescription = altDescription,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop,
-            animationSpec = tween()
-          )
-        }
-      }
+      url?.let { ImageViewComponent(it, altDescription) }
     }
   }
 }
@@ -353,17 +330,7 @@ fun CategoriesCardItem(
       val gradient =
         Brush.verticalGradient(colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f)))
       Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomStart) {
-        url?.let {
-          CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
-            KamelImage(
-              resource = asyncPainterResource(data = it),
-              contentDescription = altDescription,
-              modifier = Modifier.fillMaxSize(),
-              contentScale = ContentScale.Crop,
-              animationSpec = tween()
-            )
-          }
-        }
+        url?.let { ImageViewComponent(it, altDescription) }
         Box(modifier.matchParentSize().background(gradient), contentAlignment = Alignment.Center) {
           Column(
             modifier = Modifier.padding(8.dp),
@@ -395,47 +362,43 @@ fun CategoriesCardItem(
         }
       }
     } else {
-      url?.let {
-        CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
-          KamelImage(
-            resource = asyncPainterResource(data = it),
-            contentDescription = altDescription,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop,
-            animationSpec = tween()
-          )
-        }
-      }
+      url?.let { ImageViewComponent(it, altDescription) }
     }
   }
 }
 
 @Composable
-fun getKamelConfig(url: String): KamelConfig {
-  val kamelConfig = KamelConfig {
-    takeFrom(KamelConfig.Default)
-    imageBitmapCacheSize = DefaultCacheSize
-    imageBitmapDecoder()
+fun getKamelConfig() = KamelConfig {
+  takeFrom(KamelConfig.Default)
+  imageBitmapCacheSize = 500
+  imageBitmapDecoder()
 
-    httpFetcher {
-      defaultRequest { url(url) }
+  httpFetcher {
+    defaultRequest { header("Cache-Control", "max-age=31536000") }
 
-      CacheControl.MaxAge(maxAgeSeconds = 31536)
-      headersOf("Cache-Control", "max-age=31536000")
+    CacheControl.MaxAge(maxAgeSeconds = 31536)
 
-      install(HttpRequestRetry) {
-        maxRetries = 3
-        retryIf { _, httpResponse -> !httpResponse.status.isSuccess() }
-      }
+    install(HttpRequestRetry) {
+      maxRetries = 3
+      retryIf { _, httpResponse -> !httpResponse.status.isSuccess() }
+    }
 
-      install(Logging) {
-        logger = KtorLogger()
-        level = LogLevel.INFO
-      }
+    install(Logging) {
+      logger = KtorLogger()
+      level = LogLevel.INFO
     }
   }
+}
 
-  return kamelConfig
+@Composable
+fun ImageViewComponent(url: String, altDescription: String?) {
+  KamelImage(
+    resource = asyncPainterResource(data = url),
+    contentDescription = altDescription,
+    modifier = Modifier.fillMaxSize(),
+    contentScale = ContentScale.Crop,
+    animationSpec = tween()
+  )
 }
 
 @Composable

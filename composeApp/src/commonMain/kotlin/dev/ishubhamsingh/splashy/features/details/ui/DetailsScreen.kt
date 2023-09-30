@@ -33,7 +33,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -53,7 +52,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -91,13 +89,12 @@ import dev.ishubhamsingh.splashy.features.details.DetailsScreenModel
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.ui.components.BackButton
-import dev.ishubhamsingh.splashy.ui.components.getKamelConfig
+import dev.ishubhamsingh.splashy.ui.components.ImageViewComponent
 import dev.ishubhamsingh.splashy.ui.components.parseColor
 import dev.ishubhamsingh.splashy.ui.theme.getLatoBold
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
-import io.kamel.image.config.LocalKamelConfig
 
 data class DetailsScreen(val id: String) : Screen {
 
@@ -190,17 +187,7 @@ data class DetailsScreen(val id: String) : Screen {
       modifier = modifier.fillMaxSize().background(color = Color(parseColor(photo.color))),
       verticalArrangement = Arrangement.Center
     ) {
-      photo.urls?.regular?.let {
-        CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(it)) {
-          KamelImage(
-            resource = asyncPainterResource(data = it),
-            contentDescription = photo.altDescription,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop,
-            animationSpec = tween()
-          )
-        }
-      }
+      photo.urls?.regular?.let { ImageViewComponent(it, photo.altDescription) }
     }
   }
 
@@ -251,15 +238,13 @@ data class DetailsScreen(val id: String) : Screen {
       ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
           user?.profileImage?.let { profilePic ->
-            CompositionLocalProvider(LocalKamelConfig provides getKamelConfig(profilePic.medium)) {
-              KamelImage(
-                modifier = Modifier.size(36.dp).clip(CircleShape),
-                resource = asyncPainterResource(data = profilePic.medium),
-                contentDescription = user.name,
-                contentScale = ContentScale.Crop,
-                animationSpec = tween()
-              )
-            }
+            KamelImage(
+              modifier = Modifier.size(36.dp).clip(CircleShape),
+              resource = asyncPainterResource(data = profilePic.medium),
+              contentDescription = user.name,
+              contentScale = ContentScale.Crop,
+              animationSpec = tween()
+            )
           }
 
           Spacer(modifier = Modifier.size(16.dp))
@@ -391,7 +376,6 @@ data class DetailsScreen(val id: String) : Screen {
     }
   }
 
-  @OptIn(ExperimentalMaterialApi::class)
   @Composable
   fun SheetPhotoDetails(photo: Photo) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
