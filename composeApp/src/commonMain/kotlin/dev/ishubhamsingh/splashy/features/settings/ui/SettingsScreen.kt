@@ -17,12 +17,19 @@ package dev.ishubhamsingh.splashy.features.settings.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import moe.tlaster.precompose.navigation.Navigator
+import cafe.adriel.voyager.core.screen.Screen
 
-@Composable
-fun SettingsScreen(navigator: Navigator) {
-  Column(modifier = Modifier.fillMaxSize()) { Text("Hello Settings") }
+class SettingsScreen : Screen {
+
+  @Composable
+  override fun Content() {
+    Surface(color = MaterialTheme.colorScheme.surface) {
+      Column(modifier = Modifier.fillMaxSize()) { Text("Hello Settings") }
+    }
+  }
 }

@@ -29,65 +29,70 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.ArrowIosBack
-import dev.ishubhamsingh.splashy.core.navigation.Screen
-import dev.ishubhamsingh.splashy.features.categoriesPhotos.CategoriesPhotosViewModel
+import dev.ishubhamsingh.splashy.features.categoriesPhotos.CategoriesPhotosScreenModel
+import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
-import moe.tlaster.precompose.navigation.Navigator
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CategoriesPhotosScreen(
-  navigator: Navigator,
-  id: String,
-  categoryType: CategoryType,
-  name: String,
-  viewModel: CategoriesPhotosViewModel
-) {
+data class CategoriesPhotosScreen(
+  val id: String,
+  val categoryType: CategoryType,
+  val name: String
+) : Screen {
 
-  val state by viewModel.state.collectAsState()
+  @OptIn(ExperimentalMaterial3Api::class)
+  @Composable
+  override fun Content() {
+    val navigator = LocalNavigator.currentOrThrow
+    val screenModel = getScreenModel<CategoriesPhotosScreenModel>()
+    val state by screenModel.state.collectAsState()
 
-  LaunchedEffect(Unit) { viewModel.onEvent(CategoriesPhotosEvent.Load(id, categoryType)) }
+    LaunchedEffect(Unit) { screenModel.onEvent(CategoriesPhotosEvent.Load(id, categoryType)) }
 
-  Scaffold(
-    topBar = {
-      TopAppBar(
-        title = {
-          Text(
-            text = name,
-            style = MaterialTheme.typography.titleLarge,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-          )
+    Scaffold(
+      topBar = {
+        TopAppBar(
+          title = {
+            Text(
+              text = name,
+              style = MaterialTheme.typography.titleLarge,
+              maxLines = 1,
+              overflow = TextOverflow.Ellipsis
+            )
+          },
+          navigationIcon = {
+            Icon(
+              imageVector = EvaIcons.Outline.ArrowIosBack,
+              contentDescription = "back",
+              modifier = Modifier.clickable { navigator.pop() }
+            )
+          }
+        )
+      }
+    ) { paddingValues ->
+      PhotoGridLayout(
+        isRefreshing = state.isRefreshing,
+        onRefresh = { screenModel.onEvent(CategoriesPhotosEvent.Refresh) },
+        onSurfaceTouch = {},
+        isPaginating = state.isPaginating,
+        photos = state.photos,
+        onLoadMore = {
+          if (state.totalPages > state.currentPage) {
+            screenModel.onEvent(CategoriesPhotosEvent.LoadMore)
+          }
         },
-        navigationIcon = {
-          Icon(
-            imageVector = EvaIcons.Outline.ArrowIosBack,
-            contentDescription = "back",
-            modifier = Modifier.clickable { navigator.goBack() }
-          )
-        }
+        onItemSelected = { navigator.push(DetailsScreen(it)) },
+        error = state.networkError,
+        shouldShowSearch = false,
+        modifier = Modifier.padding(paddingValues)
       )
     }
-  ) { paddingValues ->
-    PhotoGridLayout(
-      isRefreshing = state.isRefreshing,
-      onRefresh = { viewModel.onEvent(CategoriesPhotosEvent.Refresh) },
-      onSurfaceTouch = {},
-      isPaginating = state.isPaginating,
-      photos = state.photos,
-      onLoadMore = {
-        if (state.totalPages > state.currentPage) {
-          viewModel.onEvent(CategoriesPhotosEvent.LoadMore)
-        }
-      },
-      onItemSelected = { navigator.navigate(Screen.PhotoDetails.route.plus("/${it}")) },
-      error = state.networkError,
-      shouldShowSearch = false,
-      modifier = Modifier.padding(paddingValues)
-    )
   }
 }
 

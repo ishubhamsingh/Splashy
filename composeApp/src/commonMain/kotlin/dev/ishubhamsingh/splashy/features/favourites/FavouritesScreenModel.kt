@@ -15,7 +15,8 @@
  */
 package dev.ishubhamsingh.splashy.features.favourites
 
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesEvent
@@ -27,12 +28,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 /** Created by Shubham Singh on 12/08/23. */
-class FavouritesViewModel : ViewModel(), KoinComponent {
-  private val unsplashRepository: UnsplashRepository by inject()
+class FavouritesScreenModel(private val unsplashRepository: UnsplashRepository) : ScreenModel {
 
   private val _state = MutableStateFlow(FavouritesState())
   val state = _state.asStateFlow()
@@ -55,7 +53,7 @@ class FavouritesViewModel : ViewModel(), KoinComponent {
   private fun fetchFavourites() {
     cancelActiveJob()
     job =
-      viewModelScope.launch {
+      coroutineScope.launch {
         unsplashRepository.getFavourites().collect { result ->
           when (result) {
             is NetworkResult.Error -> {

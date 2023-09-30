@@ -70,10 +70,11 @@ kotlin {
         implementation(libs.materialKolor)
         implementation(libs.kotlinx.datetime)
         implementation(libs.sqlDelight.coroutines.extensions)
-        api(libs.precompose)
-        api(libs.moko.mvvm.compose)
-        api(libs.moko.mvvm.flow.compose)
         api(libs.moko.permissions)
+        implementation(libs.voyager.navigator)
+        implementation(libs.voyager.tabNavigator)
+        implementation(libs.voyager.transitions)
+        implementation(libs.voyager.koin)
       }
     }
 

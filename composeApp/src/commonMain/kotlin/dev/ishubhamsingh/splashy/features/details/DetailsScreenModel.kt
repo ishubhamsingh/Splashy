@@ -15,7 +15,8 @@
  */
 package dev.ishubhamsingh.splashy.features.details
 
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
 import dev.icerock.moko.permissions.DeniedAlwaysException
 import dev.icerock.moko.permissions.DeniedException
 import dev.icerock.moko.permissions.Permission
@@ -40,8 +41,8 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class DetailsViewModel(val permissionsController: PermissionsController) :
-  ViewModel(), KoinComponent {
+class DetailsScreenModel(val permissionsController: PermissionsController) :
+  ScreenModel, KoinComponent {
   private val unsplashRepository: UnsplashRepository by inject()
   private val unsplashApi: UnsplashApi by inject()
   private val fileUtils: FileUtils by inject()
@@ -80,7 +81,7 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
   }
 
   private fun checkPermission(postPermissionGranted: () -> Unit) {
-    viewModelScope.launch {
+    coroutineScope.launch {
       try {
         if (fileUtils.shouldAskStorageRuntimePermission()) {
           permissionsController.providePermission(Permission.WRITE_STORAGE)
@@ -106,7 +107,7 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
   }
 
   private fun fetchPhotoDetails(id: String = state.value.id ?: "") {
-    viewModelScope.launch {
+    coroutineScope.launch {
       unsplashRepository.getPhotoDetails(id).collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Error -> {
@@ -133,7 +134,7 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
     wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION
   ) {
     photo?.links?.downloadLocation?.let {
-      viewModelScope.launch {
+      coroutineScope.launch {
         unsplashRepository.getDownloadUrl(it).collect { networkResult ->
           when (networkResult) {
             is NetworkResult.Error -> {
@@ -167,7 +168,7 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
     wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION
   ) {
     var byteArray: ByteArray? = null
-    viewModelScope
+    coroutineScope
       .launch(Dispatchers.IO) { byteArray = unsplashApi.downloadFile(url).toByteArray() }
       .invokeOnCompletion {
         if (isSaveToFile) {
@@ -187,7 +188,7 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
   }
 
   private fun saveToFile(byteArray: ByteArray?, shouldOpenFile: Boolean) {
-    viewModelScope
+    coroutineScope
       .launch {
         byteArray?.let {
           fileUtils.saveByteArrayToFile(
@@ -209,7 +210,7 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
     byteArray: ByteArray?,
     wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION
   ) {
-    viewModelScope
+    coroutineScope
       .launch {
         byteArray?.let {
           fileUtils.applyWallpaper(byteArray, wallpaperScreenType, ::updateSnackBarMessage)
@@ -222,7 +223,7 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
 
   private fun addFavourite(favourite: Favourite? = state.value.photo?.toFavourite()) {
     favourite?.let {
-      viewModelScope.launch {
+      coroutineScope.launch {
         unsplashRepository.addFavourite(favourite).collect { result ->
           when (result) {
             is NetworkResult.Success -> {
@@ -237,7 +238,7 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
 
   private fun removeFavourite(id: String = state.value.id ?: "") {
     if (id.isEmpty()) return
-    viewModelScope.launch {
+    coroutineScope.launch {
       unsplashRepository.removeFavourite(id).collect { result ->
         when (result) {
           is NetworkResult.Success -> {
@@ -251,7 +252,7 @@ class DetailsViewModel(val permissionsController: PermissionsController) :
 
   private fun isFavourite(id: String = state.value.id ?: "") {
     if (id.isEmpty()) return
-    viewModelScope.launch {
+    coroutineScope.launch {
       unsplashRepository.isFavourite(id).collect { result ->
         when (result) {
           is NetworkResult.Success -> {

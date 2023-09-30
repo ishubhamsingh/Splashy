@@ -16,10 +16,10 @@
 package dev.ishubhamsingh.splashy
 
 import android.os.Bundle
-import moe.tlaster.precompose.lifecycle.PreComposeActivity
-import moe.tlaster.precompose.lifecycle.setContent
+import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : PreComposeActivity() {
+class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent { AppView() }

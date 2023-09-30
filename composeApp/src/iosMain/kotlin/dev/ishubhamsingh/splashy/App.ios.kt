@@ -16,9 +16,9 @@
 package dev.ishubhamsingh.splashy
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import moe.tlaster.precompose.PreComposeApplication
+import androidx.compose.ui.window.ComposeUIViewController
 import platform.UIKit.UIViewController
 
 fun MainViewController(): UIViewController {
-  return PreComposeApplication { App(darkTheme = isSystemInDarkTheme(), dynamicColor = false) }
+  return ComposeUIViewController { App(darkTheme = isSystemInDarkTheme(), dynamicColor = false) }
 }

@@ -15,7 +15,8 @@
  */
 package dev.ishubhamsingh.splashy.features.categoriesPhotos
 
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoriesPhotosEvent
@@ -26,11 +27,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class CategoriesPhotosViewModel : ViewModel(), KoinComponent {
-  private val unsplashRepository: UnsplashRepository by inject()
+class CategoriesPhotosScreenModel(private val unsplashRepository: UnsplashRepository) :
+  ScreenModel {
 
   private val _state = MutableStateFlow(CategoriesPhotosState())
   val state = _state.asStateFlow()
@@ -97,7 +96,7 @@ class CategoriesPhotosViewModel : ViewModel(), KoinComponent {
     page: Int = state.value.currentPage,
     loadingType: LoadingType
   ) {
-    viewModelScope.launch {
+    coroutineScope.launch {
       unsplashRepository.getPhotosByTopic(slug = id ?: "", page = page).collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Error -> {
@@ -140,7 +139,7 @@ class CategoriesPhotosViewModel : ViewModel(), KoinComponent {
     page: Int = state.value.currentPage,
     loadingType: LoadingType
   ) {
-    viewModelScope.launch {
+    coroutineScope.launch {
       unsplashRepository.getPhotosByCollection(id = id ?: "", page = page).collect { networkResult
         ->
         when (networkResult) {
@@ -180,7 +179,7 @@ class CategoriesPhotosViewModel : ViewModel(), KoinComponent {
   }
 
   private fun fetchTopicById(id: String? = state.value.id) {
-    viewModelScope.launch {
+    coroutineScope.launch {
       unsplashRepository.getTopicBySlug(slug = id ?: "").collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Error -> {}
@@ -198,7 +197,7 @@ class CategoriesPhotosViewModel : ViewModel(), KoinComponent {
   }
 
   private fun fetchCollectionById(id: String? = state.value.id) {
-    viewModelScope.launch {
+    coroutineScope.launch {
       unsplashRepository.getCollectionById(id = id ?: "").collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Error -> {}

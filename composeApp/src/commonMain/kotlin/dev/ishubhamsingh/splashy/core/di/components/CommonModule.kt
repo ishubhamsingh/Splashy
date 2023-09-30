@@ -20,6 +20,10 @@ import dev.ishubhamsingh.splashy.core.network.UnsplashRepositoryImpl
 import dev.ishubhamsingh.splashy.core.network.api.UnsplashApi
 import dev.ishubhamsingh.splashy.core.utils.getHttpClient
 import dev.ishubhamsingh.splashy.db.createDatabase
+import dev.ishubhamsingh.splashy.features.categories.CategoriesScreenModel
+import dev.ishubhamsingh.splashy.features.categoriesPhotos.CategoriesPhotosScreenModel
+import dev.ishubhamsingh.splashy.features.favourites.FavouritesScreenModel
+import dev.ishubhamsingh.splashy.features.home.HomeScreenModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -28,4 +32,8 @@ val commonModule = module {
   single { UnsplashApi(get()) }
   single { createDatabase(get()) }
   factory<UnsplashRepository> { UnsplashRepositoryImpl(get(), get()) }
+  factory { HomeScreenModel(get()) }
+  factory { FavouritesScreenModel(get()) }
+  factory { CategoriesScreenModel(get()) }
+  factory { CategoriesPhotosScreenModel(get()) }
 }

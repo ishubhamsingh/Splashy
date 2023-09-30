@@ -15,7 +15,8 @@
  */
 package dev.ishubhamsingh.splashy.features.home
 
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.features.home.ui.HomeEvent
@@ -23,16 +24,12 @@ import dev.ishubhamsingh.splashy.features.home.ui.HomeState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class HomeViewModel : ViewModel(), KoinComponent {
-  private val unsplashRepository: UnsplashRepository by inject()
+class HomeScreenModel(private val unsplashRepository: UnsplashRepository) : ScreenModel {
 
   private val _state = MutableStateFlow(HomeState())
   val state = _state.asStateFlow()
@@ -96,7 +93,7 @@ class HomeViewModel : ViewModel(), KoinComponent {
   ) {
     cancelActiveJob() // Cancel ongoing call before launching new
     job =
-      viewModelScope.launch(Dispatchers.IO) {
+      coroutineScope.launch(Dispatchers.IO) {
         unsplashRepository
           .searchPhotos(
             if (state.value.searchQuery.isNullOrEmpty()) "wallpaper" else state.value.searchQuery!!,
@@ -138,7 +135,7 @@ class HomeViewModel : ViewModel(), KoinComponent {
   ) {
     cancelActiveJob() // Cancel ongoing call before launching new
     job =
-      viewModelScope.launch(Dispatchers.IO) {
+      coroutineScope.launch(Dispatchers.IO) {
         unsplashRepository.getPhotos(page, forceFetch).collect { networkResult ->
           when (networkResult) {
             is NetworkResult.Success -> {
