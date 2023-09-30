@@ -1,12 +1,14 @@
 <p align="center">
-<img src="/assets/splashy_banner.png" > 
+<img src="/assets/splashy_banner.png" /> 
 </p>
 
 <hr>
 
-<img src="/assets/icon.png" width="120" height="120"> 
-
-# Splashy
+<h1 align="center">
+<img height="150" src="/assets/icon.png"/>
+<br>
+Splashy
+</h1>
 
 An Unsplash based wallpaper app built with Compose Multiplatform and KMP for Android and iOS.
 
@@ -19,13 +21,12 @@ An Unsplash based wallpaper app built with Compose Multiplatform and KMP for And
 - [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
 - [Ktor Client](https://ktor.io/)
 - [SQLDelight](https://cashapp.github.io/sqldelight/2.0.0/)
-- [Precompose](https://github.com/Tlaster/PreCompose)
+- [Voyager](https://github.com/adrielcafe/voyager)
 - [Koin](https://insert-koin.io/)
 - [Kamel](https://github.com/Kamel-Media/Kamel)
 - [Napier](https://github.com/AAkira/Napier)
 - [Compose Icons](https://github.com/DevSrSouza/compose-icons)
 - [Moko Permissions](https://github.com/icerockdev/moko-permissions)
-- [Moko MVVM](https://github.com/icerockdev/moko-mvvm)
 
 ## :camera_flash: Screenshots
 
