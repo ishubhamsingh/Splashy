@@ -6,7 +6,6 @@ compose = "1.5.1"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.7.2"
 compose-uitooling = "1.5.1"
-composeImageLoader = "1.4.1"
 napier = "2.6.1"
 buildConfig = "3.1.0"
 kotlinx-coroutines = "1.7.3"
@@ -18,19 +17,18 @@ multiplatformSettings = "1.0.0"
 koin = "3.4.3"
 sqlDelight = "2.0.0"
 kamel = "0.6.0"
-materialKolor = "1.2.0"
 spotless = "6.20.0"
 ktfmt = "0.44"
 voyager = "1.0.0-rc07"
 moko-permissions = "0.16.0"
 kotlinx-datetime = "0.4.0"
+uri-kmp = "0.0.15"
 
 [libraries]
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
-composeImageLoader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "composeImageLoader" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
@@ -56,13 +54,13 @@ sqlDelight-driver-sqljs = { module = "app.cash.sqldelight:sqljs-driver", version
 sqlDelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 sqlDelight-sqlite-dialect = { module = "app.cash.sqldelight:sqlite-3-24-dialect", version.ref = "sqlDelight" }
 kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
-materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 moko-permissions = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko-permissions"}
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime"}
+uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 
 
 [plugins]
