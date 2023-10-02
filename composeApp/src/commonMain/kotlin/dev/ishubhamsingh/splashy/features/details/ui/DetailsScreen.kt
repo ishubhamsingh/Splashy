@@ -26,10 +26,13 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -83,6 +86,7 @@ import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.Platform
+import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.core.utils.getFormattedDateTime
 import dev.ishubhamsingh.splashy.core.utils.getPlatform
 import dev.ishubhamsingh.splashy.features.details.DetailsScreenModel
@@ -101,6 +105,11 @@ data class DetailsScreen(val id: String) : Screen {
   @OptIn(ExperimentalMaterial3Api::class)
   @Composable
   override fun Content() {
+    UpdateSystemBars(
+      statusBarColor = Color.Black.copy(alpha = 0.4f),
+      navigationBarColor = Color.Transparent,
+      isDarkTheme = true
+    )
     val navigator = LocalNavigator.currentOrThrow
     val factory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
     val controller: PermissionsController =
@@ -169,7 +178,10 @@ data class DetailsScreen(val id: String) : Screen {
         sheetShadowElevation = 16.dp,
       ) {
         PhotoContainer(photo = photo)
-        BackButton(onBackPressed = { navigator.pop() })
+        BackButton(
+          modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
+          onBackPressed = { navigator.pop() }
+        )
 
         if (state.shouldShowApplyWallpaperDialog) {
           ApplyWallpaperDialog(

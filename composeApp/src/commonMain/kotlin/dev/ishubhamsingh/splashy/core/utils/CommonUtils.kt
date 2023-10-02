@@ -16,6 +16,7 @@
 package dev.ishubhamsingh.splashy.core.utils
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -35,3 +36,6 @@ enum class Platform {
   Android,
   iOS
 }
+
+@Composable
+expect fun UpdateSystemBars(statusBarColor: Color, navigationBarColor: Color, isDarkTheme: Boolean)

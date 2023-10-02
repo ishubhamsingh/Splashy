@@ -16,9 +16,11 @@
 package dev.ishubhamsingh.splashy
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.ui.window.ComposeUIViewController
+import com.moriatsushi.insetsx.WindowInsetsUIViewController
 import platform.UIKit.UIViewController
 
 fun MainViewController(): UIViewController {
-  return ComposeUIViewController { App(darkTheme = isSystemInDarkTheme(), dynamicColor = false) }
+  return WindowInsetsUIViewController {
+    App(darkTheme = isSystemInDarkTheme(), dynamicColor = false)
+  }
 }

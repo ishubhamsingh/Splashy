@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.features.settings.ui
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -22,12 +23,19 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
+import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 
 class SettingsScreen : Screen {
 
   @Composable
   override fun Content() {
+    UpdateSystemBars(
+      statusBarColor = Color.Transparent,
+      navigationBarColor = Color.Transparent,
+      isDarkTheme = isSystemInDarkTheme()
+    )
     Surface(color = MaterialTheme.colorScheme.surface) {
       Column(modifier = Modifier.fillMaxSize()) { Text("Hello Settings") }
     }

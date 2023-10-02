@@ -16,6 +16,7 @@
 package dev.ishubhamsingh.splashy.core.utils
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -71,3 +72,10 @@ actual fun getFormattedDateTime(timestamp: String, format: String): String {
 actual fun getPlatform(): Platform = Platform.iOS
 
 @OptIn(ExperimentalNativeApi::class) actual fun isDebug(): Boolean = NativePlatform.isDebugBinary
+
+@Composable
+actual fun UpdateSystemBars(
+  statusBarColor: Color,
+  navigationBarColor: Color,
+  isDarkTheme: Boolean
+) {}

@@ -16,6 +16,7 @@
 package dev.ishubhamsingh.splashy.features.favourites.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.koin.getScreenModel
@@ -52,6 +54,7 @@ import compose.icons.evaicons.fill.Heart
 import compose.icons.evaicons.outline.Checkmark
 import compose.icons.evaicons.outline.Heart
 import dev.ishubhamsingh.splashy.core.presentation.CommonRes
+import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.features.favourites.FavouritesScreenModel
 import dev.ishubhamsingh.splashy.models.TopicFilter
@@ -73,6 +76,11 @@ object FavouritesTab : Tab {
 
   @Composable
   override fun Content() {
+    UpdateSystemBars(
+      statusBarColor = Color.Transparent,
+      navigationBarColor = Color.Transparent,
+      isDarkTheme = isSystemInDarkTheme()
+    )
     val navigator = LocalNavigator.currentOrThrow.parent
     val screenModel = getScreenModel<FavouritesScreenModel>()
     val state by screenModel.state.collectAsState()

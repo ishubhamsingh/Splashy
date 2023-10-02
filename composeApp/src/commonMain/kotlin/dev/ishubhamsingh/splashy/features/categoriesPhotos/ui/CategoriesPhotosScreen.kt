@@ -16,6 +16,7 @@
 package dev.ishubhamsingh.splashy.features.categoriesPhotos.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -36,6 +38,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.ArrowIosBack
+import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.CategoriesPhotosScreenModel
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
@@ -49,6 +52,11 @@ data class CategoriesPhotosScreen(
   @OptIn(ExperimentalMaterial3Api::class)
   @Composable
   override fun Content() {
+    UpdateSystemBars(
+      statusBarColor = Color.Transparent,
+      navigationBarColor = Color.Transparent,
+      isDarkTheme = isSystemInDarkTheme()
+    )
     val navigator = LocalNavigator.currentOrThrow
     val screenModel = getScreenModel<CategoriesPhotosScreenModel>()
     val state by screenModel.state.collectAsState()

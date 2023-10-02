@@ -16,11 +16,16 @@
 package dev.ishubhamsingh.splashy.core.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.core.view.WindowCompat
 import dev.ishubhamsingh.splashy.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -62,3 +67,16 @@ actual fun getFormattedDateTime(timestamp: String, format: String): String {
 actual fun getPlatform(): Platform = Platform.Android
 
 actual fun isDebug(): Boolean = BuildConfig.DEBUG
+
+@Composable
+actual fun UpdateSystemBars(
+  statusBarColor: Color,
+  navigationBarColor: Color,
+  isDarkTheme: Boolean
+) {
+  val view = LocalView.current
+  val window = (view.context as? Activity)?.window ?: return
+  window.statusBarColor = statusBarColor.toArgb()
+  window.navigationBarColor = navigationBarColor.toArgb()
+  WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDarkTheme
+}

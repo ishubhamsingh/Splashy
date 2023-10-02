@@ -86,6 +86,8 @@ kotlin {
 
     val androidMain by getting {
       dependencies {
+        implementation(compose.material3)
+        implementation(libs.material)
         implementation(libs.androidx.appcompat)
         implementation(libs.androidx.activityCompose)
         implementation(libs.compose.uitooling)
