@@ -102,7 +102,13 @@ import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
-data class DetailsScreen(val id: String) : Screen {
+data class DetailsScreen(
+  val photo: Photo? = null,
+  val id: String? = null,
+  val color: String? = null,
+  val url: String? = null,
+  val altDescription: String? = null
+) : Screen {
 
   @OptIn(ExperimentalMaterial3Api::class)
   @Composable
@@ -127,33 +133,35 @@ data class DetailsScreen(val id: String) : Screen {
 
     BindEffect(screenModel.permissionsController)
 
-    LaunchedEffect(Unit) { screenModel.onEvent(DetailsEvent.LoadDetails(id)) }
-    if (state.isLoading) {
-      Column(
-        modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-      ) {
-        CircularProgressIndicator(
-          modifier = Modifier.size(24.dp).align(Alignment.CenterHorizontally),
-          color = MaterialTheme.colorScheme.onSurface
-        )
-      }
+    LaunchedEffect(Unit) {
+      screenModel.onEvent(DetailsEvent.LoadDetails(photo, id, color, url, altDescription))
     }
-    state.photo?.let { photo ->
-      BottomSheetScaffold(
-        scaffoldState = bottomSheetScaffoldState,
-        sheetShape =
-          MaterialTheme.shapes.medium.copy(
-            topStart = CornerSize(4),
-            topEnd = CornerSize(4),
-            bottomEnd = CornerSize(0),
-            bottomStart = CornerSize(0)
-          ),
-        sheetSwipeEnabled = true,
-        sheetContainerColor = MaterialTheme.colorScheme.surface,
-        sheetContentColor = MaterialTheme.colorScheme.onSurface,
-        sheetContent = {
+    BottomSheetScaffold(
+      scaffoldState = bottomSheetScaffoldState,
+      sheetShape =
+        MaterialTheme.shapes.medium.copy(
+          topStart = CornerSize(4),
+          topEnd = CornerSize(4),
+          bottomEnd = CornerSize(0),
+          bottomStart = CornerSize(0)
+        ),
+      sheetSwipeEnabled = true,
+      sheetContainerColor = MaterialTheme.colorScheme.surface,
+      sheetContentColor = MaterialTheme.colorScheme.onSurface,
+      sheetContent = {
+        if (state.isLoading) {
+          Column(
+            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+          ) {
+            CircularProgressIndicator(
+              modifier = Modifier.size(24.dp).align(Alignment.CenterHorizontally),
+              color = MaterialTheme.colorScheme.onSurface
+            )
+          }
+        }
+        state.photo?.let { photo ->
           PhotoDetailsContainer(
             photo = photo,
             isFavourite = state.isFavourite,
@@ -164,33 +172,33 @@ data class DetailsScreen(val id: String) : Screen {
             onDownloadClicked = { screenModel.onEvent(DetailsEvent.DownloadPhoto) },
             onApplyClicked = { screenModel.onEvent(DetailsEvent.ShowApplyWallpaperDialog) }
           )
-        },
-        sheetPeekHeight = 180.dp,
-        containerColor = MaterialTheme.colorScheme.surface,
-        contentColor = MaterialTheme.colorScheme.onSurface,
-        sheetDragHandle = {
-          Surface(
-            modifier = Modifier.padding(top = 12.dp, bottom = 12.dp),
-            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
-            shape = CircleShape
-          ) {
-            Box(modifier = Modifier.size(height = 4.dp, width = 32.dp))
-          }
-        },
-        sheetShadowElevation = 16.dp,
-      ) {
-        PhotoContainer(photo = photo)
-        BackButton(
-          modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
-          onBackPressed = { navigator.pop() }
-        )
-
-        if (state.shouldShowApplyWallpaperDialog) {
-          ApplyWallpaperDialog(
-            onActionSelected = { screenModel.onEvent(DetailsEvent.ApplyAsWallpaper(it)) },
-            onDialogDismiss = { screenModel.onEvent(DetailsEvent.DismissApplyWallpaperDialog) }
-          )
         }
+      },
+      sheetPeekHeight = 180.dp,
+      containerColor = MaterialTheme.colorScheme.surface,
+      contentColor = MaterialTheme.colorScheme.onSurface,
+      sheetDragHandle = {
+        Surface(
+          modifier = Modifier.padding(top = 12.dp, bottom = 12.dp),
+          color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f),
+          shape = CircleShape
+        ) {
+          Box(modifier = Modifier.size(height = 4.dp, width = 32.dp))
+        }
+      },
+      sheetShadowElevation = 16.dp,
+    ) {
+      PhotoContainer(photo = photo, color = color, url = url, altDescription = altDescription)
+      BackButton(
+        modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
+        onBackPressed = { navigator.pop() }
+      )
+
+      if (state.shouldShowApplyWallpaperDialog) {
+        ApplyWallpaperDialog(
+          onActionSelected = { screenModel.onEvent(DetailsEvent.ApplyAsWallpaper(it)) },
+          onDialogDismiss = { screenModel.onEvent(DetailsEvent.DismissApplyWallpaperDialog) }
+        )
       }
     }
 
@@ -201,12 +209,25 @@ data class DetailsScreen(val id: String) : Screen {
   }
 
   @Composable
-  fun PhotoContainer(modifier: Modifier = Modifier, photo: Photo) {
+  fun PhotoContainer(
+    modifier: Modifier = Modifier,
+    photo: Photo?,
+    color: String?,
+    url: String?,
+    altDescription: String?
+  ) {
     Column(
-      modifier = modifier.fillMaxSize().background(color = Color(parseColor(photo.color))),
+      modifier =
+        modifier
+          .fillMaxSize()
+          .background(color = Color(parseColor(photo?.color ?: color ?: "#000000"))),
       verticalArrangement = Arrangement.Center
     ) {
-      photo.urls?.regular?.let { ImageViewComponent(it, photo.altDescription) }
+      if (photo != null) {
+        photo.urls?.regular?.let { ImageViewComponent(it, photo.altDescription) }
+      } else {
+        url?.let { ImageViewComponent(it, altDescription) }
+      }
     }
   }
 

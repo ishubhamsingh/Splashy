@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
+import cafe.adriel.voyager.transitions.SlideTransition
 import dev.ishubhamsingh.splashy.core.navigation.TopLevelScreen
 import dev.ishubhamsingh.splashy.core.presentation.SplashyTheme
 
@@ -31,6 +32,8 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
       screen = TopLevelScreen(),
       disposeBehavior =
         NavigatorDisposeBehavior(disposeNestedNavigators = false, disposeSteps = true)
-    )
+    ) {
+      SlideTransition(it)
+    }
   }
 }

@@ -57,6 +57,7 @@ import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.features.favourites.FavouritesScreenModel
+import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.TopicFilter
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
 
@@ -103,7 +104,22 @@ object FavouritesTab : Tab {
           isPaginating = false,
           favourites = state.filteredFavourites,
           onLoadMore = {},
-          onItemSelected = { navigator?.push(DetailsScreen(it)) },
+          onItemSelected = {
+            photo: Photo?,
+            id: String?,
+            color: String?,
+            url: String?,
+            altDescription: String? ->
+            navigator?.push(
+              DetailsScreen(
+                photo = photo,
+                id = id,
+                color = color,
+                url = url,
+                altDescription = altDescription
+              )
+            )
+          },
           error = "",
         )
       }

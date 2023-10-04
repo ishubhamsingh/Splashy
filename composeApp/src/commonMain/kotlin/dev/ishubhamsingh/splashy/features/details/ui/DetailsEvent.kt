@@ -17,9 +17,16 @@ package dev.ishubhamsingh.splashy.features.details.ui
 
 import dev.ishubhamsingh.splashy.core.domain.ScreenEvent
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
+import dev.ishubhamsingh.splashy.models.Photo
 
 sealed class DetailsEvent : ScreenEvent {
-  data class LoadDetails(val id: String) : DetailsEvent()
+  data class LoadDetails(
+    val photo: Photo?,
+    val id: String?,
+    val color: String?,
+    val url: String?,
+    val altDescription: String?
+  ) : DetailsEvent()
 
   data object DownloadPhoto : DetailsEvent()
 

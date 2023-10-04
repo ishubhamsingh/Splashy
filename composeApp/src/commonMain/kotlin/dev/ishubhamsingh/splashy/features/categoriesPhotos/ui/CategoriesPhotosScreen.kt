@@ -42,6 +42,7 @@ import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.CategoriesPhotosScreenModel
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.goBack
+import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.ui.components.GoBack
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
 
@@ -97,7 +98,22 @@ data class CategoriesPhotosScreen(
             screenModel.onEvent(CategoriesPhotosEvent.LoadMore)
           }
         },
-        onItemSelected = { navigator.push(DetailsScreen(it)) },
+        onItemSelected = {
+          photo: Photo?,
+          id: String?,
+          color: String?,
+          url: String?,
+          altDescription: String? ->
+          navigator.push(
+            DetailsScreen(
+              photo = photo,
+              id = id,
+              color = color,
+              url = url,
+              altDescription = altDescription
+            )
+          )
+        },
         error = state.networkError,
         shouldShowSearch = false,
         modifier = Modifier.padding(paddingValues)

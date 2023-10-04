@@ -38,6 +38,7 @@ import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.features.home.HomeScreenModel
+import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
 
 /** Created by Shubham Singh on 29/09/23. */
@@ -80,7 +81,22 @@ object HomeTab : Tab {
           screenModel.onEvent(HomeEvent.LoadMore)
         }
       },
-      onItemSelected = { navigator?.push(DetailsScreen(it)) },
+      onItemSelected = {
+        photo: Photo?,
+        id: String?,
+        color: String?,
+        url: String?,
+        altDescription: String? ->
+        navigator?.push(
+          DetailsScreen(
+            photo = photo,
+            id = id,
+            color = color,
+            url = url,
+            altDescription = altDescription
+          )
+        )
+      },
       error = state.networkError,
       shouldShowSearch = true
     )

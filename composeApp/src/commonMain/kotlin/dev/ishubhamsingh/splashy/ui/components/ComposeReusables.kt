@@ -124,7 +124,7 @@ fun PhotoGridLayout(
   photos: ArrayList<Photo> = arrayListOf(),
   favourites: ArrayList<Favourite> = arrayListOf(),
   onLoadMore: () -> Unit,
-  onItemSelected: (String) -> Unit,
+  onItemSelected: (Photo?, String?, String?, String?, String?) -> Unit,
   error: String?,
   shouldShowSearch: Boolean = false,
   modifier: Modifier = Modifier
@@ -156,23 +156,24 @@ fun PhotoGridLayout(
           if (favourites.isNotEmpty()) {
             items(items = favourites) {
               PhotoCardItem(
-                onItemSelected,
-                it.id,
-                it.color,
-                it.url,
-                it.altDescription,
+                onItemSelected = onItemSelected,
+                id = it.id,
+                color = it.color,
+                url = it.url,
+                altDescription = it.altDescription,
                 modifier = Modifier.fillMaxWidth()
               )
             }
           } else if (photos.isNotEmpty()) {
             items(items = photos) {
               PhotoCardItem(
-                onItemSelected,
-                it.id,
-                it.color,
-                it.urls?.regular,
-                it.altDescription,
-                modifier = Modifier.fillMaxWidth()
+                onItemSelected = onItemSelected,
+                id = it.id,
+                color = it.color,
+                url = it.urls?.regular,
+                altDescription = it.altDescription,
+                modifier = Modifier.fillMaxWidth(),
+                photo = it
               )
             }
           } else if (error.isNullOrEmpty().not()) {
@@ -213,11 +214,12 @@ fun PhotoGridLayout(
 
 @Composable
 fun PhotoCardItem(
-  onItemSelected: (String) -> Unit,
+  onItemSelected: (Photo?, String?, String?, String?, String?) -> Unit,
   id: String,
   color: String?,
   url: String?,
   altDescription: String?,
+  photo: Photo? = null,
   heightDp: Dp = 320.dp,
   widthDp: Dp = 200.dp,
   padding: Dp = 4.dp,
@@ -246,7 +248,7 @@ fun PhotoCardItem(
             else MaterialTheme.colorScheme.surface,
           shape = RoundedCornerShape(16.dp)
         )
-        .clickable { onItemSelected.invoke(id) }
+        .clickable { onItemSelected.invoke(photo, id, color, url, altDescription) }
   ) {
     if (shouldShowOverlay) {
       val gradient =

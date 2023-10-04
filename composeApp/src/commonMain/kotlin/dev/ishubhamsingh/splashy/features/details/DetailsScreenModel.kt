@@ -65,9 +65,19 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
         checkPermission { getDownloadUrl() }
       }
       is DetailsEvent.LoadDetails -> {
-        _state.update { detailsState -> detailsState.copy(id = event.id) }
+        _state.update { detailsState ->
+          detailsState.copy(
+            id = event.id,
+            photo = event.photo,
+            url = event.url,
+            color = event.color,
+            altDescription = event.altDescription
+          )
+        }
         isFavourite()
-        fetchPhotoDetails()
+        if (event.photo == null) {
+          fetchPhotoDetails()
+        }
       }
       DetailsEvent.AddFavourite -> addFavourite()
       DetailsEvent.RemoveFavourite -> removeFavourite()
