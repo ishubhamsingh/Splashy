@@ -91,8 +91,10 @@ import dev.ishubhamsingh.splashy.core.utils.getFormattedDateTime
 import dev.ishubhamsingh.splashy.core.utils.getPlatform
 import dev.ishubhamsingh.splashy.features.details.DetailsScreenModel
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
+import dev.ishubhamsingh.splashy.goBack
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.ui.components.BackButton
+import dev.ishubhamsingh.splashy.ui.components.GoBack
 import dev.ishubhamsingh.splashy.ui.components.ImageViewComponent
 import dev.ishubhamsingh.splashy.ui.components.parseColor
 import dev.ishubhamsingh.splashy.ui.theme.getLatoBold
@@ -190,6 +192,11 @@ data class DetailsScreen(val id: String) : Screen {
           )
         }
       }
+    }
+
+    if (goBack.value) {
+      GoBack(navigator)
+      goBack.value = false
     }
   }
 

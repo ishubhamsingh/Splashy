@@ -16,10 +16,13 @@
 package dev.ishubhamsingh.splashy
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
 import dev.ishubhamsingh.splashy.core.navigation.TopLevelScreen
 import dev.ishubhamsingh.splashy.core.presentation.SplashyTheme
+
+val goBack = mutableStateOf(false)
 
 @Composable
 fun App(darkTheme: Boolean, dynamicColor: Boolean) {

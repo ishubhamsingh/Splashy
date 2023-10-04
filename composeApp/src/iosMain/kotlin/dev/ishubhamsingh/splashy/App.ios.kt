@@ -24,3 +24,7 @@ fun MainViewController(): UIViewController {
     App(darkTheme = isSystemInDarkTheme(), dynamicColor = false)
   }
 }
+
+fun OnBackGesture() {
+  goBack.value = true
+}

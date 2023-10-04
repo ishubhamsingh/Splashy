@@ -82,6 +82,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.navigator.Navigator
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.ArrowIosBack
@@ -93,6 +94,7 @@ import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
+import io.github.aakira.napier.Napier
 import io.kamel.core.config.KamelConfig
 import io.kamel.core.config.httpFetcher
 import io.kamel.core.config.takeFrom
@@ -578,4 +580,13 @@ fun parseColor(colorString: String): Int {
     return color.toInt()
   }
   throw IllegalArgumentException("Unknown color")
+}
+
+@Composable
+fun GoBack(navigator: Navigator?) {
+  if (navigator?.canPop == true) {
+    navigator.pop()
+  } else {
+    Napier.d("Can't go back")
+  }
 }

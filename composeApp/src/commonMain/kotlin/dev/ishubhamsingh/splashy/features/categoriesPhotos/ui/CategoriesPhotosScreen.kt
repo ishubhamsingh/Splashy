@@ -41,6 +41,8 @@ import compose.icons.evaicons.outline.ArrowIosBack
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.CategoriesPhotosScreenModel
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
+import dev.ishubhamsingh.splashy.goBack
+import dev.ishubhamsingh.splashy.ui.components.GoBack
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
 
 data class CategoriesPhotosScreen(
@@ -100,6 +102,11 @@ data class CategoriesPhotosScreen(
         shouldShowSearch = false,
         modifier = Modifier.padding(paddingValues)
       )
+    }
+
+    if (goBack.value) {
+      GoBack(navigator)
+      goBack.value = false
     }
   }
 }
