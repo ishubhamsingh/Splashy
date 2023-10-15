@@ -167,6 +167,7 @@ data class DetailsScreen(
             isFavourite = state.isFavourite,
             isDownloading = state.isDownloading,
             isApplying = state.isApplying,
+            downloadProgress = state.downloadProgress,
             onSetFavourite = { screenModel.onEvent(DetailsEvent.AddFavourite) },
             onRemoveFavourite = { screenModel.onEvent(DetailsEvent.RemoveFavourite) },
             onDownloadClicked = { screenModel.onEvent(DetailsEvent.DownloadPhoto) },
@@ -237,6 +238,7 @@ data class DetailsScreen(
     isFavourite: Boolean,
     isDownloading: Boolean,
     isApplying: Boolean,
+    downloadProgress: Int = 0,
     onSetFavourite: () -> Unit,
     onRemoveFavourite: () -> Unit,
     onDownloadClicked: () -> Unit,
@@ -256,6 +258,7 @@ data class DetailsScreen(
       SheetActionRow(
         isDownloading = isDownloading,
         isApplying = isApplying,
+        downloadProgress = downloadProgress,
         onDownloadClicked = onDownloadClicked,
         onApplyClicked = onApplyClicked
       )
@@ -330,6 +333,7 @@ data class DetailsScreen(
   fun SheetActionRow(
     isDownloading: Boolean,
     isApplying: Boolean,
+    downloadProgress: Int = 0,
     onDownloadClicked: () -> Unit,
     onApplyClicked: () -> Unit
   ) {
@@ -372,8 +376,10 @@ data class DetailsScreen(
           AnimatedVisibility(visible = isDownloading) {
             CircularProgressIndicator(
               modifier = Modifier.size(16.dp),
-              color = MaterialTheme.colorScheme.onSurface,
-              strokeWidth = 2.dp
+              color = MaterialTheme.colorScheme.primary,
+              trackColor = MaterialTheme.colorScheme.primaryContainer,
+              strokeWidth = 2.dp,
+              progress = downloadProgress / 100f
             )
           }
           Spacer(modifier = Modifier.size(8.dp))

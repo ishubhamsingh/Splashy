@@ -162,7 +162,11 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
                   isSaveToFile = isSaveToFile,
                   shouldOpenFile = shouldOpenFile,
                   wallpaperScreenType = wallpaperScreenType
-                )
+                ) { downloadedSize, totalSize ->
+                  _state.update { detailsState ->
+                    detailsState.copy(downloadProgress = (downloadedSize * 100 / totalSize).toInt())
+                  }
+                }
               }
             }
           }
@@ -175,11 +179,14 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
     url: String,
     isSaveToFile: Boolean,
     shouldOpenFile: Boolean,
-    wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION
+    wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION,
+    onDownload: (Long, Long) -> Unit
   ) {
     var byteArray: ByteArray? = null
     coroutineScope
-      .launch(Dispatchers.IO) { byteArray = unsplashApi.downloadFile(url).toByteArray() }
+      .launch(Dispatchers.IO) {
+        byteArray = unsplashApi.downloadFile(url, onDownload).toByteArray()
+      }
       .invokeOnCompletion {
         if (isSaveToFile) {
           saveToFile(byteArray, shouldOpenFile)

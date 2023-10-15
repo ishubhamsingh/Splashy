@@ -29,5 +29,6 @@ data class DetailsState(
   val isApplying: Boolean = false,
   val networkError: String? = null,
   val snackBarMessage: String? = null,
-  val shouldShowApplyWallpaperDialog: Boolean = false
+  val shouldShowApplyWallpaperDialog: Boolean = false,
+  val downloadProgress: Int = 0
 )
