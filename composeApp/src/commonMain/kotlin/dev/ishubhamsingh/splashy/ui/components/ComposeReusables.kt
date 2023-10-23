@@ -95,6 +95,7 @@ import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
 import io.github.aakira.napier.Napier
+import io.kamel.core.config.DefaultHttpCacheSize
 import io.kamel.core.config.KamelConfig
 import io.kamel.core.config.httpFetcher
 import io.kamel.core.config.takeFrom
@@ -378,6 +379,7 @@ fun getKamelConfig() = KamelConfig {
   imageBitmapDecoder()
 
   httpFetcher {
+    httpCache(DefaultHttpCacheSize)
     defaultRequest { header("Cache-Control", "max-age=31536000") }
 
     CacheControl.MaxAge(maxAgeSeconds = 31536)
