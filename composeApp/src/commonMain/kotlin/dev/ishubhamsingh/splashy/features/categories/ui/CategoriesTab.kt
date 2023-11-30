@@ -62,6 +62,7 @@ import dev.ishubhamsingh.splashy.core.utils.getNonPremiumCollections
 import dev.ishubhamsingh.splashy.features.categories.CategoriesScreenModel
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoriesPhotosScreen
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
+import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.models.CollectionItem
 import dev.ishubhamsingh.splashy.models.Topic
 import dev.ishubhamsingh.splashy.ui.components.CategoriesCardItem
@@ -83,13 +84,13 @@ object CategoriesTab : Tab {
   @OptIn(ExperimentalMaterialApi::class)
   @Composable
   override fun Content() {
+    val screenModel = getScreenModel<CategoriesScreenModel>()
     UpdateSystemBars(
       statusBarColor = Color.Transparent,
       navigationBarColor = Color.Transparent,
-      isDarkTheme = isSystemInDarkTheme()
+      isDarkTheme = isDarkThemeState.value
     )
     val navigator = LocalNavigator.currentOrThrow.parent
-    val screenModel = getScreenModel<CategoriesScreenModel>()
     val state by screenModel.state.collectAsState()
 
     val pullRefreshState =

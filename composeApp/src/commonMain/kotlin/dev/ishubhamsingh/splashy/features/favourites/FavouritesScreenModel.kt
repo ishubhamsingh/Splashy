@@ -19,6 +19,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
+import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesEvent
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesState
 import dev.ishubhamsingh.splashy.models.TopicFilter
@@ -30,7 +31,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /** Created by Shubham Singh on 12/08/23. */
-class FavouritesScreenModel(private val unsplashRepository: UnsplashRepository) : ScreenModel {
+class FavouritesScreenModel(
+  private val unsplashRepository: UnsplashRepository,
+  val settingsUtils: SettingsUtils
+) : ScreenModel {
 
   private val _state = MutableStateFlow(FavouritesState())
   val state = _state.asStateFlow()

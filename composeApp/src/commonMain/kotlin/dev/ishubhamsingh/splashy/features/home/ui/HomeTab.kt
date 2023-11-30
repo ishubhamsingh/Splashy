@@ -38,6 +38,7 @@ import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.features.home.HomeScreenModel
+import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
 
@@ -57,13 +58,13 @@ object HomeTab : Tab {
 
   @Composable
   override fun Content() {
+    val screenModel = getScreenModel<HomeScreenModel>()
     UpdateSystemBars(
       statusBarColor = Color.Transparent,
       navigationBarColor = Color.Transparent,
-      isDarkTheme = isSystemInDarkTheme()
+      isDarkTheme = isDarkThemeState.value
     )
     val navigator = LocalNavigator.currentOrThrow.parent
-    val screenModel = getScreenModel<HomeScreenModel>()
     val state by screenModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
 

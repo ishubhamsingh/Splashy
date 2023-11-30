@@ -19,6 +19,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
+import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
 import dev.ishubhamsingh.splashy.features.home.ui.HomeEvent
 import dev.ishubhamsingh.splashy.features.home.ui.HomeState
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class HomeScreenModel(private val unsplashRepository: UnsplashRepository) : ScreenModel {
+class HomeScreenModel(
+  private val unsplashRepository: UnsplashRepository,
+  val settingsUtils: SettingsUtils
+) : ScreenModel {
 
   private val _state = MutableStateFlow(HomeState())
   val state = _state.asStateFlow()

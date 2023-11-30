@@ -25,6 +25,7 @@ import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.core.network.api.UnsplashApi
 import dev.ishubhamsingh.splashy.core.utils.FileUtils
+import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
 import dev.ishubhamsingh.splashy.db.mappers.toFavourite
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsEvent
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsState
@@ -46,6 +47,7 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
   private val unsplashRepository: UnsplashRepository by inject()
   private val unsplashApi: UnsplashApi by inject()
   private val fileUtils: FileUtils by inject()
+  val settingsUtils: SettingsUtils by inject()
 
   private val _state = MutableStateFlow(DetailsState())
   val state = _state.asStateFlow()

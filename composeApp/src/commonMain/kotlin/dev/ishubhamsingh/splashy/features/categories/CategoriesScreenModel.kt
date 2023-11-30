@@ -19,6 +19,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
+import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
 import dev.ishubhamsingh.splashy.features.categories.ui.CategoriesEvent
 import dev.ishubhamsingh.splashy.features.categories.ui.CategoriesState
 import io.github.aakira.napier.Napier
@@ -28,7 +29,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /** Created by Shubham Singh on 30/08/23. */
-class CategoriesScreenModel(private val unsplashRepository: UnsplashRepository) : ScreenModel {
+class CategoriesScreenModel(
+  private val unsplashRepository: UnsplashRepository,
+  val settingsUtils: SettingsUtils
+) : ScreenModel {
 
   private val _state = MutableStateFlow(CategoriesState())
   val state = _state.asStateFlow()

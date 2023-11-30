@@ -42,6 +42,7 @@ import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.CategoriesPhotosScreenModel
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.goBack
+import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.ui.components.GoBack
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
@@ -55,13 +56,13 @@ data class CategoriesPhotosScreen(
   @OptIn(ExperimentalMaterial3Api::class)
   @Composable
   override fun Content() {
+    val screenModel = getScreenModel<CategoriesPhotosScreenModel>()
     UpdateSystemBars(
       statusBarColor = Color.Transparent,
       navigationBarColor = Color.Transparent,
-      isDarkTheme = isSystemInDarkTheme()
+      isDarkTheme = isDarkThemeState.value
     )
     val navigator = LocalNavigator.currentOrThrow
-    val screenModel = getScreenModel<CategoriesPhotosScreenModel>()
     val state by screenModel.state.collectAsState()
 
     LaunchedEffect(Unit) { screenModel.onEvent(CategoriesPhotosEvent.Load(id, categoryType)) }

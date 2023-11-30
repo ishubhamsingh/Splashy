@@ -28,7 +28,7 @@ lateinit var secretKeyProperties: Properties
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-  targetHierarchy.default()
+  applyDefaultHierarchyTemplate()
   val secretKeyPropertiesFile = rootProject.file("secrets.properties")
   secretKeyProperties =
     Properties().apply { secretKeyPropertiesFile.inputStream().use { secret -> load(secret) } }
@@ -65,6 +65,7 @@ kotlin {
         implementation(libs.kotlinx.serialization.json)
         implementation(libs.multiplatformSettings)
         implementation(libs.koin.core)
+        implementation(libs.koin.compose)
         implementation(libs.kamel.image)
         implementation(libs.kotlinx.datetime)
         implementation(libs.sqlDelight.coroutines.extensions)
@@ -74,6 +75,7 @@ kotlin {
         implementation(libs.voyager.transitions)
         implementation(libs.voyager.koin)
         implementation(libs.uri.kmp)
+        implementation(libs.stately.common)
       }
     }
 

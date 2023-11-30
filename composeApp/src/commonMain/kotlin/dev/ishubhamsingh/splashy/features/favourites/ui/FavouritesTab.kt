@@ -57,6 +57,7 @@ import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.features.favourites.FavouritesScreenModel
+import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.TopicFilter
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
@@ -77,13 +78,13 @@ object FavouritesTab : Tab {
 
   @Composable
   override fun Content() {
+    val screenModel = getScreenModel<FavouritesScreenModel>()
     UpdateSystemBars(
       statusBarColor = Color.Transparent,
       navigationBarColor = Color.Transparent,
-      isDarkTheme = isSystemInDarkTheme()
+      isDarkTheme = isDarkThemeState.value
     )
     val navigator = LocalNavigator.currentOrThrow.parent
-    val screenModel = getScreenModel<FavouritesScreenModel>()
     val state by screenModel.state.collectAsState()
 
     LaunchedEffect(Unit) { screenModel.onEvent(FavouritesEvent.LoadFavourites) }
