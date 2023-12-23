@@ -34,7 +34,7 @@ class SettingsScreenModel(val settingsUtils: SettingsUtils) : ScreenModel {
   init {
     val currentTheme = settingsUtils.fetchInt(SettingsUtils.THEME, Theme.SYSTEM.value)
     val isMaterialYouEnabled =
-      settingsUtils.fetchBoolean(SettingsUtils.IS_MATERIAL_YOU_ENABLED, false)
+      settingsUtils.fetchBoolean(SettingsUtils.IS_MATERIAL_YOU_ENABLED, true)
 
     _state.update {
       it.copy(selectedTheme = currentTheme, isMaterialYouEnabled = isMaterialYouEnabled)

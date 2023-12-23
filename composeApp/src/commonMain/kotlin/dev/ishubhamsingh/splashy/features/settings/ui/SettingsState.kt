@@ -20,6 +20,6 @@ import dev.ishubhamsingh.splashy.features.settings.Theme
 /** Created by Shubham Singh on 24/11/23. */
 data class SettingsState(
   val selectedTheme: Int = Theme.SYSTEM.value,
-  val isMaterialYouEnabled: Boolean = false,
+  val isMaterialYouEnabled: Boolean = true,
   val showThemeSelectionDialog: Boolean = false
 )

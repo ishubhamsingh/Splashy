@@ -30,7 +30,7 @@ import org.koin.compose.koinInject
 val goBack = mutableStateOf(false)
 val selectedThemeState = mutableStateOf(Theme.SYSTEM.value)
 val isDarkThemeState = mutableStateOf(false)
-val isMaterialYouEnabledState = mutableStateOf(false)
+val isMaterialYouEnabledState = mutableStateOf(true)
 
 @Composable
 fun App(darkTheme: Boolean, dynamicColor: Boolean) {
@@ -39,7 +39,7 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
   LaunchedEffect(Unit) {
     selectedThemeState.value = settingsUtils.fetchInt(SettingsUtils.THEME, Theme.SYSTEM.value)
     isMaterialYouEnabledState.value =
-      settingsUtils.fetchBoolean(SettingsUtils.IS_MATERIAL_YOU_ENABLED, false)
+      settingsUtils.fetchBoolean(SettingsUtils.IS_MATERIAL_YOU_ENABLED, true)
   }
 
   SplashyTheme(
