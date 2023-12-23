@@ -50,7 +50,9 @@ import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.home.HomeScreenModel
 import dev.ishubhamsingh.splashy.features.settings.SettingsScreenModel
 import dev.ishubhamsingh.splashy.features.settings.Theme
+import dev.ishubhamsingh.splashy.goBack
 import dev.ishubhamsingh.splashy.isDarkThemeState
+import dev.ishubhamsingh.splashy.ui.components.GoBack
 import dev.ishubhamsingh.splashy.updateTheme
 
 class SettingsScreen : Screen {
@@ -98,6 +100,11 @@ class SettingsScreen : Screen {
           }
         }
       }
+    }
+
+    if (goBack.value) {
+      GoBack(navigator)
+      goBack.value = false
     }
   }
 
