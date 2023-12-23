@@ -32,8 +32,7 @@ import kotlinx.coroutines.launch
 class CategoriesPhotosScreenModel(
   private val unsplashRepository: UnsplashRepository,
   val settingsUtils: SettingsUtils
-) :
-  ScreenModel {
+) : ScreenModel {
 
   private val _state = MutableStateFlow(CategoriesPhotosState())
   val state = _state.asStateFlow()

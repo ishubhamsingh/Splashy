@@ -18,7 +18,6 @@ package dev.ishubhamsingh.splashy.core.di.components
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.core.network.UnsplashRepositoryImpl
 import dev.ishubhamsingh.splashy.core.network.api.UnsplashApi
-import dev.ishubhamsingh.splashy.core.utils.KeyValueStorage
 import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
 import dev.ishubhamsingh.splashy.core.utils.getHttpClient
 import dev.ishubhamsingh.splashy.db.createDatabase

@@ -16,7 +16,6 @@
 package dev.ishubhamsingh.splashy.features.settings.ui
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,15 +44,11 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.ArrowIosBack
-import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
-import dev.ishubhamsingh.splashy.features.home.HomeScreenModel
 import dev.ishubhamsingh.splashy.features.settings.SettingsScreenModel
-import dev.ishubhamsingh.splashy.features.settings.Theme
 import dev.ishubhamsingh.splashy.goBack
 import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.ui.components.GoBack
-import dev.ishubhamsingh.splashy.updateTheme
 
 class SettingsScreen : Screen {
 
@@ -91,9 +86,7 @@ class SettingsScreen : Screen {
       }
     ) { paddingValues ->
       Surface(modifier = Modifier.padding(paddingValues = paddingValues)) {
-        Column(
-          modifier = Modifier.fillMaxSize()
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
           ThemeSettings(state.value.isDarkTheme) {
             isDarkThemeState.value = it
             screenModel.onEvent(SettingsEvent.OnThemeChange(it))
@@ -109,23 +102,14 @@ class SettingsScreen : Screen {
   }
 
   @Composable
-  fun ThemeSettings(
-    isDarkTheme: Boolean,
-    onToggleTheme: (Boolean) -> Unit
-  ) {
+  fun ThemeSettings(isDarkTheme: Boolean, onToggleTheme: (Boolean) -> Unit) {
     Row(
-      modifier = Modifier
-        .padding(16.dp)
-        .fillMaxWidth(),
+      modifier = Modifier.padding(16.dp).fillMaxWidth(),
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.SpaceBetween
     ) {
       Text(text = "Dark Theme", style = MaterialTheme.typography.titleMedium)
-      Switch(
-        checked = isDarkTheme,
-        onCheckedChange = onToggleTheme
-      )
+      Switch(checked = isDarkTheme, onCheckedChange = onToggleTheme)
     }
   }
-
 }

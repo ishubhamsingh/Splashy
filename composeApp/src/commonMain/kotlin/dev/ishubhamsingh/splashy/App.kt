@@ -18,13 +18,11 @@ package dev.ishubhamsingh.splashy
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.NavigatorDisposeBehavior
 import cafe.adriel.voyager.transitions.SlideTransition
 import dev.ishubhamsingh.splashy.core.navigation.TopLevelScreen
 import dev.ishubhamsingh.splashy.core.presentation.SplashyTheme
-import dev.ishubhamsingh.splashy.core.utils.KeyValueStorage
 import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
 import dev.ishubhamsingh.splashy.features.settings.Theme
 import org.koin.compose.koinInject
@@ -36,9 +34,7 @@ val isDarkThemeState = mutableStateOf(false)
 fun App(darkTheme: Boolean, dynamicColor: Boolean) {
 
   val settingsUtils = koinInject<SettingsUtils>()
-  LaunchedEffect(Unit) {
-    isDarkThemeState.value = settingsUtils.isDarkTheme(darkTheme)
-  }
+  LaunchedEffect(Unit) { isDarkThemeState.value = settingsUtils.isDarkTheme(darkTheme) }
 
   SplashyTheme(darkTheme = isDarkThemeState.value, dynamicColor = dynamicColor) {
     Navigator(
@@ -52,10 +48,11 @@ fun App(darkTheme: Boolean, dynamicColor: Boolean) {
 }
 
 fun updateTheme(theme: Int, isSystemDarkTheme: Boolean, onThemeChanged: (Boolean) -> Unit) {
-  val isDarkTheme = if(theme == Theme.SYSTEM.value) {
-    isSystemDarkTheme
-  } else {
-    theme == Theme.DARK.value
-  }
+  val isDarkTheme =
+    if (theme == Theme.SYSTEM.value) {
+      isSystemDarkTheme
+    } else {
+      theme == Theme.DARK.value
+    }
   onThemeChanged(isDarkTheme)
 }

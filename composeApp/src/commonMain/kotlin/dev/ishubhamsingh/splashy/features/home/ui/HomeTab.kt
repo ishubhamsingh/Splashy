@@ -15,7 +15,6 @@
  */
 package dev.ishubhamsingh.splashy.features.home.ui
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
