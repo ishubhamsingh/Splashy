@@ -95,6 +95,7 @@ class SettingsUtils(private val settings: Settings = Settings()) : KeyValueStora
 
   companion object {
     const val THEME = "theme"
+    const val IS_MATERIAL_YOU_ENABLED = "is_material_you_enabled"
   }
 
   fun isDarkTheme(isSystemDarkTheme: Boolean): Boolean {

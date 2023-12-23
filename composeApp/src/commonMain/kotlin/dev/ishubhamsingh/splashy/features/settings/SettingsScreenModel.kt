@@ -19,6 +19,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
 import dev.ishubhamsingh.splashy.features.settings.ui.SettingsEvent
 import dev.ishubhamsingh.splashy.features.settings.ui.SettingsState
+import dev.ishubhamsingh.splashy.isMaterialYouEnabledState
+import dev.ishubhamsingh.splashy.selectedThemeState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -31,20 +33,48 @@ class SettingsScreenModel(val settingsUtils: SettingsUtils) : ScreenModel {
 
   init {
     val currentTheme = settingsUtils.fetchInt(SettingsUtils.THEME, Theme.SYSTEM.value)
-    _state.update { it.copy(theme = currentTheme, isDarkTheme = currentTheme == Theme.DARK.value) }
+    val isMaterialYouEnabled =
+      settingsUtils.fetchBoolean(SettingsUtils.IS_MATERIAL_YOU_ENABLED, false)
+
+    _state.update {
+      it.copy(selectedTheme = currentTheme, isMaterialYouEnabled = isMaterialYouEnabled)
+    }
   }
 
   fun onEvent(event: SettingsEvent) {
     when (event) {
       is SettingsEvent.OnThemeChange -> {
-        settingsUtils.storeInt(
-          SettingsUtils.THEME,
-          if (event.isDarkTheme) Theme.DARK.value else Theme.LIGHT.value
+        settingsUtils.storeInt(SettingsUtils.THEME, event.selectedTheme)
+        _state.update {
+          it.copy(
+            selectedTheme = event.selectedTheme,
+          )
+        }
+        selectedThemeState.value = event.selectedTheme
+      }
+      is SettingsEvent.OnMaterialYouToggle -> {
+        settingsUtils.storeBoolean(
+          SettingsUtils.IS_MATERIAL_YOU_ENABLED,
+          event.isMaterialYouEnabled
         )
         _state.update {
           it.copy(
-            theme = if (event.isDarkTheme) Theme.DARK.value else Theme.LIGHT.value,
-            isDarkTheme = event.isDarkTheme
+            isMaterialYouEnabled = event.isMaterialYouEnabled,
+          )
+        }
+        isMaterialYouEnabledState.value = event.isMaterialYouEnabled
+      }
+      SettingsEvent.ShowThemeSelectionDialog -> {
+        _state.update {
+          it.copy(
+            showThemeSelectionDialog = true,
+          )
+        }
+      }
+      SettingsEvent.HideThemeSelectionDialog -> {
+        _state.update {
+          it.copy(
+            showThemeSelectionDialog = false,
           )
         }
       }

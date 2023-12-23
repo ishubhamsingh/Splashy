@@ -28,21 +28,36 @@ import dev.ishubhamsingh.splashy.features.settings.Theme
 import org.koin.compose.koinInject
 
 val goBack = mutableStateOf(false)
+val selectedThemeState = mutableStateOf(Theme.SYSTEM.value)
 val isDarkThemeState = mutableStateOf(false)
+val isMaterialYouEnabledState = mutableStateOf(false)
 
 @Composable
 fun App(darkTheme: Boolean, dynamicColor: Boolean) {
 
   val settingsUtils = koinInject<SettingsUtils>()
-  LaunchedEffect(Unit) { isDarkThemeState.value = settingsUtils.isDarkTheme(darkTheme) }
+  LaunchedEffect(Unit) {
+    selectedThemeState.value = settingsUtils.fetchInt(SettingsUtils.THEME, Theme.SYSTEM.value)
+    isMaterialYouEnabledState.value =
+      settingsUtils.fetchBoolean(SettingsUtils.IS_MATERIAL_YOU_ENABLED, false)
+  }
 
-  SplashyTheme(darkTheme = isDarkThemeState.value, dynamicColor = dynamicColor) {
+  SplashyTheme(
+    darkTheme = isDarkThemeState.value,
+    dynamicColor = if (dynamicColor) isMaterialYouEnabledState.value else false
+  ) {
     Navigator(
       screen = TopLevelScreen(),
       disposeBehavior =
         NavigatorDisposeBehavior(disposeNestedNavigators = false, disposeSteps = true)
     ) {
       SlideTransition(it)
+    }
+  }
+
+  LaunchedEffect(selectedThemeState.value) {
+    updateTheme(selectedThemeState.value, darkTheme) { isDarkTheme ->
+      isDarkThemeState.value = isDarkTheme
     }
   }
 }

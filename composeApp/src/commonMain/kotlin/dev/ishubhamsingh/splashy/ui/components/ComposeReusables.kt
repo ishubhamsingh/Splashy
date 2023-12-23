@@ -434,10 +434,7 @@ fun BackButton(modifier: Modifier = Modifier, onBackPressed: () -> Unit) {
       modifier
         .padding(16.dp)
         .size(48.dp)
-        .background(
-          color = MaterialTheme.colorScheme.surfaceVariant,
-          shape = CircleShape
-        ),
+        .background(color = MaterialTheme.colorScheme.surfaceVariant, shape = CircleShape),
     contentAlignment = Alignment.Center
   ) {
     Icon(

@@ -19,12 +19,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -35,8 +41,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -44,11 +53,15 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.ArrowIosBack
+import dev.ishubhamsingh.splashy.core.utils.Platform
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
+import dev.ishubhamsingh.splashy.core.utils.getPlatform
 import dev.ishubhamsingh.splashy.features.settings.SettingsScreenModel
+import dev.ishubhamsingh.splashy.features.settings.Theme
 import dev.ishubhamsingh.splashy.goBack
 import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.ui.components.GoBack
+import dev.ishubhamsingh.splashy.ui.theme.getLatoBold
 
 class SettingsScreen : Screen {
 
@@ -87,12 +100,27 @@ class SettingsScreen : Screen {
     ) { paddingValues ->
       Surface(modifier = Modifier.padding(paddingValues = paddingValues)) {
         Column(modifier = Modifier.fillMaxSize()) {
-          ThemeSettings(state.value.isDarkTheme) {
-            isDarkThemeState.value = it
-            screenModel.onEvent(SettingsEvent.OnThemeChange(it))
+          ThemeSettings(
+            selectedTheme = state.value.selectedTheme,
+            onShowThemeSelectionDialog = {
+              screenModel.onEvent(SettingsEvent.ShowThemeSelectionDialog)
+            }
+          )
+          if (getPlatform() == Platform.Android) {
+            MaterialYouSettings(isMaterialYouEnabled = state.value.isMaterialYouEnabled) {
+              screenModel.onEvent(SettingsEvent.OnMaterialYouToggle(it))
+            }
           }
         }
       }
+    }
+
+    if (state.value.showThemeSelectionDialog) {
+      ThemeSelectionDialog(
+        selectedTheme = state.value.selectedTheme,
+        onThemeSelected = { screenModel.onEvent(SettingsEvent.OnThemeChange(it)) },
+        onDismiss = { screenModel.onEvent(SettingsEvent.HideThemeSelectionDialog) }
+      )
     }
 
     if (goBack.value) {
@@ -102,14 +130,108 @@ class SettingsScreen : Screen {
   }
 
   @Composable
-  fun ThemeSettings(isDarkTheme: Boolean, onToggleTheme: (Boolean) -> Unit) {
+  fun ThemeSettings(selectedTheme: Int, onShowThemeSelectionDialog: () -> Unit) {
+    val themeSubTitle =
+      when (selectedTheme) {
+        Theme.SYSTEM.value -> "System"
+        Theme.LIGHT.value -> "Light"
+        Theme.DARK.value -> "Dark"
+        else -> "System"
+      }
+    Column(
+      modifier = Modifier.padding(16.dp).fillMaxWidth().clickable { onShowThemeSelectionDialog() },
+      verticalArrangement = Arrangement.spacedBy(4.dp),
+      horizontalAlignment = Alignment.Start
+    ) {
+      Text(text = "Select Theme", style = MaterialTheme.typography.titleLarge)
+      Text(
+        text = themeSubTitle,
+        style =
+          MaterialTheme.typography.titleMedium.copy(
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+          )
+      )
+    }
+  }
+
+  @Composable
+  fun MaterialYouSettings(isMaterialYouEnabled: Boolean, onToggleMaterialYou: (Boolean) -> Unit) {
     Row(
       modifier = Modifier.padding(16.dp).fillMaxWidth(),
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.SpaceBetween
     ) {
-      Text(text = "Dark Theme", style = MaterialTheme.typography.titleMedium)
-      Switch(checked = isDarkTheme, onCheckedChange = onToggleTheme)
+      Column(
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.Start
+      ) {
+        Text(text = "Use Material You", style = MaterialTheme.typography.titleLarge)
+        Text(
+          text = "Apply wallpaper based colors",
+          style =
+            MaterialTheme.typography.titleMedium.copy(
+              color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+        )
+      }
+      Switch(checked = isMaterialYouEnabled, onCheckedChange = onToggleMaterialYou)
+    }
+  }
+
+  @Composable
+  fun ThemeSelectionDialog(
+    selectedTheme: Int,
+    onThemeSelected: (Int) -> Unit,
+    onDismiss: () -> Unit
+  ) {
+    Dialog(onDismissRequest = onDismiss) {
+      ElevatedCard(
+        shape = RoundedCornerShape(12.dp),
+        colors =
+          CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+          )
+      ) {
+        Column(
+          modifier = Modifier.padding(16.dp).fillMaxWidth(),
+        ) {
+          Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "Select Theme",
+            fontSize = 24.sp,
+            fontFamily = getLatoBold(),
+            textAlign = TextAlign.Center
+          )
+          Spacer(modifier = Modifier.size(8.dp))
+          Theme.entries.forEach { theme ->
+            ThemeSelectionItem(
+              theme = theme,
+              isSelected = selectedTheme == theme.value,
+              onThemeSelected = {
+                onThemeSelected(theme.value)
+                onDismiss()
+              }
+            )
+          }
+        }
+      }
+    }
+  }
+
+  @Composable
+  fun ThemeSelectionItem(theme: Theme, isSelected: Boolean, onThemeSelected: () -> Unit) {
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      RadioButton(
+        selected = isSelected,
+        onClick = onThemeSelected,
+      )
+      Text(
+        text = theme.name.lowercase().replaceFirstChar { it.uppercase() },
+        style = MaterialTheme.typography.titleMedium,
+      )
     }
   }
 }

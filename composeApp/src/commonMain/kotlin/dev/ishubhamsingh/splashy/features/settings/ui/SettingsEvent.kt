@@ -19,5 +19,11 @@ import dev.ishubhamsingh.splashy.core.domain.ScreenEvent
 
 /** Created by Shubham Singh on 24/11/23. */
 sealed class SettingsEvent : ScreenEvent {
-  data class OnThemeChange(val isDarkTheme: Boolean) : SettingsEvent()
+  data class OnThemeChange(val selectedTheme: Int) : SettingsEvent()
+
+  data class OnMaterialYouToggle(val isMaterialYouEnabled: Boolean) : SettingsEvent()
+
+  data object ShowThemeSelectionDialog : SettingsEvent()
+
+  data object HideThemeSelectionDialog : SettingsEvent()
 }
