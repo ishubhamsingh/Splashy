@@ -435,7 +435,7 @@ fun BackButton(modifier: Modifier = Modifier, onBackPressed: () -> Unit) {
         .padding(16.dp)
         .size(48.dp)
         .background(
-          color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f),
+          color = MaterialTheme.colorScheme.surfaceVariant,
           shape = CircleShape
         ),
     contentAlignment = Alignment.Center
@@ -444,7 +444,7 @@ fun BackButton(modifier: Modifier = Modifier, onBackPressed: () -> Unit) {
       imageVector = EvaIcons.Outline.ArrowIosBack,
       contentDescription = "back",
       modifier = Modifier.padding(8.dp).size(24.dp).clickable { onBackPressed.invoke() },
-      tint = MaterialTheme.colorScheme.primary
+      tint = MaterialTheme.colorScheme.surfaceTint
     )
   }
 }
