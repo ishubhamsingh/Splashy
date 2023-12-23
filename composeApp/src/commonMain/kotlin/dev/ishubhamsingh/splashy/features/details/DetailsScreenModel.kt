@@ -16,7 +16,7 @@
 package dev.ishubhamsingh.splashy.features.details
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import dev.icerock.moko.permissions.DeniedAlwaysException
 import dev.icerock.moko.permissions.DeniedException
 import dev.icerock.moko.permissions.Permission
@@ -93,7 +93,7 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
   }
 
   private fun checkPermission(postPermissionGranted: () -> Unit) {
-    coroutineScope.launch {
+    screenModelScope.launch {
       try {
         if (fileUtils.shouldAskStorageRuntimePermission()) {
           permissionsController.providePermission(Permission.WRITE_STORAGE)
@@ -119,7 +119,7 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
   }
 
   private fun fetchPhotoDetails(id: String = state.value.id ?: "") {
-    coroutineScope.launch {
+    screenModelScope.launch {
       unsplashRepository.getPhotoDetails(id).collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Error -> {
@@ -146,7 +146,7 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
     wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION
   ) {
     photo?.links?.downloadLocation?.let {
-      coroutineScope.launch {
+      screenModelScope.launch {
         unsplashRepository.getDownloadUrl(it).collect { networkResult ->
           when (networkResult) {
             is NetworkResult.Error -> {
@@ -185,7 +185,7 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
     onDownload: (Long, Long) -> Unit
   ) {
     var byteArray: ByteArray? = null
-    coroutineScope
+    screenModelScope
       .launch(Dispatchers.IO) {
         byteArray = unsplashApi.downloadFile(url, onDownload).toByteArray()
       }
@@ -207,7 +207,7 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
   }
 
   private fun saveToFile(byteArray: ByteArray?, shouldOpenFile: Boolean) {
-    coroutineScope
+    screenModelScope
       .launch {
         byteArray?.let {
           fileUtils.saveByteArrayToFile(
@@ -229,7 +229,7 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
     byteArray: ByteArray?,
     wallpaperScreenType: WallpaperScreenType = WallpaperScreenType.OTHER_APPLICATION
   ) {
-    coroutineScope
+    screenModelScope
       .launch {
         byteArray?.let {
           fileUtils.applyWallpaper(byteArray, wallpaperScreenType, ::updateSnackBarMessage)
@@ -242,7 +242,7 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
 
   private fun addFavourite(favourite: Favourite? = state.value.photo?.toFavourite()) {
     favourite?.let {
-      coroutineScope.launch {
+      screenModelScope.launch {
         unsplashRepository.addFavourite(favourite).collect { result ->
           when (result) {
             is NetworkResult.Success -> {
@@ -257,7 +257,7 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
 
   private fun removeFavourite(id: String = state.value.id ?: "") {
     if (id.isEmpty()) return
-    coroutineScope.launch {
+    screenModelScope.launch {
       unsplashRepository.removeFavourite(id).collect { result ->
         when (result) {
           is NetworkResult.Success -> {
@@ -271,7 +271,7 @@ class DetailsScreenModel(val permissionsController: PermissionsController) :
 
   private fun isFavourite(id: String = state.value.id ?: "") {
     if (id.isEmpty()) return
-    coroutineScope.launch {
+    screenModelScope.launch {
       unsplashRepository.isFavourite(id).collect { result ->
         when (result) {
           is NetworkResult.Success -> {

@@ -16,7 +16,7 @@
 package dev.ishubhamsingh.splashy.features.favourites
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
@@ -57,7 +57,7 @@ class FavouritesScreenModel(
   private fun fetchFavourites() {
     cancelActiveJob()
     job =
-      coroutineScope.launch {
+      screenModelScope.launch {
         unsplashRepository.getFavourites().collect { result ->
           when (result) {
             is NetworkResult.Error -> {

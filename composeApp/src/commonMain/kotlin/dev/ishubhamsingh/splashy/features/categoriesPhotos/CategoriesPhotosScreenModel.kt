@@ -16,7 +16,7 @@
 package dev.ishubhamsingh.splashy.features.categoriesPhotos
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
@@ -100,7 +100,7 @@ class CategoriesPhotosScreenModel(
     page: Int = state.value.currentPage,
     loadingType: LoadingType
   ) {
-    coroutineScope.launch {
+    screenModelScope.launch {
       unsplashRepository.getPhotosByTopic(slug = id ?: "", page = page).collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Error -> {
@@ -143,7 +143,7 @@ class CategoriesPhotosScreenModel(
     page: Int = state.value.currentPage,
     loadingType: LoadingType
   ) {
-    coroutineScope.launch {
+    screenModelScope.launch {
       unsplashRepository.getPhotosByCollection(id = id ?: "", page = page).collect { networkResult
         ->
         when (networkResult) {
@@ -183,7 +183,7 @@ class CategoriesPhotosScreenModel(
   }
 
   private fun fetchTopicById(id: String? = state.value.id) {
-    coroutineScope.launch {
+    screenModelScope.launch {
       unsplashRepository.getTopicBySlug(slug = id ?: "").collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Error -> {}
@@ -201,7 +201,7 @@ class CategoriesPhotosScreenModel(
   }
 
   private fun fetchCollectionById(id: String? = state.value.id) {
-    coroutineScope.launch {
+    screenModelScope.launch {
       unsplashRepository.getCollectionById(id = id ?: "").collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Error -> {}

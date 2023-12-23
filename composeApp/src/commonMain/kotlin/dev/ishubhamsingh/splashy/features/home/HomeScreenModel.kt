@@ -16,7 +16,7 @@
 package dev.ishubhamsingh.splashy.features.home
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
@@ -97,7 +97,7 @@ class HomeScreenModel(
   ) {
     cancelActiveJob() // Cancel ongoing call before launching new
     job =
-      coroutineScope.launch(Dispatchers.IO) {
+      screenModelScope.launch(Dispatchers.IO) {
         unsplashRepository
           .searchPhotos(
             if (state.value.searchQuery.isNullOrEmpty()) "wallpaper" else state.value.searchQuery!!,
@@ -139,7 +139,7 @@ class HomeScreenModel(
   ) {
     cancelActiveJob() // Cancel ongoing call before launching new
     job =
-      coroutineScope.launch(Dispatchers.IO) {
+      screenModelScope.launch(Dispatchers.IO) {
         unsplashRepository.getPhotos(page, forceFetch).collect { networkResult ->
           when (networkResult) {
             is NetworkResult.Success -> {

@@ -16,7 +16,7 @@
 package dev.ishubhamsingh.splashy.features.categories
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import dev.ishubhamsingh.splashy.core.domain.NetworkResult
 import dev.ishubhamsingh.splashy.core.domain.UnsplashRepository
 import dev.ishubhamsingh.splashy.core.utils.SettingsUtils
@@ -52,7 +52,7 @@ class CategoriesScreenModel(
   }
 
   private fun fetchCollections() {
-    coroutineScope.launch {
+    screenModelScope.launch {
       unsplashRepository.getCollections(1).collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Error -> {
@@ -77,7 +77,7 @@ class CategoriesScreenModel(
   }
 
   private fun fetchTopics() {
-    coroutineScope.launch {
+    screenModelScope.launch {
       unsplashRepository.getTopics(1).collect { networkResult ->
         when (networkResult) {
           is NetworkResult.Error -> {
