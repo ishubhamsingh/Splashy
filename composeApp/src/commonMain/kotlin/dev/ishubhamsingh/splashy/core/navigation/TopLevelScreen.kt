@@ -20,6 +20,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
@@ -40,6 +41,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -67,6 +69,8 @@ import dev.ishubhamsingh.splashy.ui.components.getKamelConfig
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import dev.ishubhamsingh.splashy.ui.theme.getLobsterRegular
 import io.kamel.image.config.LocalKamelConfig
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
 /** Created by Shubham Singh on 29/09/23. */
 class TopLevelScreen : Screen {
@@ -159,18 +163,31 @@ class TopLevelScreen : Screen {
     )
   }
 
-  @OptIn(ExperimentalMaterial3Api::class)
+  @OptIn(ExperimentalMaterial3Api::class, ExperimentalResourceApi::class)
   @Composable
   private fun AppTopBar(navigator: Navigator? = LocalNavigator.currentOrThrow.parent) {
     Box {
       CenterAlignedTopAppBar(
         title = {
-          Text(
-            CommonRes.app_name,
-            fontFamily = getLobsterRegular(),
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Normal
-          )
+          Box {
+            Text(
+              CommonRes.app_name,
+              fontFamily = getLobsterRegular(),
+              fontSize = 32.sp,
+              fontWeight = FontWeight.Normal
+            )
+            if (isChristmasNewYearWeek()) {
+              Icon(
+                painterResource("hat.png"),
+                contentDescription = "cap",
+                tint = Color.Unspecified,
+                modifier =
+                  Modifier.size(24.dp)
+                    .padding(bottom = 4.dp, end = 4.dp)
+                    .scale(scaleX = -1.0f, scaleY = 1.0f)
+              )
+            }
+          }
         },
         colors =
           TopAppBarDefaults.centerAlignedTopAppBarColors(
