@@ -17,6 +17,7 @@ package dev.ishubhamsingh.splashy.core.navigation
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -39,6 +40,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,10 +57,12 @@ import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.Menu2
 import compose.icons.evaicons.outline.Person
 import dev.ishubhamsingh.splashy.core.presentation.CommonRes
+import dev.ishubhamsingh.splashy.core.utils.isChristmasNewYearWeek
 import dev.ishubhamsingh.splashy.features.categories.ui.CategoriesTab
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesTab
 import dev.ishubhamsingh.splashy.features.home.ui.HomeTab
 import dev.ishubhamsingh.splashy.features.settings.ui.SettingsScreen
+import dev.ishubhamsingh.splashy.ui.components.SnowFallComponent
 import dev.ishubhamsingh.splashy.ui.components.getKamelConfig
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import dev.ishubhamsingh.splashy.ui.theme.getLobsterRegular
@@ -158,38 +162,43 @@ class TopLevelScreen : Screen {
   @OptIn(ExperimentalMaterial3Api::class)
   @Composable
   private fun AppTopBar(navigator: Navigator? = LocalNavigator.currentOrThrow.parent) {
-    CenterAlignedTopAppBar(
-      title = {
-        Text(
-          CommonRes.app_name,
-          fontFamily = getLobsterRegular(),
-          fontSize = 32.sp,
-          fontWeight = FontWeight.Normal
-        )
-      },
-      colors =
-        TopAppBarDefaults.centerAlignedTopAppBarColors(
-          containerColor = MaterialTheme.colorScheme.surface,
-          titleContentColor = MaterialTheme.colorScheme.secondary,
-          actionIconContentColor = MaterialTheme.colorScheme.secondary,
-          navigationIconContentColor = MaterialTheme.colorScheme.secondary
-        ),
-      actions = {
-        Icon(
-          imageVector = EvaIcons.Outline.Menu2,
-          contentDescription = "settings",
-          tint = MaterialTheme.colorScheme.secondary,
-          modifier = Modifier.clickable { navigator?.push(SettingsScreen()) }
-        )
-      },
-      navigationIcon = {
-        Icon(
-          imageVector = EvaIcons.Outline.Person,
-          contentDescription = "profile",
-          tint = MaterialTheme.colorScheme.secondary
-        )
-      },
-      modifier = Modifier.padding(horizontal = 8.dp)
-    )
+    Box {
+      CenterAlignedTopAppBar(
+        title = {
+          Text(
+            CommonRes.app_name,
+            fontFamily = getLobsterRegular(),
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Normal
+          )
+        },
+        colors =
+          TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent,
+            titleContentColor = MaterialTheme.colorScheme.secondary,
+            actionIconContentColor = MaterialTheme.colorScheme.secondary,
+            navigationIconContentColor = MaterialTheme.colorScheme.secondary
+          ),
+        actions = {
+          Icon(
+            imageVector = EvaIcons.Outline.Menu2,
+            contentDescription = "settings",
+            tint = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.clickable { navigator?.push(SettingsScreen()) }
+          )
+        },
+        navigationIcon = {
+          Icon(
+            imageVector = EvaIcons.Outline.Person,
+            contentDescription = "profile",
+            tint = MaterialTheme.colorScheme.secondary
+          )
+        },
+        modifier = Modifier.padding(horizontal = 8.dp)
+      )
+      if (isChristmasNewYearWeek()) {
+        SnowFallComponent()
+      }
+    }
   }
 }

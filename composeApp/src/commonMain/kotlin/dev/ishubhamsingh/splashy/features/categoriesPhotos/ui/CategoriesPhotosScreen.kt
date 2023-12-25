@@ -16,6 +16,7 @@
 package dev.ishubhamsingh.splashy.features.categoriesPhotos.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,6 +40,7 @@ import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.ArrowIosBack
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
+import dev.ishubhamsingh.splashy.core.utils.isChristmasNewYearWeek
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.CategoriesPhotosScreenModel
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.goBack
@@ -45,6 +48,7 @@ import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.ui.components.GoBack
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
+import dev.ishubhamsingh.splashy.ui.components.SnowFallComponent
 
 data class CategoriesPhotosScreen(
   val id: String,
@@ -68,23 +72,29 @@ data class CategoriesPhotosScreen(
 
     Scaffold(
       topBar = {
-        TopAppBar(
-          title = {
-            Text(
-              text = name,
-              style = MaterialTheme.typography.titleLarge,
-              maxLines = 1,
-              overflow = TextOverflow.Ellipsis
-            )
-          },
-          navigationIcon = {
-            Icon(
-              imageVector = EvaIcons.Outline.ArrowIosBack,
-              contentDescription = "back",
-              modifier = Modifier.clickable { navigator.pop() }
-            )
+        Box {
+          TopAppBar(
+            title = {
+              Text(
+                text = name,
+                style = MaterialTheme.typography.titleLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+              )
+            },
+            navigationIcon = {
+              Icon(
+                imageVector = EvaIcons.Outline.ArrowIosBack,
+                contentDescription = "back",
+                modifier = Modifier.clickable { navigator.pop() }
+              )
+            },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+          )
+          if (isChristmasNewYearWeek()) {
+            SnowFallComponent()
           }
-        )
+        }
       }
     ) { paddingValues ->
       PhotoGridLayout(

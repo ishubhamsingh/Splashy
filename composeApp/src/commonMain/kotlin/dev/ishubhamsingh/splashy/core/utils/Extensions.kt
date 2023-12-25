@@ -16,6 +16,11 @@
 package dev.ishubhamsingh.splashy.core.utils
 
 import dev.ishubhamsingh.splashy.models.CollectionItem
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 inline fun <reified T : Enum<T>> Int.toEnum(): T? {
   return enumValues<T>().firstOrNull { it.ordinal == this }
@@ -25,4 +30,14 @@ fun ArrayList<CollectionItem>.getNonPremiumCollections(): ArrayList<CollectionIt
   val filteredList =
     this.filter { it.coverPhoto?.urls?.regular?.contains("plus.unsplash") == false }
   return ArrayList(filteredList)
+}
+
+// fun returns true if current device date is in between 22nd December and 5th January
+fun isChristmasNewYearWeek(): Boolean {
+  val currentMoment: Instant = Clock.System.now()
+  val datetimeInSystemZone: LocalDateTime =
+    currentMoment.toLocalDateTime(TimeZone.currentSystemDefault())
+  val currentMonth = datetimeInSystemZone.monthNumber
+  val currentDay = datetimeInSystemZone.dayOfMonth
+  return (currentMonth == 12 && currentDay >= 22) || (currentMonth == 1 && currentDay <= 5)
 }

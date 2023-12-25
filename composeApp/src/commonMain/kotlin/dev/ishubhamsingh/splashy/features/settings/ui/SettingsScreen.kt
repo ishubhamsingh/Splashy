@@ -17,6 +17,7 @@ package dev.ishubhamsingh.splashy.features.settings.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +37,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -56,11 +58,13 @@ import compose.icons.evaicons.outline.ArrowIosBack
 import dev.ishubhamsingh.splashy.core.utils.Platform
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.core.utils.getPlatform
+import dev.ishubhamsingh.splashy.core.utils.isChristmasNewYearWeek
 import dev.ishubhamsingh.splashy.features.settings.SettingsScreenModel
 import dev.ishubhamsingh.splashy.features.settings.Theme
 import dev.ishubhamsingh.splashy.goBack
 import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.ui.components.GoBack
+import dev.ishubhamsingh.splashy.ui.components.SnowFallComponent
 import dev.ishubhamsingh.splashy.ui.theme.getLatoBold
 
 class SettingsScreen : Screen {
@@ -79,23 +83,29 @@ class SettingsScreen : Screen {
     val state = screenModel.state.collectAsState()
     Scaffold(
       topBar = {
-        TopAppBar(
-          title = {
-            Text(
-              text = "Settings",
-              style = MaterialTheme.typography.titleLarge,
-              maxLines = 1,
-              overflow = TextOverflow.Ellipsis
-            )
-          },
-          navigationIcon = {
-            Icon(
-              imageVector = EvaIcons.Outline.ArrowIosBack,
-              contentDescription = "back",
-              modifier = Modifier.clickable { navigator.pop() }
-            )
+        Box {
+          TopAppBar(
+            title = {
+              Text(
+                text = "Settings",
+                style = MaterialTheme.typography.titleLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+              )
+            },
+            navigationIcon = {
+              Icon(
+                imageVector = EvaIcons.Outline.ArrowIosBack,
+                contentDescription = "back",
+                modifier = Modifier.clickable { navigator.pop() }
+              )
+            },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+          )
+          if (isChristmasNewYearWeek()) {
+            SnowFallComponent()
           }
-        )
+        }
       }
     ) { paddingValues ->
       Surface(modifier = Modifier.padding(paddingValues = paddingValues)) {

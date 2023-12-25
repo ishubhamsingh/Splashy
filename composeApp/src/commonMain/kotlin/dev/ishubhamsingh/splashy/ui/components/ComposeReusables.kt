@@ -16,11 +16,17 @@
 package dev.ishubhamsingh.splashy.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -71,9 +77,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
@@ -110,6 +118,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.http.CacheControl
 import io.ktor.http.isSuccess
+import kotlin.random.Random
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -591,3 +600,63 @@ fun GoBack(navigator: Navigator?) {
     Napier.d("Can't go back")
   }
 }
+
+@Composable
+fun SnowFallComponent(
+  height: Dp = 100.dp,
+) {
+  val snowflakes = remember { List(150) { getRandomSnowFlakes() } }
+  val infiniteTransition = rememberInfiniteTransition()
+
+  val offsetY by
+    infiniteTransition.animateFloat(
+      initialValue = 0f,
+      targetValue = 1000f,
+      animationSpec =
+        infiniteRepeatable(
+          animation = tween(15000, easing = LinearEasing),
+          repeatMode = RepeatMode.Restart
+        )
+    )
+
+  val color = MaterialTheme.colorScheme.onSurface
+
+  Canvas(
+    modifier =
+      Modifier.background(
+          color = Color.Transparent,
+        )
+        .fillMaxWidth()
+        .height(height)
+  ) {
+    snowflakes.forEach { drawSnowFlake(it, offsetY % size.height, color) }
+  }
+}
+
+private fun getRandomSnowFlakes(): Snowflake {
+  return Snowflake(
+    x = Random.nextFloat(),
+    y = Random.nextFloat() * 1000f,
+    radius = Random.nextFloat() * 3f + 2f,
+    speed = Random.nextFloat() * 1.2f + 1f,
+    alpha = Random.nextFloat()
+  )
+}
+
+fun DrawScope.drawSnowFlake(snowflake: Snowflake, offsetY: Float, color: Color) {
+  val newY = (snowflake.y + offsetY * snowflake.speed) % size.height
+  drawCircle(
+    color = color,
+    radius = snowflake.radius,
+    center = Offset(snowflake.x * size.width, newY),
+    alpha = snowflake.alpha
+  )
+}
+
+data class Snowflake(
+  var x: Float,
+  var y: Float,
+  var radius: Float,
+  var speed: Float,
+  var alpha: Float
+)
