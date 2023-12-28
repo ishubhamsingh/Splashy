@@ -16,7 +16,9 @@
 package dev.ishubhamsingh.splashy.core.utils
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +35,7 @@ import platform.Foundation.NSLocale
 import platform.Foundation.NSTimeZone
 import platform.Foundation.autoupdatingCurrentLocale
 import platform.Foundation.localTimeZone
+import platform.UIKit.UIScreen
 
 actual fun getHttpClient(): HttpClient {
   val httpClient =
@@ -72,6 +75,12 @@ actual fun getFormattedDateTime(timestamp: String, format: String): String {
 actual fun getPlatform(): Platform = Platform.iOS
 
 @OptIn(ExperimentalNativeApi::class) actual fun isDebug(): Boolean = NativePlatform.isDebugBinary
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+actual fun getScreenHeight(): Int {
+  return LocalWindowInfo.current.containerSize.height
+}
 
 @Composable
 actual fun UpdateSystemBars(

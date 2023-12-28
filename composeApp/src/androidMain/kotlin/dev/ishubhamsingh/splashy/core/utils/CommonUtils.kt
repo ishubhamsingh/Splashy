@@ -69,6 +69,11 @@ actual fun getPlatform(): Platform = Platform.Android
 actual fun isDebug(): Boolean = BuildConfig.DEBUG
 
 @Composable
+actual fun getScreenHeight(): Int {
+  return LocalContext.current.resources.displayMetrics.heightPixels
+}
+
+@Composable
 actual fun UpdateSystemBars(
   statusBarColor: Color,
   navigationBarColor: Color,

@@ -27,15 +27,18 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -89,6 +92,7 @@ import dev.ishubhamsingh.splashy.core.utils.Platform
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.core.utils.getFormattedDateTime
 import dev.ishubhamsingh.splashy.core.utils.getPlatform
+import dev.ishubhamsingh.splashy.core.utils.getScreenHeight
 import dev.ishubhamsingh.splashy.features.details.DetailsScreenModel
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 import dev.ishubhamsingh.splashy.goBack
@@ -130,6 +134,7 @@ data class DetailsScreen(
         bottomSheetState =
           rememberStandardBottomSheetState(initialValue = SheetValue.PartiallyExpanded)
       )
+    val heightPixels = getScreenHeight()
 
     BindEffect(screenModel.permissionsController)
 
@@ -162,17 +167,19 @@ data class DetailsScreen(
           }
         }
         state.photo?.let { photo ->
-          PhotoDetailsContainer(
-            photo = photo,
-            isFavourite = state.isFavourite,
-            isDownloading = state.isDownloading,
-            isApplying = state.isApplying,
-            downloadProgress = state.downloadProgress,
-            onSetFavourite = { screenModel.onEvent(DetailsEvent.AddFavourite) },
-            onRemoveFavourite = { screenModel.onEvent(DetailsEvent.RemoveFavourite) },
-            onDownloadClicked = { screenModel.onEvent(DetailsEvent.DownloadPhoto) },
-            onApplyClicked = { screenModel.onEvent(DetailsEvent.ShowApplyWallpaperDialog) }
-          )
+          Box(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            PhotoDetailsContainer(
+              photo = photo,
+              isFavourite = state.isFavourite,
+              isDownloading = state.isDownloading,
+              isApplying = state.isApplying,
+              downloadProgress = state.downloadProgress,
+              onSetFavourite = { screenModel.onEvent(DetailsEvent.AddFavourite) },
+              onRemoveFavourite = { screenModel.onEvent(DetailsEvent.RemoveFavourite) },
+              onDownloadClicked = { screenModel.onEvent(DetailsEvent.DownloadPhoto) },
+              onApplyClicked = { screenModel.onEvent(DetailsEvent.ShowApplyWallpaperDialog) }
+            )
+          }
         }
       },
       sheetPeekHeight = 180.dp,
@@ -189,7 +196,13 @@ data class DetailsScreen(
       },
       sheetShadowElevation = 16.dp,
     ) {
-      PhotoContainer(photo = photo, color = color, url = url, altDescription = altDescription)
+      Box(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(((bottomSheetScaffoldState.bottomSheetState.requireOffset())
+                / (heightPixels)).let { if (it == 0f) 1f else it } )
+      ) {
+        PhotoContainer(photo = photo, color = color, url = url, altDescription = altDescription)
+      }
       BackButton(
         modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
         onBackPressed = { navigator.pop() }
