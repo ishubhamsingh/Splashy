@@ -35,7 +35,6 @@ import platform.Foundation.NSLocale
 import platform.Foundation.NSTimeZone
 import platform.Foundation.autoupdatingCurrentLocale
 import platform.Foundation.localTimeZone
-import platform.UIKit.UIScreen
 
 actual fun getHttpClient(): HttpClient {
   val httpClient =

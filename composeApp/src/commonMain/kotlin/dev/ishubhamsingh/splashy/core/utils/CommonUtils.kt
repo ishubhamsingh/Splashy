@@ -32,8 +32,7 @@ expect fun getPlatform(): Platform
 
 expect fun isDebug(): Boolean
 
-@Composable
-expect fun getScreenHeight(): Int
+@Composable expect fun getScreenHeight(): Int
 
 enum class Platform {
   Android,

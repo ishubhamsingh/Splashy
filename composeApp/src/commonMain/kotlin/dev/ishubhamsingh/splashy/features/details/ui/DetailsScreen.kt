@@ -196,10 +196,14 @@ data class DetailsScreen(
       },
       sheetShadowElevation = 16.dp,
     ) {
-      Box(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight(((bottomSheetScaffoldState.bottomSheetState.requireOffset())
-                / (heightPixels)).let { if (it == 0f) 1f else it } )
+      Box(
+        modifier =
+          Modifier.fillMaxWidth()
+            .fillMaxHeight(
+              ((bottomSheetScaffoldState.bottomSheetState.requireOffset()) / (heightPixels)).let {
+                if (it == 0f) 1f else it
+              }
+            )
       ) {
         PhotoContainer(photo = photo, color = color, url = url, altDescription = altDescription)
       }
