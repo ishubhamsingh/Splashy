@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.models
 
+import cafe.adriel.voyager.core.lifecycle.JavaSerializable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -36,7 +37,7 @@ data class TopicSubmissions(
   @SerialName("people") val people: TopicSubmissionStatus? = null,
   @SerialName("spirituality") val spirituality: TopicSubmissionStatus? = null,
   @SerialName("textures-patterns") val texturesPatterns: TopicSubmissionStatus? = null
-) {
+): JavaSerializable {
   private val topicSubmissionMap =
     hashMapOf(
       "Wallpapers" to wallpapers,

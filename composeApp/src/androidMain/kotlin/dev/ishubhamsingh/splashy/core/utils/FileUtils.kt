@@ -49,29 +49,18 @@ actual class FileUtils(private val context: Context) {
     updateMessage: (String) -> Unit
   ) {
     var uri: Uri? = null
-    var newFileName = ""
     var result = ""
 
     CoroutineScope(coroutineContext).launch(Dispatchers.IO) {
       runCatching {
           val imageBitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
 
-          val pictureFolder =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-          val splashyFolder = File(pictureFolder, CommonRes.app_name)
-          if (!splashyFolder.exists()) {
-            splashyFolder.mkdir()
-          }
-
-          val imageFile = File(splashyFolder, "$fileName.jpg")
-          newFileName = imageFile.name
-
           val mContentValues =
             ContentValues().apply {
               put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis())
               put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-              put(MediaStore.Images.Media.DATA, imageFile.absolutePath)
-              put(MediaStore.Images.Media.DISPLAY_NAME, newFileName)
+              put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+              put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
             }
 
           context.contentResolver
@@ -87,7 +76,7 @@ actual class FileUtils(private val context: Context) {
         }
         .onSuccess {
           if (shouldOpenFile) {
-            openFile(uri?.toUri(), newFileName)
+            openFile(uri?.toUri(), fileName)
           } else {
             result =
               CommonRes.downloading_file_success_message.replace(

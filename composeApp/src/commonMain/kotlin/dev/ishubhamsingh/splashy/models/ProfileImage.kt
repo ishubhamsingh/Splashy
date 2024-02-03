@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.models
 
+import cafe.adriel.voyager.core.lifecycle.JavaSerializable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -23,4 +24,4 @@ data class ProfileImage(
   @SerialName("large") val large: String = "",
   @SerialName("medium") val medium: String = "",
   @SerialName("small") val small: String = ""
-)
+): JavaSerializable

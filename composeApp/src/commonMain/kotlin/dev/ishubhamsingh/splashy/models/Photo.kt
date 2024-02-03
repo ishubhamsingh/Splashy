@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.models
 
+import cafe.adriel.voyager.core.lifecycle.JavaSerializable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -34,4 +35,4 @@ data class Photo(
   @SerialName("urls") val urls: Urls? = Urls(),
   @SerialName("user") val user: User? = User(),
   @SerialName("width") val width: Int = 0
-)
+): JavaSerializable

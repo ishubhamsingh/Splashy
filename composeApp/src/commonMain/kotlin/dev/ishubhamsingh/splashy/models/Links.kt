@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.models
 
+import cafe.adriel.voyager.core.lifecycle.JavaSerializable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -26,7 +27,7 @@ data class Links(
   @SerialName("download_location") val downloadLocation: String = "",
   @SerialName("html") val html: String = "",
   @SerialName("self") val self: String = ""
-) {
+): JavaSerializable {
   override fun toString(): String {
     return Json.encodeToString(this)
   }

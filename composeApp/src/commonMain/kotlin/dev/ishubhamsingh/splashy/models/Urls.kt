@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.models
 
+import cafe.adriel.voyager.core.lifecycle.JavaSerializable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -28,7 +29,7 @@ data class Urls(
   @SerialName("small") val small: String = "",
   @SerialName("small_s3") val smallS3: String = "",
   @SerialName("thumb") val thumb: String = ""
-) {
+): JavaSerializable {
   override fun toString(): String {
     return Json.encodeToString(this)
   }
