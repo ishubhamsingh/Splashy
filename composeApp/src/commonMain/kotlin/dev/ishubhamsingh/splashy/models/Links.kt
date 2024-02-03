@@ -27,7 +27,7 @@ data class Links(
   @SerialName("download_location") val downloadLocation: String = "",
   @SerialName("html") val html: String = "",
   @SerialName("self") val self: String = ""
-): JavaSerializable {
+) : JavaSerializable {
   override fun toString(): String {
     return Json.encodeToString(this)
   }

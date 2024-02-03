@@ -42,7 +42,7 @@ data class User(
   @SerialName("twitter_username") val twitterUsername: String? = "",
   @SerialName("updated_at") val updatedAt: String? = "",
   @SerialName("username") val username: String? = ""
-): JavaSerializable {
+) : JavaSerializable {
   override fun toString(): String {
     return Json.encodeToString(this)
   }

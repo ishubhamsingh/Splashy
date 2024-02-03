@@ -24,4 +24,4 @@ data class ProfileImage(
   @SerialName("large") val large: String = "",
   @SerialName("medium") val medium: String = "",
   @SerialName("small") val small: String = ""
-): JavaSerializable
+) : JavaSerializable

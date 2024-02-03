@@ -29,7 +29,7 @@ data class Urls(
   @SerialName("small") val small: String = "",
   @SerialName("small_s3") val smallS3: String = "",
   @SerialName("thumb") val thumb: String = ""
-): JavaSerializable {
+) : JavaSerializable {
   override fun toString(): String {
     return Json.encodeToString(this)
   }

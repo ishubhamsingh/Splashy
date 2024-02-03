@@ -28,4 +28,4 @@ data class LinksX(
   @SerialName("photos") val photos: String = "",
   @SerialName("portfolio") val portfolio: String = "",
   @SerialName("self") val self: String = ""
-): JavaSerializable
+) : JavaSerializable

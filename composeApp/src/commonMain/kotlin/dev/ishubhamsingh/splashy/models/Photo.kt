@@ -35,4 +35,4 @@ data class Photo(
   @SerialName("urls") val urls: Urls? = Urls(),
   @SerialName("user") val user: User? = User(),
   @SerialName("width") val width: Int = 0
-): JavaSerializable
+) : JavaSerializable

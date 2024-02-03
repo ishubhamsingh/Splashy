@@ -25,4 +25,4 @@ data class Social(
   @SerialName("paypal_email") val paypalEmail: String? = null,
   @SerialName("portfolio_url") val portfolioUrl: String? = null,
   @SerialName("twitter_username") val twitterUsername: String? = null
-): JavaSerializable
+) : JavaSerializable

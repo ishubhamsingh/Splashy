@@ -37,7 +37,7 @@ data class TopicSubmissions(
   @SerialName("people") val people: TopicSubmissionStatus? = null,
   @SerialName("spirituality") val spirituality: TopicSubmissionStatus? = null,
   @SerialName("textures-patterns") val texturesPatterns: TopicSubmissionStatus? = null
-): JavaSerializable {
+) : JavaSerializable {
   private val topicSubmissionMap =
     hashMapOf(
       "Wallpapers" to wallpapers,

@@ -33,7 +33,6 @@ import com.eygraber.uri.toAndroidUri
 import com.eygraber.uri.toUri
 import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
-import java.io.File
 import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
