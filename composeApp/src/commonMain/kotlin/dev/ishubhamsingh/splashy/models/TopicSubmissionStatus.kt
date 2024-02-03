@@ -15,6 +15,7 @@
  */
 package dev.ishubhamsingh.splashy.models
 
+import cafe.adriel.voyager.core.lifecycle.JavaSerializable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -22,4 +23,4 @@ import kotlinx.serialization.Serializable
 data class TopicSubmissionStatus(
   @SerialName("approved_on") val approvedOn: String = "",
   @SerialName("status") val status: String = ""
-)
+) : JavaSerializable
