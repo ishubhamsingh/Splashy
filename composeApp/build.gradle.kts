@@ -88,7 +88,6 @@ kotlin {
 
     val androidMain by getting {
       dependencies {
-        implementation(compose.material3)
         implementation(libs.material)
         implementation(libs.androidx.appcompat)
         implementation(libs.androidx.activityCompose)
@@ -97,6 +96,14 @@ kotlin {
         implementation(libs.ktor.client.okhttp)
         implementation(libs.sqlDelight.driver.android)
         implementation(libs.koin.android)
+
+        // Temporary fix for ProgressBar crash in older material libs
+        implementation("androidx.compose.material:material:1.6.0") {
+          exclude(group = "androidx.compose.material", module = "material")
+        }
+        implementation("androidx.compose.material3:material3:1.2.0-alpha10"){
+          exclude(group = "androidx.compose.material3", module = "material3")
+        }
       }
     }
 
