@@ -98,7 +98,7 @@ kotlin {
         implementation(libs.koin.android)
 
         // Temporary fix for ProgressBar crash in older material libs
-        implementation("androidx.compose.material:material:1.6.0") {
+        implementation("androidx.compose.material:material:1.6.1") {
           exclude(group = "androidx.compose.material", module = "material")
         }
         implementation("androidx.compose.material3:material3:1.2.0-rc01") {
