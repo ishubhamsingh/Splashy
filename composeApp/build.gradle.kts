@@ -101,7 +101,7 @@ kotlin {
         implementation("androidx.compose.material:material:1.6.0") {
           exclude(group = "androidx.compose.material", module = "material")
         }
-        implementation("androidx.compose.material3:material3:1.2.0-rc01") {
+        implementation("androidx.compose.material3:material3:1.2.0") {
           exclude(group = "androidx.compose.material3", module = "material3")
         }
       }
