@@ -2,10 +2,10 @@
 
 kotlin = "1.9.21"
 agp = "8.2.2"
-compose = "1.5.12"
+compose = "1.6.0-beta02"
 androidx-appcompat = "1.6.1"
 androidx-activityCompose = "1.8.2"
-compose-uitooling = "1.6.0"
+compose-uitooling = "1.6.1"
 material = "1.11.0"
 napier = "2.7.1"
 buildConfig = "4.2.0"

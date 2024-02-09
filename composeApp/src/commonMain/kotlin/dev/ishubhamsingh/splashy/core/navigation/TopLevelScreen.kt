@@ -69,6 +69,7 @@ import dev.ishubhamsingh.splashy.ui.components.getKamelConfig
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import dev.ishubhamsingh.splashy.ui.theme.getLobsterRegular
 import io.kamel.image.config.LocalKamelConfig
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -178,7 +179,7 @@ class TopLevelScreen : Screen {
             )
             if (isChristmasNewYearWeek()) {
               Icon(
-                painterResource("hat.png"),
+                painterResource(DrawableResource("hat.png")),
                 contentDescription = "cap",
                 tint = Color.Unspecified,
                 modifier =

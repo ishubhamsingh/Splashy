@@ -166,6 +166,8 @@ object FavouritesTab : Tab {
         ),
       border =
         FilterChipDefaults.filterChipBorder(
+          enabled = true,
+          selected = isSelected,
           borderColor = MaterialTheme.colorScheme.surfaceTint,
           borderWidth = 2.dp,
           selectedBorderColor = MaterialTheme.colorScheme.primaryContainer,

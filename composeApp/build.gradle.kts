@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
+import com.android.build.gradle.internal.lint.LintModelWriterTask
 import java.util.Properties
 
 plugins {
@@ -96,14 +98,6 @@ kotlin {
         implementation(libs.ktor.client.okhttp)
         implementation(libs.sqlDelight.driver.android)
         implementation(libs.koin.android)
-
-        // Temporary fix for ProgressBar crash in older material libs
-        implementation("androidx.compose.material:material:1.6.1") {
-          exclude(group = "androidx.compose.material", module = "material")
-        }
-        implementation("androidx.compose.material3:material3:1.2.0") {
-          exclude(group = "androidx.compose.material3", module = "material3")
-        }
       }
     }
 
@@ -195,3 +189,7 @@ sqldelight {
     }
   }
 }
+
+tasks.withType<AndroidLintAnalysisTask> { dependsOn("copyFontsToAndroidAssets") }
+
+tasks.withType<LintModelWriterTask> { dependsOn("copyFontsToAndroidAssets") }

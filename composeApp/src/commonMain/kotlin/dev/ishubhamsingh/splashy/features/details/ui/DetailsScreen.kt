@@ -200,9 +200,8 @@ data class DetailsScreen(
         modifier =
           Modifier.fillMaxWidth()
             .fillMaxHeight(
-              ((bottomSheetScaffoldState.bottomSheetState.requireOffset()) / (heightPixels)).let {
-                if (it == 0f) 1f else it
-              }
+              ((bottomSheetScaffoldState.bottomSheetState.requireOffset() + 130) / (heightPixels))
+                .let { if (it == 0f) 1f else it }
             )
       ) {
         PhotoContainer(photo = photo, color = color, url = url, altDescription = altDescription)
@@ -557,6 +556,7 @@ data class DetailsScreen(
             ),
           border =
             SuggestionChipDefaults.suggestionChipBorder(
+              enabled = true,
               borderColor = MaterialTheme.colorScheme.secondary
             ),
         )
