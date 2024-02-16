@@ -189,7 +189,3 @@ sqldelight {
     }
   }
 }
-
-tasks.withType<AndroidLintAnalysisTask> { dependsOn("copyFontsToAndroidAssets") }
-
-tasks.withType<LintModelWriterTask> { dependsOn("copyFontsToAndroidAssets") }
