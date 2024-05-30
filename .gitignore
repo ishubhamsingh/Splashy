@@ -8,6 +8,7 @@ build
 captures
 .externalNativeBuild
 .cxx
+.kotlin
 local.properties
 xcuserdata/
 *yarn.lock
