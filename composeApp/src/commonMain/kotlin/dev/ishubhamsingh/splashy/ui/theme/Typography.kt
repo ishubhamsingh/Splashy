@@ -22,26 +22,36 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import dev.ishubhamsingh.splashy.core.utils.font
+import dev.ishubhamsingh.splashy.resources.Res
+import dev.ishubhamsingh.splashy.resources.lato_black
+import dev.ishubhamsingh.splashy.resources.lato_bold
+import dev.ishubhamsingh.splashy.resources.lato_light
+import dev.ishubhamsingh.splashy.resources.lato_regular
+import dev.ishubhamsingh.splashy.resources.lato_thin
+import dev.ishubhamsingh.splashy.resources.lobster_regular
+import org.jetbrains.compose.resources.Font
 
 @Composable
-fun getLatoRegular() = FontFamily(font("Lato", "lato_regular", FontWeight.Normal, FontStyle.Normal))
+fun getLatoRegular() =
+  FontFamily(
+    Font(resource = Res.font.lato_regular, weight = FontWeight.Normal, style = FontStyle.Normal)
+  )
 
 @Composable
-fun getLatoBold() = FontFamily(font("Lato", "lato_bold", FontWeight.Bold, FontStyle.Normal))
+fun getLatoBold() = FontFamily(Font(Res.font.lato_bold, FontWeight.Bold, FontStyle.Normal))
 
 @Composable
-fun getLatoBlack() = FontFamily(font("Lato", "lato_black", FontWeight.Black, FontStyle.Normal))
+fun getLatoBlack() = FontFamily(Font(Res.font.lato_black, FontWeight.Black, FontStyle.Normal))
 
 @Composable
-fun getLatoThin() = FontFamily(font("Lato", "lato_thin", FontWeight.Thin, FontStyle.Normal))
+fun getLatoThin() = FontFamily(Font(Res.font.lato_thin, FontWeight.Thin, FontStyle.Normal))
 
 @Composable
-fun getLatoLight() = FontFamily(font("Lato", "lato_light", FontWeight.Light, FontStyle.Normal))
+fun getLatoLight() = FontFamily(Font(Res.font.lato_light, FontWeight.Light, FontStyle.Normal))
 
 @Composable
 fun getLobsterRegular() =
-  FontFamily(font("Lobster", "lobster_regular", FontWeight.Normal, FontStyle.Normal))
+  FontFamily(Font(Res.font.lobster_regular, FontWeight.Normal, FontStyle.Normal))
 
 @Composable
 fun getTypography(): Typography {

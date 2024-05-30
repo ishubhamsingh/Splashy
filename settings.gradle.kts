@@ -27,9 +27,11 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
+  @Suppress("UnstableApiUsage")
   repositories {
     google()
     mavenCentral()
+    maven("https://jitpack.io")
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
   }
 }

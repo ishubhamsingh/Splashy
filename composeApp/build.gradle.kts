@@ -187,3 +187,9 @@ sqldelight {
     }
   }
 }
+
+compose.resources {
+  publicResClass = true
+  packageOfResClass = "dev.ishubhamsingh.splashy.resources"
+  generateResClass = always
+}
