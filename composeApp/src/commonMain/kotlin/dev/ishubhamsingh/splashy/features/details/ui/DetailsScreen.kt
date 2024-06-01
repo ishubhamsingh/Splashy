@@ -87,7 +87,6 @@ import dev.icerock.moko.permissions.PermissionsController
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
-import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.Platform
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.core.utils.getFormattedDateTime
@@ -97,6 +96,23 @@ import dev.ishubhamsingh.splashy.features.details.DetailsScreenModel
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
 import dev.ishubhamsingh.splashy.goBack
 import dev.ishubhamsingh.splashy.models.Photo
+import dev.ishubhamsingh.splashy.resources.Res
+import dev.ishubhamsingh.splashy.resources.desc_apply_wallpaper_dialog
+import dev.ishubhamsingh.splashy.resources.lbl_apply_wall_both
+import dev.ishubhamsingh.splashy.resources.lbl_apply_wall_homescreen
+import dev.ishubhamsingh.splashy.resources.lbl_apply_wall_lockscreen
+import dev.ishubhamsingh.splashy.resources.lbl_apply_wall_other_app
+import dev.ishubhamsingh.splashy.resources.lbl_apply_wallpaper
+import dev.ishubhamsingh.splashy.resources.lbl_color
+import dev.ishubhamsingh.splashy.resources.lbl_desc
+import dev.ishubhamsingh.splashy.resources.lbl_details_caps
+import dev.ishubhamsingh.splashy.resources.lbl_download
+import dev.ishubhamsingh.splashy.resources.lbl_likes
+import dev.ishubhamsingh.splashy.resources.lbl_posted_on
+import dev.ishubhamsingh.splashy.resources.lbl_size
+import dev.ishubhamsingh.splashy.resources.lbl_topics
+import dev.ishubhamsingh.splashy.resources.save_to_photos
+import dev.ishubhamsingh.splashy.resources.title_apply_wallpaper_dialog
 import dev.ishubhamsingh.splashy.ui.components.BackButton
 import dev.ishubhamsingh.splashy.ui.components.GoBack
 import dev.ishubhamsingh.splashy.ui.components.ImageViewComponent
@@ -105,6 +121,7 @@ import dev.ishubhamsingh.splashy.ui.theme.getLatoBold
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import org.jetbrains.compose.resources.stringResource
 
 data class DetailsScreen(
   val photo: Photo? = null,
@@ -374,7 +391,7 @@ data class DetailsScreen(
           }
           Spacer(modifier = Modifier.size(8.dp))
           Text(
-            text = CommonRes.save_to_photos,
+            text = stringResource(Res.string.save_to_photos),
             style =
               MaterialTheme.typography.titleSmall.copy(
                 fontFamily = getLatoRegular(),
@@ -400,7 +417,7 @@ data class DetailsScreen(
           }
           Spacer(modifier = Modifier.size(8.dp))
           Text(
-            text = CommonRes.lbl_download,
+            text = stringResource(Res.string.lbl_download),
             style =
               MaterialTheme.typography.titleSmall.copy(
                 fontFamily = getLatoRegular(),
@@ -424,7 +441,7 @@ data class DetailsScreen(
           }
           Spacer(modifier = Modifier.size(8.dp))
           Text(
-            text = CommonRes.lbl_apply_wallpaper,
+            text = stringResource(Res.string.lbl_apply_wallpaper),
             style =
               MaterialTheme.typography.titleSmall.copy(
                 fontFamily = getLatoRegular(),
@@ -449,7 +466,7 @@ data class DetailsScreen(
         )
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-          text = CommonRes.lbl_details_caps,
+          text = stringResource(Res.string.lbl_details_caps),
           color = MaterialTheme.colorScheme.onBackground,
           style = MaterialTheme.typography.bodyMedium
         )
@@ -459,7 +476,7 @@ data class DetailsScreen(
         modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
       ) {
-        PhotoDetailItem(CommonRes.lbl_desc) {
+        PhotoDetailItem(stringResource(Res.string.lbl_desc)) {
           Text(
             if (photo.description.isNullOrEmpty()) photo.altDescription ?: ""
             else photo.description,
@@ -468,7 +485,7 @@ data class DetailsScreen(
         }
 
         photo.createdAt?.let {
-          PhotoDetailItem(CommonRes.lbl_posted_on) {
+          PhotoDetailItem(stringResource(Res.string.lbl_posted_on)) {
             Text(
               text = getFormattedDateTime(it),
               style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
@@ -476,21 +493,21 @@ data class DetailsScreen(
           }
         }
 
-        PhotoDetailItem(CommonRes.lbl_size) {
+        PhotoDetailItem(stringResource(Res.string.lbl_size)) {
           Text(
             "${photo.width} x ${photo.height}",
             style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
           )
         }
 
-        PhotoDetailItem(CommonRes.lbl_likes) {
+        PhotoDetailItem(stringResource(Res.string.lbl_likes)) {
           Text(
             text = photo.likes.toString(),
             style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp)
           )
         }
 
-        PhotoDetailItem(CommonRes.lbl_color) {
+        PhotoDetailItem(stringResource(Res.string.lbl_color)) {
           Box(
             modifier =
               Modifier.size(18.dp)
@@ -500,7 +517,10 @@ data class DetailsScreen(
 
         photo.topicSubmissions?.let {
           if (it.getApprovedTopics().isNotEmpty()) {
-            PhotoDetailItem(CommonRes.lbl_topics, alignment = Alignment.CenterVertically) {
+            PhotoDetailItem(
+              stringResource(Res.string.lbl_topics),
+              alignment = Alignment.CenterVertically
+            ) {
               TopicDetailItem(it.getApprovedTopics())
             }
           }
@@ -586,14 +606,14 @@ data class DetailsScreen(
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
           Text(
-            text = CommonRes.title_apply_wallpaper_dialog,
+            text = stringResource(Res.string.title_apply_wallpaper_dialog),
             fontSize = 24.sp,
             fontFamily = getLatoBold(),
             textAlign = TextAlign.Center
           )
           Spacer(modifier = Modifier.size(8.dp))
           Text(
-            text = CommonRes.desc_apply_wallpaper_dialog,
+            text = stringResource(Res.string.desc_apply_wallpaper_dialog),
             fontSize = 14.sp,
             fontFamily = getLatoRegular(),
             textAlign = TextAlign.Center
@@ -615,7 +635,7 @@ data class DetailsScreen(
               )
           ) {
             Text(
-              text = CommonRes.lbl_apply_wall_other_app,
+              text = stringResource(Res.string.lbl_apply_wall_other_app),
               color = MaterialTheme.colorScheme.onSurface,
               fontFamily = getLatoRegular(),
               modifier = Modifier.padding(8.dp)
@@ -632,7 +652,7 @@ data class DetailsScreen(
             shape = RoundedCornerShape(4.dp)
           ) {
             Text(
-              text = CommonRes.lbl_apply_wall_homescreen,
+              text = stringResource(Res.string.lbl_apply_wall_homescreen),
               color = MaterialTheme.colorScheme.onSurface,
               fontFamily = getLatoRegular(),
               modifier = Modifier.padding(8.dp)
@@ -649,7 +669,7 @@ data class DetailsScreen(
             shape = RoundedCornerShape(4.dp)
           ) {
             Text(
-              text = CommonRes.lbl_apply_wall_lockscreen,
+              text = stringResource(Res.string.lbl_apply_wall_lockscreen),
               color = MaterialTheme.colorScheme.onSurface,
               fontFamily = getLatoRegular(),
               modifier = Modifier.padding(8.dp)
@@ -677,7 +697,7 @@ data class DetailsScreen(
               )
           ) {
             Text(
-              text = CommonRes.lbl_apply_wall_both,
+              text = stringResource(Res.string.lbl_apply_wall_both),
               color = MaterialTheme.colorScheme.onSurface,
               fontFamily = getLatoRegular(),
               modifier = Modifier.padding(8.dp)

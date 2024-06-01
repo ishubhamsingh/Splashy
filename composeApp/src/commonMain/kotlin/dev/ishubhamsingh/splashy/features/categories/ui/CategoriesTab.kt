@@ -55,7 +55,6 @@ import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.Folder
 import compose.icons.evaicons.outline.Folder
-import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.core.utils.getNonPremiumCollections
 import dev.ishubhamsingh.splashy.features.categories.CategoriesScreenModel
@@ -64,7 +63,13 @@ import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
 import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.models.CollectionItem
 import dev.ishubhamsingh.splashy.models.Topic
+import dev.ishubhamsingh.splashy.resources.Res
+import dev.ishubhamsingh.splashy.resources.lbl_categories
+import dev.ishubhamsingh.splashy.resources.lbl_collections_title
+import dev.ishubhamsingh.splashy.resources.lbl_photos_count
+import dev.ishubhamsingh.splashy.resources.lbl_topics_title
 import dev.ishubhamsingh.splashy.ui.components.CategoriesCardItem
+import org.jetbrains.compose.resources.stringResource
 
 /** Created by Shubham Singh on 29/09/23. */
 object CategoriesTab : Tab {
@@ -73,7 +78,7 @@ object CategoriesTab : Tab {
     @Composable
     get() {
       val isSelected = LocalTabNavigator.current.current == this
-      val title = CommonRes.lbl_categories
+      val title = stringResource(Res.string.lbl_categories)
       val icon =
         rememberVectorPainter(if (isSelected) EvaIcons.Fill.Folder else EvaIcons.Outline.Folder)
 
@@ -141,7 +146,7 @@ object CategoriesTab : Tab {
       item(
         content = {
           Text(
-            text = CommonRes.lbl_collections_title,
+            text = stringResource(Res.string.lbl_collections_title),
             style = MaterialTheme.typography.displayMedium
           )
         }
@@ -150,7 +155,10 @@ object CategoriesTab : Tab {
       item(content = { Spacer(modifier = Modifier.size(16.dp)) })
       item(
         content = {
-          Text(text = CommonRes.lbl_topics_title, style = MaterialTheme.typography.displayMedium)
+          Text(
+            text = stringResource(Res.string.lbl_topics_title),
+            style = MaterialTheme.typography.displayMedium
+          )
         }
       )
       items(topics) {
@@ -166,7 +174,7 @@ object CategoriesTab : Tab {
           modifier = Modifier.fillMaxWidth(),
           shouldShowOverlay = true,
           overlayTitle = it.title ?: "",
-          overlaySubtitle = CommonRes.lbl_photos_count.replace("%count", it.totalPhotos.toString())
+          overlaySubtitle = stringResource(Res.string.lbl_photos_count, it.totalPhotos.toString())
         )
       }
     }

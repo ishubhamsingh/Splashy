@@ -63,9 +63,18 @@ import dev.ishubhamsingh.splashy.features.settings.SettingsScreenModel
 import dev.ishubhamsingh.splashy.features.settings.Theme
 import dev.ishubhamsingh.splashy.goBack
 import dev.ishubhamsingh.splashy.isDarkThemeState
+import dev.ishubhamsingh.splashy.resources.Res
+import dev.ishubhamsingh.splashy.resources.lbl_back
+import dev.ishubhamsingh.splashy.resources.lbl_material_you_desc
+import dev.ishubhamsingh.splashy.resources.lbl_material_you_title
+import dev.ishubhamsingh.splashy.resources.lbl_select_theme
+import dev.ishubhamsingh.splashy.resources.lbl_settings
+import dev.ishubhamsingh.splashy.resources.themes_array
 import dev.ishubhamsingh.splashy.ui.components.GoBack
 import dev.ishubhamsingh.splashy.ui.components.SnowFallComponent
 import dev.ishubhamsingh.splashy.ui.theme.getLatoBold
+import org.jetbrains.compose.resources.stringArrayResource
+import org.jetbrains.compose.resources.stringResource
 
 class SettingsScreen : Screen {
 
@@ -87,7 +96,7 @@ class SettingsScreen : Screen {
           TopAppBar(
             title = {
               Text(
-                text = "Settings",
+                text = stringResource(Res.string.lbl_settings),
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -96,7 +105,7 @@ class SettingsScreen : Screen {
             navigationIcon = {
               Icon(
                 imageVector = EvaIcons.Outline.ArrowIosBack,
-                contentDescription = "back",
+                contentDescription = stringResource(Res.string.lbl_back),
                 modifier = Modifier.clickable { navigator.pop() }
               )
             },
@@ -141,19 +150,23 @@ class SettingsScreen : Screen {
 
   @Composable
   fun ThemeSettings(selectedTheme: Int, onShowThemeSelectionDialog: () -> Unit) {
+    val themesArray = stringArrayResource(Res.array.themes_array)
     val themeSubTitle =
       when (selectedTheme) {
-        Theme.SYSTEM.value -> "System"
-        Theme.LIGHT.value -> "Light"
-        Theme.DARK.value -> "Dark"
-        else -> "System"
+        Theme.SYSTEM.value -> themesArray[0]
+        Theme.LIGHT.value -> themesArray[1]
+        Theme.DARK.value -> themesArray[2]
+        else -> themesArray[0]
       }
     Column(
       modifier = Modifier.padding(16.dp).fillMaxWidth().clickable { onShowThemeSelectionDialog() },
       verticalArrangement = Arrangement.spacedBy(4.dp),
       horizontalAlignment = Alignment.Start
     ) {
-      Text(text = "Select Theme", style = MaterialTheme.typography.titleLarge)
+      Text(
+        text = stringResource(Res.string.lbl_select_theme),
+        style = MaterialTheme.typography.titleLarge
+      )
       Text(
         text = themeSubTitle,
         style =
@@ -175,9 +188,12 @@ class SettingsScreen : Screen {
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.Start
       ) {
-        Text(text = "Use Material You", style = MaterialTheme.typography.titleLarge)
         Text(
-          text = "Apply wallpaper based colors",
+          text = stringResource(Res.string.lbl_material_you_title),
+          style = MaterialTheme.typography.titleLarge
+        )
+        Text(
+          text = stringResource(Res.string.lbl_material_you_desc),
           style =
             MaterialTheme.typography.titleMedium.copy(
               color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
@@ -208,7 +224,7 @@ class SettingsScreen : Screen {
         ) {
           Text(
             modifier = Modifier.fillMaxWidth(),
-            text = "Select Theme",
+            text = stringResource(Res.string.lbl_select_theme),
             fontSize = 24.sp,
             fontFamily = getLatoBold(),
             textAlign = TextAlign.Center

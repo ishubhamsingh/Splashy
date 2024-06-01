@@ -31,12 +31,19 @@ import android.provider.MediaStore
 import android.widget.Toast
 import com.eygraber.uri.toAndroidUri
 import com.eygraber.uri.toUri
-import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
+import dev.ishubhamsingh.splashy.resources.Res
+import dev.ishubhamsingh.splashy.resources.applying_wallpaper_failed_message
+import dev.ishubhamsingh.splashy.resources.applying_wallpaper_success_message
+import dev.ishubhamsingh.splashy.resources.downloading_file_failed_message
+import dev.ishubhamsingh.splashy.resources.downloading_file_success_message
+import dev.ishubhamsingh.splashy.resources.opening_file_failed_message
+import dev.ishubhamsingh.splashy.resources.wallpaper_chooser_title
 import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 
 /** Created by Shubham Singh on 19/08/23. */
 actual class FileUtils(private val context: Context) {
@@ -78,19 +85,16 @@ actual class FileUtils(private val context: Context) {
             openFile(uri?.toUri(), fileName)
           } else {
             result =
-              CommonRes.downloading_file_success_message.replace(
-                "%path",
-                Environment.DIRECTORY_PICTURES
-              )
+              getString(Res.string.downloading_file_success_message, Environment.DIRECTORY_PICTURES)
             updateMessage.invoke(result)
           }
         }
         .onFailure {
           result =
             if (shouldOpenFile) {
-              CommonRes.opening_file_failed_message
+              getString(Res.string.opening_file_failed_message)
             } else {
-              CommonRes.downloading_file_failed_message
+              getString(Res.string.downloading_file_failed_message)
             }
           updateMessage.invoke(result)
           it.printStackTrace()
@@ -105,7 +109,7 @@ actual class FileUtils(private val context: Context) {
     intent.setDataAndType(uri?.toAndroidUri(), "image/jpeg")
     intent.putExtra("mimeType", "image/jpeg")
     val chooserIntent =
-      Intent.createChooser(intent, CommonRes.wallpaper_chooser_title.replace("%fileName", fileName))
+      Intent.createChooser(intent, getString(Res.string.wallpaper_chooser_title, fileName))
     chooserIntent.addFlags(FLAG_ACTIVITY_NEW_TASK)
     context.startActivity(chooserIntent)
   }
@@ -131,11 +135,11 @@ actual class FileUtils(private val context: Context) {
           wallpaperManager.setBitmap(imageBitmap, null, true, flag)
         }
         .onSuccess {
-          result = CommonRes.applying_wallpaper_success_message
+          result = getString(Res.string.applying_wallpaper_success_message)
           updateMessage.invoke(result)
         }
         .onFailure {
-          result = CommonRes.applying_wallpaper_failed_message
+          result = getString(Res.string.applying_wallpaper_failed_message)
           showMessage(result)
           updateMessage.invoke(result)
         }

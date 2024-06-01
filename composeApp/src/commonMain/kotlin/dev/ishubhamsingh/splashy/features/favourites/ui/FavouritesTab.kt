@@ -52,14 +52,17 @@ import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.Heart
 import compose.icons.evaicons.outline.Checkmark
 import compose.icons.evaicons.outline.Heart
-import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.features.favourites.FavouritesScreenModel
 import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.models.TopicFilter
+import dev.ishubhamsingh.splashy.resources.Res
+import dev.ishubhamsingh.splashy.resources.lbl_favourites
+import dev.ishubhamsingh.splashy.resources.lbl_filter
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
+import org.jetbrains.compose.resources.stringResource
 
 /** Created by Shubham Singh on 29/09/23. */
 object FavouritesTab : Tab {
@@ -68,7 +71,7 @@ object FavouritesTab : Tab {
     @Composable
     get() {
       val isSelected = LocalTabNavigator.current.current == this
-      val title = CommonRes.lbl_favourites
+      val title = stringResource(Res.string.lbl_favourites)
       val icon =
         rememberVectorPainter(if (isSelected) EvaIcons.Fill.Heart else EvaIcons.Outline.Heart)
 
@@ -131,7 +134,7 @@ object FavouritesTab : Tab {
 
     Column(modifier = Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
       Text(
-        CommonRes.lbl_filter,
+        stringResource(Res.string.lbl_filter),
         style = MaterialTheme.typography.titleSmall,
         modifier = Modifier.padding(start = 4.dp)
       )

@@ -58,13 +58,13 @@ import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.Menu2
 import compose.icons.evaicons.outline.Person
-import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.isChristmasNewYearWeek
 import dev.ishubhamsingh.splashy.features.categories.ui.CategoriesTab
 import dev.ishubhamsingh.splashy.features.favourites.ui.FavouritesTab
 import dev.ishubhamsingh.splashy.features.home.ui.HomeTab
 import dev.ishubhamsingh.splashy.features.settings.ui.SettingsScreen
 import dev.ishubhamsingh.splashy.resources.Res
+import dev.ishubhamsingh.splashy.resources.app_name
 import dev.ishubhamsingh.splashy.resources.hat
 import dev.ishubhamsingh.splashy.ui.components.SnowFallComponent
 import dev.ishubhamsingh.splashy.ui.components.getKamelConfig
@@ -73,6 +73,7 @@ import dev.ishubhamsingh.splashy.ui.theme.getLobsterRegular
 import io.kamel.image.config.LocalKamelConfig
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 /** Created by Shubham Singh on 29/09/23. */
 class TopLevelScreen : Screen {
@@ -173,7 +174,7 @@ class TopLevelScreen : Screen {
         title = {
           Box {
             Text(
-              CommonRes.app_name,
+              stringResource(Res.string.app_name),
               fontFamily = getLobsterRegular(),
               fontSize = 32.sp,
               fontWeight = FontWeight.Normal

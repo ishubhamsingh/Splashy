@@ -98,10 +98,11 @@ import compose.icons.evaicons.outline.ArrowheadUp
 import compose.icons.evaicons.outline.CloseCircle
 import compose.icons.evaicons.outline.Search
 import dev.ishubhamsingh.splashy.core.network.KtorLogger
-import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
+import dev.ishubhamsingh.splashy.resources.Res
+import dev.ishubhamsingh.splashy.resources.lbl_search
 import io.github.aakira.napier.Napier
 import io.kamel.core.config.DefaultHttpCacheSize
 import io.kamel.core.config.KamelConfig
@@ -120,6 +121,7 @@ import io.ktor.http.CacheControl
 import io.ktor.http.isSuccess
 import kotlin.random.Random
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -518,7 +520,7 @@ fun SearchBar(searchQuery: String?, isSearching: Boolean, onQueryChanged: (Strin
       interactionSource = interactionSource,
       placeholder = {
         Text(
-          CommonRes.lbl_search,
+          stringResource(Res.string.lbl_search),
           style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
         )
       },

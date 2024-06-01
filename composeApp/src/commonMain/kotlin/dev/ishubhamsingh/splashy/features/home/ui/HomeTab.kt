@@ -33,13 +33,15 @@ import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.Home
 import compose.icons.evaicons.outline.Home
-import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.core.utils.UpdateSystemBars
 import dev.ishubhamsingh.splashy.features.details.ui.DetailsScreen
 import dev.ishubhamsingh.splashy.features.home.HomeScreenModel
 import dev.ishubhamsingh.splashy.isDarkThemeState
 import dev.ishubhamsingh.splashy.models.Photo
+import dev.ishubhamsingh.splashy.resources.Res
+import dev.ishubhamsingh.splashy.resources.lbl_home
 import dev.ishubhamsingh.splashy.ui.components.PhotoGridLayout
+import org.jetbrains.compose.resources.stringResource
 
 /** Created by Shubham Singh on 29/09/23. */
 object HomeTab : Tab {
@@ -48,7 +50,7 @@ object HomeTab : Tab {
     @Composable
     get() {
       val isSelected = LocalTabNavigator.current.current == this
-      val title = CommonRes.lbl_home
+      val title = stringResource(Res.string.lbl_home)
       val icon =
         rememberVectorPainter(if (isSelected) EvaIcons.Fill.Home else EvaIcons.Outline.Home)
 
