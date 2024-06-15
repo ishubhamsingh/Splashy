@@ -37,7 +37,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -67,10 +66,8 @@ import dev.ishubhamsingh.splashy.resources.Res
 import dev.ishubhamsingh.splashy.resources.app_name
 import dev.ishubhamsingh.splashy.resources.hat
 import dev.ishubhamsingh.splashy.ui.components.SnowFallComponent
-import dev.ishubhamsingh.splashy.ui.components.getKamelConfig
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
 import dev.ishubhamsingh.splashy.ui.theme.getLobsterRegular
-import io.kamel.image.config.LocalKamelConfig
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -83,32 +80,30 @@ class TopLevelScreen : Screen {
     val coroutineScope = rememberCoroutineScope()
 
     TabNavigator(HomeTab) {
-      CompositionLocalProvider(LocalKamelConfig provides getKamelConfig()) {
-        Scaffold(
-          topBar = { AppTopBar() },
-          bottomBar = { BottomNavigationComponent() },
-          snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState) {
-              Snackbar(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.secondary,
-                shape = CircleShape,
-                modifier = Modifier.padding(16.dp)
-              ) {
-                Text(text = it.visuals.message, fontFamily = getLatoRegular(), fontSize = 16.sp)
-              }
-            }
-          },
-          content = { paddingValues ->
-            Surface(
-              modifier = Modifier.padding(paddingValues),
-              color = MaterialTheme.colorScheme.surface
+      Scaffold(
+        topBar = { AppTopBar() },
+        bottomBar = { BottomNavigationComponent() },
+        snackbarHost = {
+          SnackbarHost(hostState = snackBarHostState) {
+            Snackbar(
+              containerColor = MaterialTheme.colorScheme.secondaryContainer,
+              contentColor = MaterialTheme.colorScheme.secondary,
+              shape = CircleShape,
+              modifier = Modifier.padding(16.dp)
             ) {
-              CurrentTab()
+              Text(text = it.visuals.message, fontFamily = getLatoRegular(), fontSize = 16.sp)
             }
           }
-        )
-      }
+        },
+        content = { paddingValues ->
+          Surface(
+            modifier = Modifier.padding(paddingValues),
+            color = MaterialTheme.colorScheme.surface
+          ) {
+            CurrentTab()
+          }
+        }
+      )
     }
   }
 

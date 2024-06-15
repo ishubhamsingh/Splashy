@@ -53,6 +53,7 @@ kotlin {
         implementation(compose.material3)
         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         implementation(compose.components.resources)
+        implementation(libs.coil)
         implementation(libs.napier)
         implementation(libs.kotlinx.coroutines.core)
         implementation(libs.insetsx)
@@ -67,7 +68,6 @@ kotlin {
         implementation(libs.multiplatformSettings)
         implementation(libs.koin.core)
         implementation(libs.koin.compose)
-        implementation(libs.kamel.image)
         implementation(libs.kotlinx.datetime)
         implementation(libs.sqlDelight.coroutines.extensions)
         api(libs.moko.permissions)
@@ -77,6 +77,9 @@ kotlin {
         implementation(libs.voyager.koin)
         implementation(libs.uri.kmp)
         implementation(libs.stately.common)
+        implementation(libs.coil)
+        implementation(libs.coil.compose)
+        implementation(libs.coil.ktor)
       }
     }
 

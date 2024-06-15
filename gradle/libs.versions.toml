@@ -3,6 +3,7 @@
 kotlin = "2.0.0"
 agp = "8.4.1"
 compose = "1.6.11"
+coil = "3.0.0-alpha06"
 androidx-appcompat = "1.7.0"
 androidx-activityCompose = "1.9.0"
 compose-uitooling = "1.6.7"
@@ -18,7 +19,6 @@ multiplatformSettings = "1.1.1"
 koin = "3.5.6"
 koin-compose = "1.1.5"
 sqlDelight = "2.0.2"
-kamel = "0.9.5"
 spotless = "6.25.0"
 ktfmt = "0.44"
 statelyCommon = "2.0.7"
@@ -32,6 +32,9 @@ uri-kmp = "0.0.18"
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil"}
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil"}
+coil-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil"}
 material = { module = "com.google.android.material:material", version.ref = "material" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -58,7 +61,6 @@ sqlDelight-driver-native = { module = "app.cash.sqldelight:native-driver", versi
 sqlDelight-driver-sqljs = { module = "app.cash.sqldelight:sqljs-driver", version.ref = "sqlDelight" }
 sqlDelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 sqlDelight-sqlite-dialect = { module = "app.cash.sqldelight:sqlite-3-24-dialect", version.ref = "sqlDelight" }
-kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamel" }
 stately-common = { module = "co.touchlab:stately-common", version.ref = "statelyCommon" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }

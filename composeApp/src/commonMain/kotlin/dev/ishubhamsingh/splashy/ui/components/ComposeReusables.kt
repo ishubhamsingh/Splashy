@@ -91,34 +91,21 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.Navigator
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.ArrowIosBack
 import compose.icons.evaicons.outline.ArrowheadUp
 import compose.icons.evaicons.outline.CloseCircle
 import compose.icons.evaicons.outline.Search
-import dev.ishubhamsingh.splashy.core.network.KtorLogger
 import dev.ishubhamsingh.splashy.features.categoriesPhotos.ui.CategoryType
 import dev.ishubhamsingh.splashy.models.Favourite
 import dev.ishubhamsingh.splashy.models.Photo
 import dev.ishubhamsingh.splashy.resources.Res
 import dev.ishubhamsingh.splashy.resources.lbl_search
 import io.github.aakira.napier.Napier
-import io.kamel.core.config.DefaultHttpCacheSize
-import io.kamel.core.config.KamelConfig
-import io.kamel.core.config.httpFetcher
-import io.kamel.core.config.takeFrom
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
-import io.kamel.image.config.Default
-import io.kamel.image.config.imageBitmapDecoder
-import io.ktor.client.plugins.HttpRequestRetry
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.header
-import io.ktor.http.CacheControl
-import io.ktor.http.isSuccess
 import kotlin.random.Random
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -384,37 +371,18 @@ fun CategoriesCardItem(
 }
 
 @Composable
-fun getKamelConfig() = KamelConfig {
-  takeFrom(KamelConfig.Default)
-  imageBitmapCacheSize = 500
-  imageBitmapDecoder()
-
-  httpFetcher {
-    httpCache(DefaultHttpCacheSize)
-    defaultRequest { header("Cache-Control", "max-age=31536000") }
-
-    CacheControl.MaxAge(maxAgeSeconds = 31536)
-
-    install(HttpRequestRetry) {
-      maxRetries = 3
-      retryIf { _, httpResponse -> !httpResponse.status.isSuccess() }
-    }
-
-    install(Logging) {
-      logger = KtorLogger()
-      level = LogLevel.INFO
-    }
-  }
-}
-
-@Composable
 fun ImageViewComponent(url: String, altDescription: String?) {
-  KamelImage(
-    resource = asyncPainterResource(data = url),
+  AsyncImage(
+    model =
+      ImageRequest.Builder(LocalPlatformContext.current)
+        .data(url)
+        .diskCacheKey(url)
+        .memoryCacheKey(url)
+        .build(),
     contentDescription = altDescription,
     modifier = Modifier.fillMaxSize(),
     contentScale = ContentScale.Crop,
-    animationSpec = tween()
+    alignment = Alignment.Center
   )
 }
 
