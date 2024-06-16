@@ -16,8 +16,10 @@
 package dev.ishubhamsingh.splashy.core.utils
 
 import com.eygraber.uri.Uri
-import dev.ishubhamsingh.splashy.core.presentation.CommonRes
 import dev.ishubhamsingh.splashy.features.details.WallpaperScreenType
+import dev.ishubhamsingh.splashy.resources.Res
+import dev.ishubhamsingh.splashy.resources.saved_failure_message
+import dev.ishubhamsingh.splashy.resources.saved_success_message
 import kotlin.coroutines.coroutineContext
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -27,6 +29,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 import platform.Foundation.NSData
 import platform.Foundation.create
 import platform.UIKit.UIImage
@@ -55,11 +58,11 @@ actual class FileUtils {
           }
         }
         .onSuccess {
-          result = CommonRes.saved_success_message
+          result = getString(Res.string.saved_success_message)
           updateMessage.invoke(result)
         }
         .onFailure {
-          result = CommonRes.saved_failure_message
+          result = getString(Res.string.saved_failure_message)
           updateMessage.invoke(result)
           it.printStackTrace()
         }

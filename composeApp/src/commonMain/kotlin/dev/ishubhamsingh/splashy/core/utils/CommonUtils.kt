@@ -17,14 +17,9 @@ package dev.ishubhamsingh.splashy.core.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import io.ktor.client.HttpClient
 
 expect fun getHttpClient(): HttpClient
-
-@Composable expect fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font
 
 expect fun getFormattedDateTime(timestamp: String, format: String = "dd MMM yyyy, hh:mm a"): String
 

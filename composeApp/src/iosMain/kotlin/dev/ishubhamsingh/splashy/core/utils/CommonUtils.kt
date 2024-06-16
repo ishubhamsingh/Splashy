@@ -20,15 +20,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.darwin.Darwin
 import kotlin.experimental.ExperimentalNativeApi
 import kotlin.native.Platform as NativePlatform
-import kotlinx.coroutines.runBlocking
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.resource
 import platform.Foundation.NSDateFormatter
 import platform.Foundation.NSISO8601DateFormatter
 import platform.Foundation.NSLocale
@@ -51,15 +46,6 @@ actual fun getHttpClient(): HttpClient {
 }
 
 private val cache: MutableMap<String, Font> = mutableMapOf()
-
-@OptIn(ExperimentalResourceApi::class, ExperimentalResourceApi::class)
-@Composable
-actual fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font {
-  return cache.getOrPut(res) {
-    val byteArray = runBlocking { resource("font/$res.ttf").readBytes() }
-    androidx.compose.ui.text.platform.Font(res, byteArray, weight, style)
-  }
-}
 
 actual fun getFormattedDateTime(timestamp: String, format: String): String {
   val date = NSISO8601DateFormatter().dateFromString(timestamp) ?: return ""

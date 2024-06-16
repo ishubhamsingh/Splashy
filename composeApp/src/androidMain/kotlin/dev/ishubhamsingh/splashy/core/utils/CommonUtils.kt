@@ -15,16 +15,12 @@
  */
 package dev.ishubhamsingh.splashy.core.utils
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.core.view.WindowCompat
 import dev.ishubhamsingh.splashy.BuildConfig
 import io.ktor.client.HttpClient
@@ -48,14 +44,6 @@ actual fun getHttpClient(): HttpClient {
     }
 
   return httpClient
-}
-
-@SuppressLint("DiscouragedApi")
-@Composable
-actual fun font(name: String, res: String, weight: FontWeight, style: FontStyle): Font {
-  val context = LocalContext.current
-  val id = context.resources.getIdentifier(res, "font", context.packageName)
-  return Font(id, weight, style)
 }
 
 actual fun getFormattedDateTime(timestamp: String, format: String): String {
