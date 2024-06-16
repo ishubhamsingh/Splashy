@@ -17,7 +17,6 @@ package dev.ishubhamsingh.splashy.features.details.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -77,6 +76,9 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
@@ -119,8 +121,6 @@ import dev.ishubhamsingh.splashy.ui.components.ImageViewComponent
 import dev.ishubhamsingh.splashy.ui.components.parseColor
 import dev.ishubhamsingh.splashy.ui.theme.getLatoBold
 import dev.ishubhamsingh.splashy.ui.theme.getLatoRegular
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 import org.jetbrains.compose.resources.stringResource
 
 data class DetailsScreen(
@@ -314,12 +314,16 @@ data class DetailsScreen(
       ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
           user?.profileImage?.let { profilePic ->
-            KamelImage(
+            AsyncImage(
+              model =
+                ImageRequest.Builder(LocalPlatformContext.current)
+                  .data(profilePic.medium)
+                  .diskCacheKey(profilePic.medium)
+                  .memoryCacheKey(profilePic.medium)
+                  .build(),
               modifier = Modifier.size(36.dp).clip(CircleShape),
-              resource = asyncPainterResource(data = profilePic.medium),
               contentDescription = user.name,
-              contentScale = ContentScale.Crop,
-              animationSpec = tween()
+              contentScale = ContentScale.Crop
             )
           }
 
