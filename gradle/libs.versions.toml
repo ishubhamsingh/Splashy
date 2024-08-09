@@ -1,7 +1,7 @@
 [versions]
 
 kotlin = "2.0.10"
-agp = "8.5.1"
+agp = "8.5.2"
 compose = "1.6.11"
 coil = "3.0.0-alpha08"
 androidx-appcompat = "1.7.0"
