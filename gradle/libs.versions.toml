@@ -24,7 +24,7 @@ ktfmt = "0.44"
 statelyCommon = "2.1.0"
 voyager = "1.0.1"
 moko-permissions = "0.18.1"
-kotlinx-datetime = "0.6.1"
+kotlinx-datetime = "0.6.2"
 uri-kmp = "0.0.19"
 
 [libraries]
