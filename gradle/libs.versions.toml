@@ -2,7 +2,7 @@
 
 kotlin = "2.1.10"
 agp = "8.8.1"
-compose = "1.7.1"
+compose = "1.8.0+check"
 coil = "3.0.0-alpha08"
 androidx-appcompat = "1.7.0"
 androidx-activityCompose = "1.9.3"
