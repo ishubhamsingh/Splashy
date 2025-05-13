@@ -1,6 +1,6 @@
 [versions]
 
-kotlin = "2.1.20"
+kotlin = "2.1.21"
 agp = "8.10.0"
 compose = "1.7.1"
 coil = "3.0.0-alpha08"
