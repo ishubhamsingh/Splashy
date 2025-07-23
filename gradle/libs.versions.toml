@@ -23,7 +23,7 @@ spotless = "7.2.1"
 ktfmt = "0.44"
 statelyCommon = "2.1.0"
 voyager = "1.0.1"
-moko-permissions = "0.18.1"
+moko-permissions = "0.19.1"
 kotlinx-datetime = "0.7.1-0.6.x-compat"
 uri-kmp = "0.0.19"
 
