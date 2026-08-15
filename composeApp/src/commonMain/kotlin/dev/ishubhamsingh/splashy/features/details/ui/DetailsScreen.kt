@@ -213,12 +213,18 @@ data class DetailsScreen(
       },
       sheetShadowElevation = 16.dp,
     ) {
+      // requireOffset() throws until the sheet's AnchoredDraggableState has completed its first
+      // layout pass (e.g. the very first composition), so guard the read and fall back to full
+      // height until a real offset is available.
+      val sheetOffset =
+        runCatching { bottomSheetScaffoldState.bottomSheetState.requireOffset() }.getOrNull()
       Box(
         modifier =
           Modifier.fillMaxWidth()
             .fillMaxHeight(
-              ((bottomSheetScaffoldState.bottomSheetState.requireOffset() + 130) / (heightPixels))
-                .let { if (it == 0f) 1f else it }
+              sheetOffset
+                ?.let { offset -> ((offset + 130) / heightPixels).let { if (it == 0f) 1f else it } }
+                ?: 1f
             )
       ) {
         PhotoContainer(photo = photo, color = color, url = url, altDescription = altDescription)
