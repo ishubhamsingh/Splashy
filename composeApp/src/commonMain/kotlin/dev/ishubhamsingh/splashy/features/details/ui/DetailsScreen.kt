@@ -222,8 +222,9 @@ data class DetailsScreen(
         modifier =
           Modifier.fillMaxWidth()
             .fillMaxHeight(
-              sheetOffset
-                ?.let { offset -> ((offset + 130) / heightPixels).let { if (it == 0f) 1f else it } }
+              sheetOffset?.let { offset ->
+                ((offset + 130) / heightPixels).let { if (it == 0f) 1f else it }
+              }
                 ?: 1f
             )
       ) {
