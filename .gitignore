@@ -13,3 +13,6 @@ local.properties
 xcuserdata/
 *yarn.lock
 secrets.properties
+
+# Claude Code local worktrees
+.claude/worktrees/
